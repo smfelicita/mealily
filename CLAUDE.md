@@ -60,8 +60,9 @@ context/          — документация проекта (TASKS.md, FUNCTIO
 
 ## Редизайн
 Редизайн идёт на ветке `main` (slim-main стратегия — без `/v2`-префикса).
-Готовые страницы: HomePage, DishesPage, DishDetailPage, FridgePage, MealPlanPage, ProfilePage, AuthPage, GroupsPage, GroupDetailPage, GroupFormPage, DishFormPage, Layout (header + tab bar).
-В очереди: ChatPage (фича скрыта от пользователей).
+Готовые страницы: HomePage, DishesPage, DishDetailPage, FridgePage, MealPlanPage, ProfilePage, AuthPage, GroupsPage, GroupDetailPage, GroupFormPage, DishFormPage, ChatPage, Layout (header + tab bar).
+
+Phase A завершена. Все основные страницы редизайнены, файлы V2 переименованы в основные, бэлласт убран (старый DishCard, PlanItem, /v2 редиректы).
 
 Стратегия: правка существующих `*Page.jsx` напрямую, без отдельных V2-файлов.
 Артефакты дизайн-агента — в `context/design/*-v2.jsx`.
