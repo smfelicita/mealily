@@ -1,1 +1,55 @@
-{}
+{
+  "titleLine1": "Что приготовить",
+  "titleLine2": "сегодня?",
+  "greeting": "Добрый день, {{name}} 👋",
+  "mealChips": {
+    "all": "Все",
+    "breakfast": "Завтрак",
+    "lunch": "Обед",
+    "dinner": "Ужин",
+    "snack": "Перекус"
+  },
+  "guestBanner": {
+    "title": "Добавь свои блюда — и больше не думай, что готовить",
+    "description": "Подборка по холодильнику, план на неделю, любимые рецепты.",
+    "registerText": "Создать свою кухню",
+    "loginText": "Войти"
+  },
+  "emptyFridge": {
+    "title": "Заполни холодильник",
+    "body": "Покажем рецепты из того, что есть дома"
+  },
+  "metrics": {
+    "inPlan": "В плане",
+    "inFridge": "В холодильнике",
+    "inFavorites": "В избранном"
+  },
+  "fridgeSuggest": {
+    "prefix": "Из вашего холодильника можно приготовить",
+    "suffix_one": "блюдо",
+    "suffix_few": "блюда",
+    "suffix_many": "блюд"
+  },
+  "todayPinned": {
+    "label": "Сегодня в плане",
+    "cookButton": "Готовлю!",
+    "cookTimeMin": "{{n}} мин"
+  },
+  "quickActions": {
+    "favorites": "Избранное",
+    "fridge": "Холодильник"
+  },
+  "addOwnDish": {
+    "guest": "Создать свою кухню",
+    "user": "Добавить своё блюдо"
+  },
+  "list": {
+    "loading": "Загружаем блюда…",
+    "empty": "Нет подходящих блюд",
+    "loadError": "Не удалось загрузить блюда"
+  },
+  "addToPlan": {
+    "success": "«{{name}}» добавлено на сегодня",
+    "error": "Не удалось добавить"
+  }
+}

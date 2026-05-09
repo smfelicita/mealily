@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   ChevronRight, Heart, Refrigerator,
   Sun, Utensils, Moon, Cookie,
@@ -24,21 +25,23 @@ import {
 } from '../components/ui'
 
 // ─── Meal times (локальный reference) ────────────────────────────
+// labelKey соответствует ключу в home.mealChips.<key>
 const MEAL_TIMES = [
-  { id: 'breakfast', label: 'Завтрак', Icon: Sun       },
-  { id: 'lunch',     label: 'Обед',    Icon: Utensils  },
-  { id: 'dinner',    label: 'Ужин',    Icon: Moon      },
-  { id: 'snack',     label: 'Перекус', Icon: Cookie    },
+  { id: 'breakfast', labelKey: 'breakfast', Icon: Sun      },
+  { id: 'lunch',     labelKey: 'lunch',     Icon: Utensils },
+  { id: 'dinner',    labelKey: 'dinner',    Icon: Moon     },
+  { id: 'snack',     labelKey: 'snack',     Icon: Cookie   },
 ]
 
 // ═══ MealChips ═══════════════════════════════════════════════════
 // Инлайновые chips с иконками (v2-вариант), чтобы не править общий MealTypeChips.
 function MealChips({ active, onChange }) {
-  const all = [{ id: '', label: 'Все', Icon: null }, ...MEAL_TIMES]
+  const { t } = useTranslation('home')
+  const all = [{ id: '', labelKey: 'all', Icon: null }, ...MEAL_TIMES]
   return (
     <div className="overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
       <div className="flex gap-1.5 w-max">
-        {all.map(({ id, label, Icon }) => {
+        {all.map(({ id, labelKey, Icon }) => {
           const isActive = id === active
           return (
             <button
@@ -54,7 +57,7 @@ function MealChips({ active, onChange }) {
               ].join(' ')}
             >
               {Icon && <Icon size={14} strokeWidth={2} />}
-              {label}
+              {t(`mealChips.${labelKey}`)}
             </button>
           )
         })}
@@ -65,6 +68,9 @@ function MealChips({ active, onChange }) {
 
 // ═══ FridgeSuggest ═══════════════════════════════════════════════
 function FridgeSuggest({ count, onClick }) {
+  const { t } = useTranslation('home')
+  // Плюрализация: t() с count выберет нужный suffix
+  const suffix = t('fridgeSuggest.suffix', { count })
   return (
     <button
       type="button"
@@ -75,8 +81,8 @@ function FridgeSuggest({ count, onClick }) {
     >
       <Refrigerator size={16} strokeWidth={2} className="text-sage shrink-0" />
       <div className="flex-1 text-[12.5px] font-bold text-sage">
-        Из вашего холодильника можно приготовить{' '}
-        <span className="tabular-nums">{count}</span> блюд
+        {t('fridgeSuggest.prefix')}{' '}
+        <span className="tabular-nums">{count}</span> {suffix}
       </div>
       <ChevronRight size={14} strokeWidth={2.2} className="text-sage shrink-0" />
     </button>
@@ -85,12 +91,13 @@ function FridgeSuggest({ count, onClick }) {
 
 // ═══ TodayPinned ═════════════════════════════════════════════════
 function TodayPinned({ dish, img, onCook, onOpen }) {
+  const { t } = useTranslation('home')
   return (
     <div className="rounded-2xl bg-accent-muted border border-accent-border p-2.5">
       <div className="flex items-center gap-1.5 mb-2 px-1">
         <Flame size={12} strokeWidth={2.4} className="text-accent" />
         <span className="text-[10.5px] font-bold uppercase tracking-wider text-accent">
-          Сегодня в плане
+          {t('todayPinned.label')}
         </span>
       </div>
       <div className="flex items-center gap-3 rounded-xl bg-bg-2 p-2">
@@ -116,7 +123,7 @@ function TodayPinned({ dish, img, onCook, onOpen }) {
             <div className="flex items-center gap-2 mt-1 text-[11.5px] text-text-2">
               <span className="flex items-center gap-0.5">
                 <Clock size={10} strokeWidth={2.2} />
-                {dish.cookTime} мин
+                {t('todayPinned.cookTimeMin', { n: dish.cookTime })}
               </span>
             </div>
           )}
@@ -127,7 +134,7 @@ function TodayPinned({ dish, img, onCook, onOpen }) {
           className="h-9 px-3.5 rounded-full text-[12.5px] font-bold text-white
             bg-accent shrink-0 hover:bg-accent-2 transition-colors"
         >
-          Готовлю!
+          {t('todayPinned.cookButton')}
         </button>
       </div>
     </div>
@@ -136,6 +143,7 @@ function TodayPinned({ dish, img, onCook, onOpen }) {
 
 // ═══ QuickActions ════════════════════════════════════════════════
 function QuickActions({ favActive, fridgeActive, onFav, onFridge }) {
+  const { t } = useTranslation('home')
   return (
     <div className="flex gap-2">
       <button
@@ -150,7 +158,7 @@ function QuickActions({ favActive, fridgeActive, onFav, onFridge }) {
         ].join(' ')}
       >
         <Heart size={14} strokeWidth={2.4} fill={favActive ? '#fff' : 'none'} />
-        Избранное
+        {t('quickActions.favorites')}
       </button>
       <button
         type="button"
@@ -164,7 +172,7 @@ function QuickActions({ favActive, fridgeActive, onFav, onFridge }) {
         ].join(' ')}
       >
         <Refrigerator size={14} strokeWidth={2.4} />
-        Холодильник
+        {t('quickActions.fridge')}
       </button>
     </div>
   )
@@ -172,6 +180,7 @@ function QuickActions({ favActive, fridgeActive, onFav, onFridge }) {
 
 // ═══ AddOwnDish ══════════════════════════════════════════════════
 function AddOwnDish({ guest, onClick }) {
+  const { t } = useTranslation('home')
   if (guest) {
     return (
       <button
@@ -182,7 +191,7 @@ function AddOwnDish({ guest, onClick }) {
         style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
       >
         <Sparkles size={16} strokeWidth={2.2} />
-        Создать свою кухню
+        {t('addOwnDish.guest')}
       </button>
     )
   }
@@ -196,13 +205,14 @@ function AddOwnDish({ guest, onClick }) {
         hover:bg-accent-muted transition-colors"
     >
       <Plus size={16} strokeWidth={2.4} />
-      Добавить своё блюдо
+      {t('addOwnDish.user')}
     </button>
   )
 }
 
 // ═══ HomePage ══════════════════════════════════════════════════
 export default function HomePage() {
+  const { t } = useTranslation('home')
   const navigate = useNavigate()
   const token    = useStore(s => s.token)
   const user     = useStore(s => s.user)
@@ -222,7 +232,7 @@ export default function HomePage() {
   useEffect(() => {
     api.getDishes({ limit: 50 })
       .then(data => setDishes(data.dishes ?? data))
-      .catch(e => show(e.message || 'Не удалось загрузить блюда', 'error'))
+      .catch(e => show(e.message || t('list.loadError'), 'error'))
       .finally(() => setLoading(false))
 
     if (token) {
@@ -257,19 +267,19 @@ export default function HomePage() {
     {
       icon:  <CalendarDays size={16} strokeWidth={2.2} />,
       value: planDishIds.size,
-      label: 'В плане',
+      label: t('metrics.inPlan'),
       accent: 'accent',
     },
     {
       icon:  <Refrigerator size={16} strokeWidth={2.2} />,
       value: fridge.length,
-      label: 'В холодильнике',
+      label: t('metrics.inFridge'),
       accent: 'sage',
     },
     {
       icon:  <Heart size={16} strokeWidth={2.2} />,
       value: favIds.size,
-      label: 'В избранном',
+      label: t('metrics.inFavorites'),
       accent: 'pro',
     },
   ]
@@ -290,9 +300,9 @@ export default function HomePage() {
   async function handleAddToPlan(dish) {
     try {
       await api.addMealPlan({ dishId: dish.id })
-      show(`«${dish.name}» добавлено на сегодня`, 'success')
+      show(t('addToPlan.success', { name: dish.name }), 'success')
     } catch (e) {
-      show(e.message || 'Не удалось добавить', 'error')
+      show(e.message || t('addToPlan.error'), 'error')
     }
   }
 
@@ -310,14 +320,14 @@ export default function HomePage() {
     return true
   })
 
-  const greeting = user?.name ? `Добрый день, ${user.name} 👋` : null
+  const greeting = user?.name ? t('greeting', { name: user.name }) : null
 
   return (
     <div className="flex flex-col flex-1 bg-bg pb-6">
       {/* ── Title ───────────────────────────────────────────────── */}
       <PageHeader
         subtitle={guest ? null : greeting}
-        title={<>Что приготовить<br />сегодня?</>}
+        title={<>{t('titleLine1')}<br />{t('titleLine2')}</>}
       />
 
       {/* ── Guest banner ─────────────────────────────────────────── */}
@@ -326,10 +336,10 @@ export default function HomePage() {
           <GuestBlock
             variant="banner"
             icon={<Sparkles size={18} strokeWidth={2.2} />}
-            title="Добавь свои блюда — и больше не думай, что готовить"
-            description="Подборка по холодильнику, план на неделю, любимые рецепты."
-            registerText="Создать свою кухню"
-            loginText="Войти"
+            title={t('guestBanner.title')}
+            description={t('guestBanner.description')}
+            registerText={t('guestBanner.registerText')}
+            loginText={t('guestBanner.loginText')}
             storageKey="mealbot_guest_banner_dismissed"
             dismissible
           />
@@ -342,9 +352,9 @@ export default function HomePage() {
           <HintBanner
             variant="sage"
             icon={<Refrigerator size={17} strokeWidth={2} />}
-            title="Заполни холодильник"
+            title={t('emptyFridge.title')}
           >
-            Покажем рецепты из того, что есть дома
+            {t('emptyFridge.body')}
           </HintBanner>
         </div>
       )}
@@ -390,11 +400,11 @@ export default function HomePage() {
       <div className="px-5 mt-4 flex flex-col gap-2">
         {loading ? (
           <div className="bg-bg-2 border border-border rounded-2xl p-6 text-center text-[14px] text-text-3">
-            Загружаем блюда…
+            {t('list.loading')}
           </div>
         ) : filtered.length === 0 ? (
           <div className="bg-bg-2 border border-border rounded-2xl p-6 text-center">
-            <p className="text-[14px] text-text-3">Нет подходящих блюд</p>
+            <p className="text-[14px] text-text-3">{t('list.empty')}</p>
           </div>
         ) : (
           filtered.slice(0, 8).map(dish => (

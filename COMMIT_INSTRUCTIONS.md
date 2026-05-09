@@ -1,41 +1,44 @@
-# Коммит: i18n ProfilePage
+# Коммит: i18n HomePage
 
 Ветка: `main`. Frontend-only.
 
-Второй шаг i18n-перевода. Покрываем ProfilePage целиком — это самая короткая страница, отлично подходит для отладки pipeline.
+Третий шаг i18n. Главная страница (`/`) — все UI-строки через `t()`.
 
 ## Что сделано
 
-### Содержимое namespace `profile`
+### `home` namespace заполнен
 
-Заполнены `frontend/src/locales/ru/profile.json` и `en/profile.json` с placeholder'ами `[EN] ...`. Структура ключей:
+`frontend/src/locales/ru/home.json` и `en/home.json`:
 
-- `hero.noName` — fallback «Без имени»
-- `hero.joinedAt` — «С нами с {{date}}» (interpolation)
-- `hero.badge.pro` / `hero.badge.free` — чипы Pro/Free (оставила `Pro`/`Free` без `[EN]`-префикса в EN-версии — это бренд)
-- `sections.connections`, `sections.settings`, `sections.account`
-- `telegram.title`, `telegram.descConnected`, `telegram.descDisconnected`, `telegram.statusConnected`, `telegram.openBot`, `telegram.connectButton`, `telegram.errorLink`
-- `language.row` — «Язык интерфейса»
-- `language.ru` / `language.en` — названия языков (в локализации они меняются: на ru — «Русский», на en — `[EN] Русский` пока)
-- `language.hint` — подсказка про английский
+- `titleLine1` / `titleLine2` — две строки заголовка (раньше был `<>...<br/>...</>` хардкодом)
+- `greeting` — «Добрый день, {{name}} 👋» (interpolation)
+- `mealChips.{all,breakfast,lunch,dinner,snack}` — фильтр времени приёма
+- `guestBanner.{title,description,registerText,loginText}` — баннер гостя
+- `emptyFridge.{title,body}` — подсказка про пустой холодильник
+- `metrics.{inPlan,inFridge,inFavorites}` — метрики MetaStrip
+- `fridgeSuggest.{prefix,suffix_one,suffix_few,suffix_many}` — фраза «Из вашего холодильника можно приготовить N блюд» с плюрализацией i18next
+- `todayPinned.{label,cookButton,cookTimeMin}` — секция «Сегодня в плане»
+- `quickActions.{favorites,fridge}` — кнопки под списком
+- `addOwnDish.{guest,user}` — CTA под списком
+- `list.{loading,empty,loadError}` — состояния списка
+- `addToPlan.{success,error}` — toast'ы (с interpolation `{{name}}`)
 
-Кроме того, в `language.en` я оставила «English» в обеих локалях — название языка не переводится.
+### HomePage.jsx
 
-### ProfilePage.jsx
-
-- Импортирован `useTranslation` из `react-i18next`.
-- В каждом субкомпоненте (Hero, TelegramRow, LanguagePicker, Main) вызывается `useTranslation('profile')`.
-- В Hero дополнительно используется `i18n.language` для форматирования даты через `Date.toLocaleDateString` с правильной BCP-47-локалью (`ru-RU` или `en-GB`). Локаль выбирается из мини-маппинга `LOCALE_BY_LANG`.
-- `LANGUAGES` справочник теперь хранит только `code` + `flag`. Имена языков — через `t(\`language.${l.code}\`)`.
-- Все хардкоженные русские строки UI заменены. В коде остался русский **только в комментариях**.
+- `useTranslation('home')` пробрасывается во все суб-компоненты (MealChips, FridgeSuggest, TodayPinned, QuickActions, AddOwnDish, главный HomePage).
+- `MEAL_TIMES` теперь хранит `labelKey` (`breakfast`, `lunch`, …) вместо `label`. Метка чипа берётся через `t(\`mealChips.${labelKey}\`)`.
+- `FridgeSuggest` использует i18next-плюрализацию: `t('fridgeSuggest.suffix', { count })` подставит `_one` / `_few` / `_many` по правилам русского языка.
+- `addToPlan.success` и `greeting` используют interpolation `{{name}}`.
+- `cookTimeMin` — interpolation `{{n}}` для числа минут.
+- `title` страницы — две строки `t('titleLine1')` + `<br/>` + `t('titleLine2')` (раньше было `<>Что приготовить<br/>сегодня?</>` хардкодом).
 
 ## Файлы
 
 ```
 modified:   COMMIT_INSTRUCTIONS.md
-modified:   frontend/src/locales/ru/profile.json
-modified:   frontend/src/locales/en/profile.json
-modified:   frontend/src/pages/ProfilePage.jsx
+modified:   frontend/src/locales/ru/home.json
+modified:   frontend/src/locales/en/home.json
+modified:   frontend/src/pages/HomePage.jsx
 ```
 
 Сборка: 1859 модулей, без ошибок.
@@ -48,18 +51,20 @@ git status
 git branch --show-current      # main
 
 git add COMMIT_INSTRUCTIONS.md \
-        frontend/src/locales/ru/profile.json \
-        frontend/src/locales/en/profile.json \
-        frontend/src/pages/ProfilePage.jsx
+        frontend/src/locales/ru/home.json \
+        frontend/src/locales/en/home.json \
+        frontend/src/pages/HomePage.jsx
 
-git commit -m "i18n(profile): перенос ProfilePage на t() + ru/en/profile.json
+git commit -m "i18n(home): перенос HomePage на t() + ru/en/home.json
 
-- ru/profile.json и en/profile.json заполнены (en — placeholder'ы [EN])
-- Hero, TelegramRow, LanguagePicker, Main используют useTranslation('profile')
-- joinedAt с interpolation {{date}}; локаль даты через i18n.language → BCP-47
-- LANGUAGES хранит только code + flag, имена языков через t('language.{code}')
+- ru/home.json и en/home.json заполнены (en — placeholder'ы [EN])
+- MealChips, FridgeSuggest, TodayPinned, QuickActions, AddOwnDish — useTranslation('home')
+- Заголовок страницы (titleLine1/titleLine2) и greeting (interpolation {{name}})
+- fridgeSuggest с плюрализацией i18next (suffix_one/few/many)
+- toast'ы (addToPlan.success/error) и состояния списка
+- MEAL_TIMES хранит labelKey, метки берутся из mealChips namespace
 
-Хардкоженный русский остался только в комментариях. Сами тексты UI переключаются."
+Хардкоженный русский остался только в комментариях."
 
 git push origin main
 ```
@@ -72,21 +77,33 @@ ssh root@194.87.130.215 "cd /var/www/mealbot && git pull && cd frontend && npm r
 
 ## Что проверить после деплоя
 
-### `/profile`, RU
-- Hero: «Pro» / «Free» чип, «С нами с 14 ноября 2025» (или подобное в зависимости от createdAt)
-- Telegram-row: «Telegram-бот» / «Подключено» / «Подключить»
-- Настройки: «Язык интерфейса» → «Русский 🇷🇺»
-- Аккаунт: «Выйти из аккаунта»
+### `/` (главная), RU
+- Заголовок «Что приготовить / сегодня?» (две строки)
+- Если залогинен — приветствие «Добрый день, {имя} 👋»
+- Чипы фильтра «Все / Завтрак / Обед / Ужин / Перекус»
+- Если есть блюда из холодильника — sage-баннер «Из вашего холодильника можно приготовить N блюд» (плюрализация: 1 блюдо / 2-4 блюда / 5+ блюд)
+- Метрики: «В плане», «В холодильнике», «В избранном»
 
-### Переключение на English
-- В ProfilePage → Настройки → Язык → English
-- Hero: «[EN] Pro» убрал — просто «Pro» / «Free»
-- Дата: должна теперь форматироваться по-английски (`14 November 2025`)
-- Telegram-row: «[EN] Telegram-бот», «[EN] Подключено», и т.д.
-- Настройки: «[EN] Язык интерфейса» → «English 🇬🇧»
-- Подсказка под селектором: «[EN] English перевод появится позже…»
-- Аккаунт: «[EN] Выйти из аккаунта»
+### Переключение в EN
+- Заголовок: «[EN] Что приготовить / [EN] сегодня?»
+- Приветствие: «[EN] Добрый день, {имя} 👋»
+- Чипы: «[EN] Все», «[EN] Завтрак», и т.д.
+- Метрики: «[EN] В плане», и т.д.
+- Кнопки: «[EN] Избранное», «[EN] Холодильник», «[EN] Добавить своё блюдо»
+- TodayPinned: «[EN] Сегодня в плане», «[EN] Готовлю!»
+- Toast при добавлении в план: «[EN] «{name}» добавлено на сегодня»
 
-### Bonus
-- Layout/TabBar тоже переключается (это сделано в прошлом коммите)
-- Остальные страницы — пока русские, переводим по очереди
+### Что НЕ переводится пока
+- Названия самих блюд из БД — на русском (это контент)
+- Текст кнопок DishCard (Heart, Plus) — без текста, иконки
+- Названия `mealTime` в DishCard meta-строке — это уже из общих констант, могут отображаться. Это будет в шаге переноса DishCard на t().
+
+## Прогресс i18n
+
+- ✅ Foundation (en/ структура, i18n.js, common.json)
+- ✅ Layout + TabBar
+- ✅ ProfilePage
+- ✅ **HomePage**
+- ⏳ DishesPage, DishDetailPage, FridgePage, MealPlanPage, AuthPage, ChatPage, GroupsPage, GroupDetailPage, GroupFormPage, DishFormPage
+- ⏳ Компоненты (DishCard, MetaStrip, GuestBlock, HintBanner, etc.)
+- ⏳ Финальный pass проф-перевода (заменить `[EN] ...` на нормальный английский)

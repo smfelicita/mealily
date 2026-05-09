@@ -1,1 +1,55 @@
-{}
+{
+  "titleLine1": "[EN] Что приготовить",
+  "titleLine2": "[EN] сегодня?",
+  "greeting": "[EN] Добрый день, {{name}} 👋",
+  "mealChips": {
+    "all": "[EN] Все",
+    "breakfast": "[EN] Завтрак",
+    "lunch": "[EN] Обед",
+    "dinner": "[EN] Ужин",
+    "snack": "[EN] Перекус"
+  },
+  "guestBanner": {
+    "title": "[EN] Добавь свои блюда — и больше не думай, что готовить",
+    "description": "[EN] Подборка по холодильнику, план на неделю, любимые рецепты.",
+    "registerText": "[EN] Создать свою кухню",
+    "loginText": "[EN] Войти"
+  },
+  "emptyFridge": {
+    "title": "[EN] Заполни холодильник",
+    "body": "[EN] Покажем рецепты из того, что есть дома"
+  },
+  "metrics": {
+    "inPlan": "[EN] В плане",
+    "inFridge": "[EN] В холодильнике",
+    "inFavorites": "[EN] В избранном"
+  },
+  "fridgeSuggest": {
+    "prefix": "[EN] Из вашего холодильника можно приготовить",
+    "suffix_one": "[EN] блюдо",
+    "suffix_few": "[EN] блюда",
+    "suffix_many": "[EN] блюд"
+  },
+  "todayPinned": {
+    "label": "[EN] Сегодня в плане",
+    "cookButton": "[EN] Готовлю!",
+    "cookTimeMin": "[EN] {{n}} мин"
+  },
+  "quickActions": {
+    "favorites": "[EN] Избранное",
+    "fridge": "[EN] Холодильник"
+  },
+  "addOwnDish": {
+    "guest": "[EN] Создать свою кухню",
+    "user": "[EN] Добавить своё блюдо"
+  },
+  "list": {
+    "loading": "[EN] Загружаем блюда…",
+    "empty": "[EN] Нет подходящих блюд",
+    "loadError": "[EN] Не удалось загрузить блюда"
+  },
+  "addToPlan": {
+    "success": "[EN] «{{name}}» добавлено на сегодня",
+    "error": "[EN] Не удалось добавить"
+  }
+}
