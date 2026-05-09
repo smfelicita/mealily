@@ -17,6 +17,7 @@
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   Crown, Globe, LogOut, Check, MessageCircle, ChevronRight,
 } from 'lucide-react'
@@ -27,15 +28,21 @@ import { useStore } from '../store'
 import { Loader, useToast } from '../components/ui'
 
 // ─── Локали для селектора ────────────────────────────────────────
+// label/labelKey и флаги — фиксированные (это сами названия языков).
 const LANGUAGES = [
-  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
-  { code: 'en', label: 'English', flag: '🇬🇧' },
+  { code: 'ru', flag: '🇷🇺' },
+  { code: 'en', flag: '🇬🇧' },
 ]
 
+// Маппинг lang code → BCP-47 для Date.toLocaleDateString
+const LOCALE_BY_LANG = { ru: 'ru-RU', en: 'en-GB' }
+
 // ─── Helpers ─────────────────────────────────────────────────────
-function fmtDate(iso) {
+function fmtDate(iso, lang) {
   if (!iso) return null
-  return new Date(iso).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })
+  return new Date(iso).toLocaleDateString(LOCALE_BY_LANG[lang] || 'ru-RU', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  })
 }
 
 function isPro(profile) {
@@ -57,9 +64,10 @@ function SectionLabel({ children }) {
 
 // ═══ Hero ════════════════════════════════════════════════════════
 function Hero({ profile }) {
+  const { t, i18n: ii } = useTranslation('profile')
   const pro = isPro(profile)
   const initial = (profile?.name || profile?.email || '?').trim().charAt(0).toUpperCase()
-  const joined = fmtDate(profile?.createdAt)
+  const joined = fmtDate(profile?.createdAt, ii.language)
 
   return (
     <div
@@ -85,7 +93,7 @@ function Hero({ profile }) {
             className="text-[18px] font-extrabold leading-tight text-text"
             style={{ textWrap: 'pretty' }}
           >
-            {profile?.name || 'Без имени'}
+            {profile?.name || t('hero.noName')}
           </div>
           {pro ? (
             <span
@@ -98,7 +106,7 @@ function Hero({ profile }) {
               }}
             >
               <Crown size={10} strokeWidth={2.4} />
-              Pro
+              {t('hero.badge.pro')}
             </span>
           ) : (
             <span
@@ -106,7 +114,7 @@ function Hero({ profile }) {
                 bg-bg-3 border border-border text-text-2"
               style={{ letterSpacing: 1 }}
             >
-              Free
+              {t('hero.badge.free')}
             </span>
           )}
         </div>
@@ -117,7 +125,7 @@ function Hero({ profile }) {
         )}
         {joined && (
           <div className="text-[11.5px] mt-1 text-text-3">
-            С нами с {joined}
+            {t('hero.joinedAt', { date: joined })}
           </div>
         )}
       </div>
@@ -127,6 +135,7 @@ function Hero({ profile }) {
 
 // ═══ Telegram row ════════════════════════════════════════════════
 function TelegramRow({ profile, onConnect, tgLink, tgLoading, tgError }) {
+  const { t } = useTranslation('profile')
   const connected = !!profile?.telegramId
 
   return (
@@ -138,11 +147,11 @@ function TelegramRow({ profile, onConnect, tgLink, tgLoading, tgError }) {
         <MessageCircle size={18} strokeWidth={2.2} className="text-white" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-[14.5px] font-semibold text-text">Telegram-бот</div>
+        <div className="text-[14.5px] font-semibold text-text">{t('telegram.title')}</div>
         <div className="text-[12px] text-text-3 mt-0.5">
           {connected
-            ? (profile.telegramUsername ? `@${profile.telegramUsername}` : 'Подключён')
-            : 'Управляй приложением прямо в Telegram'}
+            ? (profile.telegramUsername ? `@${profile.telegramUsername}` : t('telegram.descConnected'))
+            : t('telegram.descDisconnected')}
         </div>
         {tgError && (
           <div className="text-[12px] text-red-500 mt-1">{tgError}</div>
@@ -155,7 +164,7 @@ function TelegramRow({ profile, onConnect, tgLink, tgLoading, tgError }) {
           style={{ letterSpacing: 0.3 }}
         >
           <Check size={11} strokeWidth={3} />
-          Подключено
+          {t('telegram.statusConnected')}
         </span>
       ) : tgLink ? (
         <a
@@ -165,7 +174,7 @@ function TelegramRow({ profile, onConnect, tgLink, tgLoading, tgError }) {
           className="inline-flex items-center justify-center bg-accent text-white text-[12px] font-bold
             rounded-full px-3.5 h-8 shrink-0"
         >
-          Открыть бота →
+          {t('telegram.openBot')}
         </a>
       ) : (
         <button
@@ -175,7 +184,7 @@ function TelegramRow({ profile, onConnect, tgLink, tgLoading, tgError }) {
           className="inline-flex items-center justify-center bg-accent text-white text-[12px] font-bold
             rounded-full px-3 h-8 shrink-0 disabled:opacity-60"
         >
-          {tgLoading ? '...' : 'Подключить'}
+          {tgLoading ? '...' : t('telegram.connectButton')}
         </button>
       )}
     </div>
@@ -206,6 +215,7 @@ function SettingRow({ Icon, label, right, onClick }) {
 
 // ═══ Language picker (свёрнутый/развёрнутый) ═════════════════════
 function LanguagePicker({ current, onChange }) {
+  const { t } = useTranslation('profile')
   const [open, setOpen] = useState(false)
   const cur = LANGUAGES.find(l => l.code === current) || LANGUAGES[0]
 
@@ -218,12 +228,12 @@ function LanguagePicker({ current, onChange }) {
     <div className="flex flex-col gap-2">
       <SettingRow
         Icon={Globe}
-        label="Язык интерфейса"
+        label={t('language.row')}
         onClick={() => setOpen(o => !o)}
         right={
           <>
             <span className="text-[13px] text-text-3">
-              {cur.label} {cur.flag}
+              {t(`language.${cur.code}`)} {cur.flag}
             </span>
             <ChevronRight
               size={16}
@@ -250,7 +260,7 @@ function LanguagePicker({ current, onChange }) {
                 ].join(' ')}
               >
                 <span style={{ fontSize: 16 }}>{l.flag}</span>
-                <span className="flex-1">{l.label}</span>
+                <span className="flex-1">{t(`language.${l.code}`)}</span>
                 {on && <Check size={14} strokeWidth={2.5} className="text-accent" />}
               </button>
             )
@@ -259,7 +269,7 @@ function LanguagePicker({ current, onChange }) {
             className="px-4 py-2 text-[11px] text-text-3 border-t border-border"
             style={{ background: 'var(--color-bg-3)' }}
           >
-            English перевод появится позже — пока подключена только инфраструктура.
+            {t('language.hint')}
           </div>
         </div>
       )}
@@ -286,6 +296,7 @@ function ActionRow({ Icon, label, onClick, danger = false }) {
 
 // ═══ Main ════════════════════════════════════════════════════════
 export default function ProfilePage() {
+  const { t } = useTranslation('profile')
   const logout   = useStore(s => s.logout)
   const navigate = useNavigate()
   const { Toast } = useToast()
@@ -311,7 +322,7 @@ export default function ProfilePage() {
       const { url } = await api.generateTelegramLink()
       setTgLink(url)
     } catch (err) {
-      setTgError(err.message || 'Не удалось получить ссылку')
+      setTgError(err.message || t('telegram.errorLink'))
     }
     setTgLoading(false)
   }
@@ -336,7 +347,7 @@ export default function ProfilePage() {
         <Hero profile={profile} />
 
         <div className="mt-7">
-          <SectionLabel>Подключения</SectionLabel>
+          <SectionLabel>{t('sections.connections')}</SectionLabel>
           <TelegramRow
             profile={profile}
             onConnect={connectTelegram}
@@ -347,13 +358,13 @@ export default function ProfilePage() {
         </div>
 
         <div className="mt-7">
-          <SectionLabel>Настройки</SectionLabel>
+          <SectionLabel>{t('sections.settings')}</SectionLabel>
           <LanguagePicker current={lang} onChange={changeLang} />
         </div>
 
         <div className="mt-7">
-          <SectionLabel>Аккаунт</SectionLabel>
-          <ActionRow Icon={LogOut} label="Выйти из аккаунта" onClick={handleLogout} danger />
+          <SectionLabel>{t('sections.account')}</SectionLabel>
+          <ActionRow Icon={LogOut} label={t('logout')} onClick={handleLogout} danger />
         </div>
       </div>
 

@@ -1,1 +1,31 @@
-{}
+{
+  "hero": {
+    "noName": "Без имени",
+    "joinedAt": "С нами с {{date}}",
+    "badge": {
+      "pro": "Pro",
+      "free": "Free"
+    }
+  },
+  "sections": {
+    "connections": "Подключения",
+    "settings": "Настройки",
+    "account": "Аккаунт"
+  },
+  "telegram": {
+    "title": "Telegram-бот",
+    "descConnected": "Подключён",
+    "descDisconnected": "Управляй приложением прямо в Telegram",
+    "statusConnected": "Подключено",
+    "openBot": "Открыть бота →",
+    "connectButton": "Подключить",
+    "errorLink": "Не удалось получить ссылку"
+  },
+  "language": {
+    "row": "Язык интерфейса",
+    "ru": "Русский",
+    "en": "English",
+    "hint": "English перевод появится позже — пока подключена только инфраструктура."
+  },
+  "logout": "Выйти из аккаунта"
+}
