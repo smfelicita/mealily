@@ -7,6 +7,7 @@
 
 import { useState } from 'react'
 import { Outlet, useNavigate, NavLink, useLocation, matchPath } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   Home, ChefHat, Refrigerator, Calendar,
   Bell, ChevronLeft, Sparkles,
@@ -19,12 +20,13 @@ import { Avatar, Modal, InstallPrompt } from './ui'
 // CHAT_ENABLED — флаг скрытого чат-таба. Когда фича будет готова, переключить на true.
 const CHAT_ENABLED = false
 
+// Метки берутся через t('common:nav.<key>') в TabBar.
 const TABS = [
-  { to: '/',       Icon: Home,         label: 'Главная'     },
-  { to: '/dishes', Icon: ChefHat,      label: 'Блюда'       },
-  { to: '/fridge', Icon: Refrigerator, label: 'Холодильник' },
-  { to: '/plan',   Icon: Calendar,     label: 'План'        },
-  ...(CHAT_ENABLED ? [{ to: '/chat', Icon: Sparkles, label: 'Чат' }] : []),
+  { to: '/',       Icon: Home,         labelKey: 'home'    },
+  { to: '/dishes', Icon: ChefHat,      labelKey: 'dishes'  },
+  { to: '/fridge', Icon: Refrigerator, labelKey: 'fridge'  },
+  { to: '/plan',   Icon: Calendar,     labelKey: 'plan'    },
+  ...(CHAT_ENABLED ? [{ to: '/chat', Icon: Sparkles, labelKey: 'chat' }] : []),
 ]
 
 // Ровно те страницы которые в TabBar — корневые табы
@@ -44,34 +46,38 @@ function getHeaderMode(pathname) {
   // Деталка блюда — full-bleed, без layout-header
   if (matchPath('/dishes/:id', pathname)) return { mode: 'none' }
 
+  // Чат — full-bleed (свой mini top-bar + sticky input снизу)
+  if (pathname === '/chat') return { mode: 'none' }
+
   // Корневые табы — обычный header
   if (TAB_PATHS.includes(pathname)) return { mode: 'root' }
 
-  // Вложенные: явно мапим в title
+  // Вложенные: явно мапим в title-key (читается через t('common:backTitles.<key>'))
   const backMap = [
-    { pattern: '/profile',        title: 'Профиль'         },
-    { pattern: '/groups',         title: 'Мои группы'      },
-    { pattern: '/groups/new',     title: 'Новая группа'    },
-    { pattern: '/groups/:id',     title: 'Группа'          },
-    { pattern: '/groups/:id/edit',title: 'Редактирование группы' },
+    { pattern: '/profile',        titleKey: 'profile'   },
+    { pattern: '/groups',         titleKey: 'groups'    },
+    { pattern: '/groups/new',     titleKey: 'groupNew'  },
+    { pattern: '/groups/:id',     titleKey: 'group'     },
+    { pattern: '/groups/:id/edit',titleKey: 'groupEdit' },
   ]
-  for (const { pattern, title } of backMap) {
-    if (matchPath(pattern, pathname)) return { mode: 'back', title }
+  for (const { pattern, titleKey } of backMap) {
+    if (matchPath(pattern, pathname)) return { mode: 'back', titleKey }
   }
 
   // Дефолт — back-header без явного title
-  return { mode: 'back', title: '' }
+  return { mode: 'back', titleKey: null }
 }
 
 // ─── Bell (заглушка) ──────────────────────────────────────────────
 function Bell_({ count = 0, onClick }) {
+  const { t } = useTranslation('common')
   return (
     <button
       type="button"
       onClick={onClick}
       className="w-10 h-10 rounded-full flex items-center justify-center relative
         text-text-2 hover:bg-bg-3 transition-colors focus:outline-none"
-      aria-label="Уведомления"
+      aria-label={t('header.notifications')}
     >
       <Bell size={20} strokeWidth={2} />
       {count > 0 && count <= 9 && (
@@ -95,6 +101,7 @@ function Bell_({ count = 0, onClick }) {
 
 // ─── Brand block (для root header) ─────────────────────────────
 function Brand({ onClick }) {
+  const { t } = useTranslation('common')
   return (
     <button
       type="button"
@@ -105,15 +112,17 @@ function Brand({ onClick }) {
         <ChefHat size={16} strokeWidth={2.2} className="text-accent" />
       </div>
       <div className="flex flex-col leading-tight items-start">
-        <span className="text-[16px] font-extrabold tracking-tight text-text">MealBot</span>
-        <span className="text-[10.5px] text-text-3">Моя кухня</span>
+        <span className="text-[16px] font-extrabold tracking-tight text-text">{t('brand.name')}</span>
+        <span className="text-[10.5px] text-text-3">{t('brand.subtitle')}</span>
       </div>
     </button>
   )
 }
 
 // ─── Header ──────────────────────────────────────────────────────
-function Header({ mode, title, token, user, onAvatarClick, onAuthClick, onBackClick, onBrandClick }) {
+function Header({ mode, titleKey, token, user, onAvatarClick, onAuthClick, onBackClick, onBrandClick }) {
+  const { t } = useTranslation('common')
+  const title = titleKey ? t(`backTitles.${titleKey}`) : ''
   const rightSlot = (
     <div className="flex items-center gap-1">
       <Bell_ count={0} onClick={() => {/* TODO: notifications */}} />
@@ -122,7 +131,7 @@ function Header({ mode, title, token, user, onAvatarClick, onAuthClick, onBackCl
           type="button"
           onClick={onAvatarClick}
           className="focus:outline-none rounded-full"
-          aria-label="Профиль"
+          aria-label={t('header.profile')}
         >
           <Avatar name={user?.name} size="md" />
         </button>
@@ -132,7 +141,7 @@ function Header({ mode, title, token, user, onAvatarClick, onAuthClick, onBackCl
           onClick={onAuthClick}
           className="h-8 px-3 rounded-full text-[13px] font-bold text-white bg-accent"
         >
-          Войти
+          {t('header.loginButton')}
         </button>
       )}
     </div>
@@ -150,7 +159,7 @@ function Header({ mode, title, token, user, onAvatarClick, onAuthClick, onBackCl
             onClick={onBackClick}
             className="w-10 h-10 rounded-full flex items-center justify-center text-text-2
               hover:bg-bg-3 transition-colors focus:outline-none"
-            aria-label="Назад"
+            aria-label={t('actions.back')}
           >
             <ChevronLeft size={20} strokeWidth={2} />
           </button>
@@ -174,8 +183,9 @@ function Header({ mode, title, token, user, onAvatarClick, onAuthClick, onBackCl
   )
 }
 
-// ─── Profile dropdown (без изменений) ────────────────────────────
+// ─── Profile dropdown ────────────────────────────────────────────
 function ProfileModal({ onClose }) {
+  const { t }    = useTranslation('common')
   const user     = useStore(s => s.user)
   const logout   = useStore(s => s.logout)
   const navigate = useNavigate()
@@ -188,7 +198,7 @@ function ProfileModal({ onClose }) {
     try {
       const { url } = await api.generateTelegramLink()
       setTgLink(url)
-    } catch (e) { setTgError(e.message || 'Ошибка') }
+    } catch (e) { setTgError(e.message || t('profileMenu.errorGeneric')) }
     setTgLoading(false)
   }
 
@@ -200,33 +210,33 @@ function ProfileModal({ onClose }) {
       <div className="flex items-center gap-3 pb-4 mb-1 border-b border-border">
         <Avatar name={user?.name} size="md" />
         <div className="min-w-0">
-          <p className="font-bold text-[15px] truncate">{user?.name || 'Пользователь'}</p>
+          <p className="font-bold text-[15px] truncate">{user?.name || t('profileMenu.user')}</p>
           <p className="text-xs text-text-2 truncate">
             {user?.email || (user?.telegramUsername ? `@${user.telegramUsername}` : '')}
           </p>
         </div>
       </div>
 
-      <MenuItem onClick={() => go('/groups')} icon={<IcoGroups />}>Мои группы</MenuItem>
-      <MenuItem onClick={() => go('/groups?action=create')} icon={<IcoPlus />}>Создать группу</MenuItem>
+      <MenuItem onClick={() => go('/groups')} icon={<IcoGroups />}>{t('profileMenu.myGroups')}</MenuItem>
+      <MenuItem onClick={() => go('/groups?action=create')} icon={<IcoPlus />}>{t('profileMenu.createGroup')}</MenuItem>
       <MenuDivider />
 
       {!tgLink ? (
         <MenuItem onClick={connectTelegram} disabled={tgLoading} icon={<IcoTelegram />}>
-          {tgLoading ? '...' : 'Telegram-бот'}
+          {tgLoading ? '...' : t('profileMenu.telegramBot')}
         </MenuItem>
       ) : (
         <a href={tgLink} target="_blank" rel="noopener noreferrer" onClick={onClose}
           className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm bg-sage/10 text-sage font-semibold">
-          <IcoTelegram /><span>Открыть бота →</span>
+          <IcoTelegram /><span>{t('profileMenu.openBot')}</span>
         </a>
       )}
       {tgError && <p className="text-xs text-red-400 px-3 mt-1">{tgError}</p>}
 
       <MenuDivider />
-      <MenuItem onClick={() => go('/profile')} icon={<IcoUser />}>Профиль</MenuItem>
+      <MenuItem onClick={() => go('/profile')} icon={<IcoUser />}>{t('profileMenu.profile')}</MenuItem>
       <MenuDivider />
-      <MenuItem onClick={handleLogout} className="text-red-400" icon={<IcoLogout />}>Выйти</MenuItem>
+      <MenuItem onClick={handleLogout} className="text-red-400" icon={<IcoLogout />}>{t('profileMenu.logout')}</MenuItem>
     </Modal>
   )
 }
@@ -255,21 +265,22 @@ function MenuDivider() { return <div className="h-px bg-border my-1.5 mx-3" /> }
 
 // ─── TabBar ──────────────────────────────────────────────────────
 function TabBar({ tabs, planBadge = 0, chatDot = false }) {
+  const { t: tr } = useTranslation('common')
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 max-w-app mx-auto
         flex bg-bg-2 border-t border-border z-[100] pb-safe"
       style={{ boxShadow: '0 -1px 12px rgba(0,0,0,0.04)' }}
     >
-      {tabs.map(t => {
-        const Icon = t.Icon
-        const badge = t.to === '/plan' && planBadge > 0 ? planBadge : 0
-        const dot   = t.to === '/chat' && chatDot
+      {tabs.map(tab => {
+        const Icon = tab.Icon
+        const badge = tab.to === '/plan' && planBadge > 0 ? planBadge : 0
+        const dot   = tab.to === '/chat' && chatDot
         return (
           <NavLink
-            key={t.to}
-            to={t.to}
-            end={t.to === '/'}
+            key={tab.to}
+            to={tab.to}
+            end={tab.to === '/'}
             className={({ isActive }) => [
               'flex-1 flex flex-col items-center justify-center gap-0.5 py-2 relative min-h-[52px]',
               'focus:outline-none transition-colors',
@@ -310,7 +321,7 @@ function TabBar({ tabs, planBadge = 0, chatDot = false }) {
                   className="text-[10.5px] leading-none font-semibold"
                   style={{ fontWeight: isActive ? 700 : 600 }}
                 >
-                  {t.label}
+                  {tr(`nav.${tab.labelKey}`)}
                 </span>
               </>
             )}
@@ -339,7 +350,7 @@ export default function Layout() {
       {headerInfo.mode !== 'none' && (
         <Header
           mode={headerInfo.mode}
-          title={headerInfo.title}
+          titleKey={headerInfo.titleKey}
           token={token}
           user={user}
           onAvatarClick={() => setProfileOpen(p => !p)}

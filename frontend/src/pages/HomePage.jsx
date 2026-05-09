@@ -13,7 +13,7 @@ import {
 
 import { api } from '../api'
 import { useStore } from '../store'
-import { DishCardV2 } from '../components/domain'
+import { DishCard } from '../components/domain'
 import {
   PageHeader,
   MetaStrip,
@@ -398,7 +398,7 @@ export default function HomePage() {
           </div>
         ) : (
           filtered.slice(0, 8).map(dish => (
-            <DishCardV2
+            <DishCard
               key={dish.id}
               dish={dish}
               isFav={favIds.has(dish.id)}

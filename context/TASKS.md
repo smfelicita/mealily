@@ -117,15 +117,15 @@
 - [x] GroupFormPage — radio-cards FAMILY/REGULAR, pill-инпуты, аватар группы
 - [x] DishFormPage — sticky form-header с Сохранить, ModeSwitcher Быстро/Расширенно, photo grid с главным фото, MiniSwitch «по вкусу» в строке ингредиента, VisibilityCards
 - [x] DishIngredientPicker — bottom-sheet, поиск, chips категорий, grid карточек, форма создания своего ингредиента
+- [x] ChatPage — mini top-bar (Sparkles + Очистить), guest/empty/active состояния, suggestion-cards, user/assistant bubbles, inline-dish-cards, typing dots, sticky pill-input + ArrowUp
+- [x] Cleanup: старый DishCard.jsx (variants grid/row/inline) удалён, DishCardV2 переименован в DishCard, обновлены импорты
 - [x] **Slim-main**: убран `/v2`-префикс, V2-файлы переименованы в основные, redesign-ветка слита и архивирована
 - [x] **Cleanup**: удалены backward-compat redirects `/v2/*`, удалён `PlanItem.jsx`
 - [x] КБЖУ переписан с «на блюдо» на «на 100 г», скрипт пересчёта
 - [x] `store.fridge` загружается при старте (раньше — только при заходе на FridgePage)
 - [x] Фильтр `difficulty` на серверной стороне в GET /api/dishes
 
-В очереди (Phase B — оставшиеся страницы):
-- [ ] ChatPage — нужен артефакт (фича скрыта от пользователей)
-- [ ] DishCardV2 → DishCard (переименование когда старый DishCard перестанет использоваться в Chat/GroupDetail — после редизайна Chat)
+**Phase A завершена.** Дальнейшие работы — i18n переводы (бэклог), монетизация Pro и т.д.
 
 ---
 

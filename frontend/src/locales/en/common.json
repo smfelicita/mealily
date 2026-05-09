@@ -1,0 +1,160 @@
+{
+  "actions": {
+    "save": "[EN] Сохранить",
+    "cancel": "[EN] Отменить",
+    "delete": "[EN] Удалить",
+    "edit": "[EN] Редактировать",
+    "close": "[EN] Закрыть",
+    "back": "[EN] Назад",
+    "next": "[EN] Далее",
+    "done": "[EN] Готово",
+    "add": "[EN] Добавить",
+    "remove": "[EN] Убрать",
+    "continue": "[EN] Продолжить",
+    "confirm": "[EN] Подтвердить",
+    "copy": "[EN] Скопировать",
+    "share": "[EN] Поделиться",
+    "retry": "[EN] Попробовать снова",
+    "skip": "[EN] Пропустить",
+    "open": "[EN] Открыть"
+  },
+  "units": {
+    "min": "[EN] мин",
+    "kcal": "[EN] ккал",
+    "gram": "[EN] г",
+    "kg": "[EN] кг",
+    "ml": "[EN] мл",
+    "litre": "[EN] л",
+    "piece": "[EN] шт",
+    "garlicClove": "[EN] зубчик",
+    "bunch": "[EN] пучок",
+    "pinch": "[EN] щепотка",
+    "tablespoon": "[EN] ст.л.",
+    "teaspoon": "[EN] ч.л."
+  },
+  "auth": {
+    "loginCta": "[EN] Войти",
+    "registerCta": "[EN] Создать аккаунт",
+    "alreadyHaveAccount": "[EN] Уже есть аккаунт? Войти",
+    "noAccount": "[EN] Нет аккаунта? Регистрация"
+  },
+  "empty": {
+    "nothingFound": "[EN] Ничего не найдено"
+  },
+  "nav": {
+    "home": "[EN] Главная",
+    "dishes": "[EN] Блюда",
+    "fridge": "[EN] Холодильник",
+    "plan": "[EN] План",
+    "chat": "[EN] Чат",
+    "profile": "[EN] Профиль"
+  },
+  "brand": {
+    "name": "MealBot",
+    "subtitle": "[EN] Моя кухня"
+  },
+  "header": {
+    "loginButton": "[EN] Войти",
+    "notifications": "[EN] Уведомления",
+    "profile": "[EN] Профиль"
+  },
+  "profileMenu": {
+    "user": "[EN] Пользователь",
+    "myGroups": "[EN] Мои группы",
+    "createGroup": "[EN] Создать группу",
+    "telegramBot": "[EN] Telegram-бот",
+    "openBot": "[EN] Открыть бота →",
+    "profile": "[EN] Профиль",
+    "logout": "[EN] Выйти",
+    "errorGeneric": "[EN] Ошибка"
+  },
+  "backTitles": {
+    "profile": "[EN] Профиль",
+    "groups": "[EN] Мои группы",
+    "groupNew": "[EN] Новая группа",
+    "group": "[EN] Группа",
+    "groupEdit": "[EN] Редактирование группы"
+  },
+  "dishCategory": {
+    "SOUP": "[EN] Суп",
+    "SALAD": "[EN] Салат",
+    "MAIN": "[EN] Основное",
+    "SIDE": "[EN] Гарнир",
+    "DESSERT": "[EN] Десерт",
+    "DRINK": "[EN] Напиток",
+    "BAKERY": "[EN] Выпечка",
+    "SAUCE": "[EN] Соус"
+  },
+  "mealTime": {
+    "BREAKFAST": "[EN] Утро",
+    "LUNCH": "[EN] Обед",
+    "DINNER": "[EN] Вечер",
+    "SNACK": "[EN] Перекус",
+    "ANYTIME": "[EN] Любое"
+  },
+  "mealTimeShort": {
+    "BREAKFAST": "[EN] Завтрак",
+    "LUNCH": "[EN] Обед",
+    "DINNER": "[EN] Ужин",
+    "SNACK": "[EN] Перекус",
+    "ANYTIME": "[EN] Любое"
+  },
+  "planMealType": {
+    "BREAKFAST": "🌅 [EN] Завтрак",
+    "LUNCH": "☀️ [EN] Обед",
+    "DINNER": "🌙 [EN] Ужин",
+    "SNACK": "🍎 [EN] Перекус",
+    "ANYTIME": "🍽 [EN] Когда угодно"
+  },
+  "difficulty": {
+    "easy": "[EN] Легко",
+    "medium": "[EN] Средне",
+    "hard": "[EN] Сложно"
+  },
+  "ingCategory": {
+    "dairy": "[EN] Молочное",
+    "meat": "[EN] Мясо",
+    "fish": "[EN] Рыба",
+    "vegetable": "[EN] Овощи",
+    "fruit": "[EN] Фрукты",
+    "grain": "[EN] Злаки",
+    "legume": "[EN] Бобовые",
+    "egg": "[EN] Яйца",
+    "bread": "[EN] Хлеб",
+    "oil": "[EN] Масла",
+    "sauce": "[EN] Соусы",
+    "spice": "[EN] Специи",
+    "herb": "[EN] Зелень",
+    "nut": "[EN] Орехи",
+    "sweetener": "[EN] Сладкое",
+    "canned": "[EN] Консервы",
+    "other": "[EN] Другое"
+  },
+  "visibility": {
+    "PRIVATE": {
+      "label": "[EN] Личный",
+      "desc": "[EN] Только вы"
+    },
+    "FAMILY": {
+      "label": "[EN] Семья",
+      "desc": "[EN] Только участники семейной группы"
+    },
+    "ALL_GROUPS": {
+      "label": "[EN] Все мои группы",
+      "desc": "[EN] Участники всех ваших групп"
+    }
+  },
+  "cuisines": {
+    "russian": "[EN] Русская",
+    "italian": "[EN] Итальянская",
+    "asian": "[EN] Азиатская",
+    "mediterranean": "[EN] Средиземноморская",
+    "greek": "[EN] Греческая",
+    "french": "[EN] Французская",
+    "mexican": "[EN] Мексиканская",
+    "japanese": "[EN] Японская",
+    "indian": "[EN] Индийская",
+    "european": "[EN] Европейская",
+    "american": "[EN] Американская"
+  }
+}

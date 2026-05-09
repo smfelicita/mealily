@@ -1,5 +1,4 @@
 export { default as DishCard }             from './DishCard'
-export { default as DishCardV2 }           from './DishCardV2'
 export { default as DishMeta }             from './DishMeta'
 export { default as DishSteps }            from './DishSteps'
 export { default as DishIngredientPicker } from './DishIngredientPicker'

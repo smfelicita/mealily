@@ -26,6 +26,9 @@
     "ml": "мл",
     "litre": "л",
     "piece": "шт",
+    "garlicClove": "зубчик",
+    "bunch": "пучок",
+    "pinch": "щепотка",
     "tablespoon": "ст.л.",
     "teaspoon": "ч.л."
   },
@@ -41,8 +44,117 @@
   "nav": {
     "home": "Главная",
     "dishes": "Блюда",
+    "fridge": "Холодильник",
     "plan": "План",
     "chat": "Чат",
     "profile": "Профиль"
+  },
+  "brand": {
+    "name": "MealBot",
+    "subtitle": "Моя кухня"
+  },
+  "header": {
+    "loginButton": "Войти",
+    "notifications": "Уведомления",
+    "profile": "Профиль"
+  },
+  "profileMenu": {
+    "user": "Пользователь",
+    "myGroups": "Мои группы",
+    "createGroup": "Создать группу",
+    "telegramBot": "Telegram-бот",
+    "openBot": "Открыть бота →",
+    "profile": "Профиль",
+    "logout": "Выйти",
+    "errorGeneric": "Ошибка"
+  },
+  "backTitles": {
+    "profile": "Профиль",
+    "groups": "Мои группы",
+    "groupNew": "Новая группа",
+    "group": "Группа",
+    "groupEdit": "Редактирование группы"
+  },
+  "dishCategory": {
+    "SOUP": "Суп",
+    "SALAD": "Салат",
+    "MAIN": "Основное",
+    "SIDE": "Гарнир",
+    "DESSERT": "Десерт",
+    "DRINK": "Напиток",
+    "BAKERY": "Выпечка",
+    "SAUCE": "Соус"
+  },
+  "mealTime": {
+    "BREAKFAST": "Утро",
+    "LUNCH": "Обед",
+    "DINNER": "Вечер",
+    "SNACK": "Перекус",
+    "ANYTIME": "Любое"
+  },
+  "mealTimeShort": {
+    "BREAKFAST": "Завтрак",
+    "LUNCH": "Обед",
+    "DINNER": "Ужин",
+    "SNACK": "Перекус",
+    "ANYTIME": "Любое"
+  },
+  "planMealType": {
+    "BREAKFAST": "🌅 Завтрак",
+    "LUNCH": "☀️ Обед",
+    "DINNER": "🌙 Ужин",
+    "SNACK": "🍎 Перекус",
+    "ANYTIME": "🍽 Когда угодно"
+  },
+  "difficulty": {
+    "easy": "Легко",
+    "medium": "Средне",
+    "hard": "Сложно"
+  },
+  "ingCategory": {
+    "dairy": "Молочное",
+    "meat": "Мясо",
+    "fish": "Рыба",
+    "vegetable": "Овощи",
+    "fruit": "Фрукты",
+    "grain": "Злаки",
+    "legume": "Бобовые",
+    "egg": "Яйца",
+    "bread": "Хлеб",
+    "oil": "Масла",
+    "sauce": "Соусы",
+    "spice": "Специи",
+    "herb": "Зелень",
+    "nut": "Орехи",
+    "sweetener": "Сладкое",
+    "canned": "Консервы",
+    "other": "Другое"
+  },
+  "visibility": {
+    "PRIVATE": {
+      "label": "Личный",
+      "desc": "Только вы"
+    },
+    "FAMILY": {
+      "label": "Семья",
+      "desc": "Только участники семейной группы"
+    },
+    "ALL_GROUPS": {
+      "label": "Все мои группы",
+      "desc": "Участники всех ваших групп"
+    }
+  },
+  "cuisines": {
+    "russian": "Русская",
+    "italian": "Итальянская",
+    "asian": "Азиатская",
+    "mediterranean": "Средиземноморская",
+    "greek": "Греческая",
+    "french": "Французская",
+    "mexican": "Мексиканская",
+    "japanese": "Японская",
+    "indian": "Индийская",
+    "european": "Европейская",
+    "american": "Американская"
   }
 }

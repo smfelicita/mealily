@@ -1,4 +1,23 @@
+// Справочники приложения. Метки локализованы через t().
+// Поле `label` оставлено как fallback (показывается если t() не вернёт значение
+// — например, в тестах или если страница не пробрасывает useTranslation).
+// В компонентах используем формат: t(`common:dishCategory.${value}`).
+
 export const UNITS = ['г', 'кг', 'мл', 'л', 'шт', 'зубчик', 'пучок', 'щепотка', 'ст.л.', 'ч.л.']
+
+// Маппинг unit → ключ в common.units (для t())
+export const UNIT_I18N_KEY = {
+  'г':       'gram',
+  'кг':      'kg',
+  'мл':      'ml',
+  'л':       'litre',
+  'шт':      'piece',
+  'зубчик':  'garlicClove',
+  'пучок':   'bunch',
+  'щепотка': 'pinch',
+  'ст.л.':   'tablespoon',
+  'ч.л.':    'teaspoon',
+}
 
 export const DISH_CATEGORIES = [
   { value: 'SOUP',    label: 'Суп'      },
@@ -25,11 +44,24 @@ export const DIFFICULTIES = [
   { value: 'hard',   label: 'Сложно' },
 ]
 
-export const CUISINES = [
-  'Русская', 'Итальянская', 'Азиатская', 'Средиземноморская',
-  'Греческая', 'Французская', 'Мексиканская', 'Японская',
-  'Индийская', 'Европейская', 'Американская',
+// Кухни: на UI показываем через t(`common:cuisines.${slug}`).
+// Бэк хранит cuisine как произвольную строку — здесь только пресеты для chip-выбора.
+export const CUISINE_PRESETS = [
+  { value: 'Русская',           i18nKey: 'russian'       },
+  { value: 'Итальянская',       i18nKey: 'italian'       },
+  { value: 'Азиатская',         i18nKey: 'asian'         },
+  { value: 'Средиземноморская', i18nKey: 'mediterranean' },
+  { value: 'Греческая',         i18nKey: 'greek'         },
+  { value: 'Французская',       i18nKey: 'french'        },
+  { value: 'Мексиканская',      i18nKey: 'mexican'       },
+  { value: 'Японская',          i18nKey: 'japanese'      },
+  { value: 'Индийская',         i18nKey: 'indian'        },
+  { value: 'Европейская',       i18nKey: 'european'      },
+  { value: 'Американская',      i18nKey: 'american'      },
 ]
+
+// Старый формат — массив строк, оставлен для обратной совместимости.
+export const CUISINES = CUISINE_PRESETS.map(c => c.value)
 
 export const ING_CATEGORIES = [
   { value: 'dairy',     label: 'Молочное' },
