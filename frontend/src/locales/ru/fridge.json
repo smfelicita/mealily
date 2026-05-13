@@ -1,1 +1,71 @@
-{}
+{
+  "title": "Холодильник",
+  "guest": {
+    "title": "Готовь из того, что есть дома",
+    "description": "Добавь продукты из холодильника — MealBot подберёт блюда, которые можно приготовить прямо сейчас.",
+    "register": "Создать свою кухню",
+    "login": "Уже есть аккаунт? Войти"
+  },
+  "telegram": {
+    "title": "Управляй холодильником в Telegram",
+    "subtitle": "Голосом или текстом, быстрее чем в приложении",
+    "connect": "Подключить",
+    "loading": "...",
+    "polling": "Ожидание…",
+    "errorLink": "Не удалось получить ссылку",
+    "linkedToast": "Telegram подключён!",
+    "closeAria": "Закрыть"
+  },
+  "family": {
+    "title": "Общий холодильник с семьёй",
+    "memberCount_one": "{{count}} участник",
+    "memberCount_few": "{{count}} участника",
+    "memberCount_many": "{{count}} участников"
+  },
+  "metaStrip": {
+    "total": "всего",
+    "basic": "базовых"
+  },
+  "cookCta": {
+    "button": "Что можно приготовить?",
+    "subtitle": "ИИ подберёт блюдо по твоему холодильнику"
+  },
+  "card": {
+    "deleteAria": "Удалить",
+    "saveAria": "Сохранить",
+    "cancelAria": "Отмена",
+    "qtyPlaceholder": "Кол-во",
+    "basicBadge": "базовый"
+  },
+  "empty": {
+    "title": "Холодильник пустой",
+    "description": "Добавь продукты — MealBot подберёт что приготовить из того, что есть",
+    "addButton": "Добавить продукты"
+  },
+  "picker": {
+    "title": "Что у вас есть?",
+    "closeAria": "Закрыть",
+    "searchPlaceholder": "Найти продукт…",
+    "clearAria": "Очистить",
+    "searchResultsLabel": "Результаты по «{{query}}»",
+    "nothingFound": "Ничего не найдено",
+    "allInFridge": "Все продукты уже в холодильнике 🎉",
+    "addingMany": "Добавляем…",
+    "addCount_one": "Добавить {{count}} продукт",
+    "addCount_few": "Добавить {{count}} продукта",
+    "addCount_many": "Добавить {{count}} продуктов",
+    "doneEmpty": "Готово"
+  },
+  "actions": {
+    "fab": "Добавить",
+    "fabAria": "Добавить продукты",
+    "clearAll": "Очистить всё",
+    "clearAllConfirm": "Очистить холодильник?",
+    "clearAllToast": "Холодильник очищен"
+  },
+  "toast": {
+    "addedList": "Добавлено: {{names}}",
+    "removed": "{{name}} убран"
+  },
+  "aiPrompt": "Что можно приготовить из продуктов в моём холодильнике?"
+}

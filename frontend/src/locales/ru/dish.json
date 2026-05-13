@@ -1,1 +1,64 @@
-{}
+{
+  "list": {
+    "pageTitle": "Мои блюда",
+    "searchPlaceholder": "Искать блюда, ингредиенты…",
+    "mealAll": "Все",
+    "mealBreakfast": "Завтрак",
+    "mealLunch": "Обед",
+    "mealDinner": "Ужин",
+    "mealSnack": "Перекус",
+    "fridge": "Холодильник",
+    "favorites": "Избранное",
+    "sortAria": "Сортировка",
+    "sortTitleSoon": "Сортировка (скоро)",
+    "filtersAria": "Фильтры",
+    "bulkHint": "Несколько блюд — добавь",
+    "bulkHintAccent": "через запятую",
+    "addToFavoritesAria": "Избранное",
+    "addToPlanAria": "Добавить в план",
+    "fab": "Добавить блюдо",
+    "minSuffix": "мин",
+    "loadError": "Не удалось загрузить блюда",
+    "addToPlanSuccess": "«{{name}}» добавлено на сегодня",
+    "addToPlanError": "Не удалось добавить",
+    "countDish_one": "блюдо",
+    "countDish_few": "блюда",
+    "countDish_many": "блюд",
+    "countLabelShow": "Показать"
+  },
+  "filters": {
+    "title": "Фильтры",
+    "reset": "Сбросить",
+    "tags": "Теги",
+    "cuisine": "Кухня",
+    "difficulty": "Сложность",
+    "applyClose": "Закрыть"
+  },
+  "empty": {
+    "ownTitle": "Ваша кухня пока пуста",
+    "ownBody": "Добавьте первое блюдо — личное или для всей семьи",
+    "ownButton": "Добавить блюдо",
+    "guestTitle": "Добавь свои блюда",
+    "guestBody": "Зарегистрируйся — и MealBot каждый день будет подсказывать что приготовить",
+    "guestRegister": "Создать свою кухню",
+    "guestLogin": "Уже есть аккаунт? Войти",
+    "filteredTitle": "Ничего не найдено",
+    "filteredBody": "Попробуй изменить поиск или сбросить фильтры",
+    "filteredReset": "Сбросить фильтры"
+  },
+  "popularTags": {
+    "fast": "быстро",
+    "filling": "сытно",
+    "light": "лёгкое",
+    "lent": "постно",
+    "soup": "суп",
+    "salad": "салат",
+    "simple": "просто",
+    "meat": "мясо",
+    "glutenFree": "без глютена"
+  },
+  "common": {
+    "closeAria": "Закрыть",
+    "clearAria": "Очистить"
+  }
+}

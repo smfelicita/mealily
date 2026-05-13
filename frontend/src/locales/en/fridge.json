@@ -1,1 +1,71 @@
-{}
+{
+  "title": "[EN] Холодильник",
+  "guest": {
+    "title": "[EN] Готовь из того, что есть дома",
+    "description": "[EN] Добавь продукты из холодильника — MealBot подберёт блюда, которые можно приготовить прямо сейчас.",
+    "register": "[EN] Создать свою кухню",
+    "login": "[EN] Уже есть аккаунт? Войти"
+  },
+  "telegram": {
+    "title": "[EN] Управляй холодильником в Telegram",
+    "subtitle": "[EN] Голосом или текстом, быстрее чем в приложении",
+    "connect": "[EN] Подключить",
+    "loading": "...",
+    "polling": "[EN] Ожидание…",
+    "errorLink": "[EN] Не удалось получить ссылку",
+    "linkedToast": "[EN] Telegram подключён!",
+    "closeAria": "[EN] Закрыть"
+  },
+  "family": {
+    "title": "[EN] Общий холодильник с семьёй",
+    "memberCount_one": "[EN] {{count}} участник",
+    "memberCount_few": "[EN] {{count}} участника",
+    "memberCount_many": "[EN] {{count}} участников"
+  },
+  "metaStrip": {
+    "total": "[EN] всего",
+    "basic": "[EN] базовых"
+  },
+  "cookCta": {
+    "button": "[EN] Что можно приготовить?",
+    "subtitle": "[EN] ИИ подберёт блюдо по твоему холодильнику"
+  },
+  "card": {
+    "deleteAria": "[EN] Удалить",
+    "saveAria": "[EN] Сохранить",
+    "cancelAria": "[EN] Отмена",
+    "qtyPlaceholder": "[EN] Кол-во",
+    "basicBadge": "[EN] базовый"
+  },
+  "empty": {
+    "title": "[EN] Холодильник пустой",
+    "description": "[EN] Добавь продукты — MealBot подберёт что приготовить из того, что есть",
+    "addButton": "[EN] Добавить продукты"
+  },
+  "picker": {
+    "title": "[EN] Что у вас есть?",
+    "closeAria": "[EN] Закрыть",
+    "searchPlaceholder": "[EN] Найти продукт…",
+    "clearAria": "[EN] Очистить",
+    "searchResultsLabel": "[EN] Результаты по «{{query}}»",
+    "nothingFound": "[EN] Ничего не найдено",
+    "allInFridge": "[EN] Все продукты уже в холодильнике 🎉",
+    "addingMany": "[EN] Добавляем…",
+    "addCount_one": "[EN] Добавить {{count}} продукт",
+    "addCount_few": "[EN] Добавить {{count}} продукта",
+    "addCount_many": "[EN] Добавить {{count}} продуктов",
+    "doneEmpty": "[EN] Готово"
+  },
+  "actions": {
+    "fab": "[EN] Добавить",
+    "fabAria": "[EN] Добавить продукты",
+    "clearAll": "[EN] Очистить всё",
+    "clearAllConfirm": "[EN] Очистить холодильник?",
+    "clearAllToast": "[EN] Холодильник очищен"
+  },
+  "toast": {
+    "addedList": "[EN] Добавлено: {{names}}",
+    "removed": "[EN] {{name}} убран"
+  },
+  "aiPrompt": "[EN] Что можно приготовить из продуктов в моём холодильнике?"
+}

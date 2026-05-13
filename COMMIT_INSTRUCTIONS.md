@@ -1,44 +1,70 @@
-# Коммит: i18n HomePage
+# Коммит: i18n DishesPage + FridgePage
 
-Ветка: `main`. Frontend-only.
+Ветка: `main`. Frontend-only. Один коммит на обе страницы.
 
-Третий шаг i18n. Главная страница (`/`) — все UI-строки через `t()`.
+Шаги 4 и 5 i18n-перевода.
 
 ## Что сделано
 
-### `home` namespace заполнен
+### `dish` namespace заполнен (часть для DishesPage)
 
-`frontend/src/locales/ru/home.json` и `en/home.json`:
+`frontend/src/locales/ru/dish.json` и `en/dish.json`:
 
-- `titleLine1` / `titleLine2` — две строки заголовка (раньше был `<>...<br/>...</>` хардкодом)
-- `greeting` — «Добрый день, {{name}} 👋» (interpolation)
-- `mealChips.{all,breakfast,lunch,dinner,snack}` — фильтр времени приёма
-- `guestBanner.{title,description,registerText,loginText}` — баннер гостя
-- `emptyFridge.{title,body}` — подсказка про пустой холодильник
-- `metrics.{inPlan,inFridge,inFavorites}` — метрики MetaStrip
-- `fridgeSuggest.{prefix,suffix_one,suffix_few,suffix_many}` — фраза «Из вашего холодильника можно приготовить N блюд» с плюрализацией i18next
-- `todayPinned.{label,cookButton,cookTimeMin}` — секция «Сегодня в плане»
-- `quickActions.{favorites,fridge}` — кнопки под списком
-- `addOwnDish.{guest,user}` — CTA под списком
-- `list.{loading,empty,loadError}` — состояния списка
-- `addToPlan.{success,error}` — toast'ы (с interpolation `{{name}}`)
+- `list.*` — заголовок, search, чипы mealTime, кнопки фильтров, FAB, hint про bulk-add, состояния списка, toast'ы, плюрализация «блюдо/блюда/блюд»
+- `filters.*` — title/reset/tags/cuisine/difficulty/applyClose
+- `empty.*` — три варианта empty-стейта (own / guest / filtered)
+- `popularTags.*` — фиксированный список тегов с переводимым label (value на бэк уходит как было — на русском)
+- `common.*` — closeAria, clearAria для общих aria-меток
 
-### HomePage.jsx
+DishDetailPage и DishFormPage будут использовать тот же namespace `dish`, но другие подключи — добавятся в свой шаг.
 
-- `useTranslation('home')` пробрасывается во все суб-компоненты (MealChips, FridgeSuggest, TodayPinned, QuickActions, AddOwnDish, главный HomePage).
-- `MEAL_TIMES` теперь хранит `labelKey` (`breakfast`, `lunch`, …) вместо `label`. Метка чипа берётся через `t(\`mealChips.${labelKey}\`)`.
-- `FridgeSuggest` использует i18next-плюрализацию: `t('fridgeSuggest.suffix', { count })` подставит `_one` / `_few` / `_many` по правилам русского языка.
-- `addToPlan.success` и `greeting` используют interpolation `{{name}}`.
-- `cookTimeMin` — interpolation `{{n}}` для числа минут.
-- `title` страницы — две строки `t('titleLine1')` + `<br/>` + `t('titleLine2')` (раньше было `<>Что приготовить<br/>сегодня?</>` хардкодом).
+### `fridge` namespace заполнен
+
+`frontend/src/locales/ru/fridge.json` и `en/fridge.json`:
+
+- `title` — заголовок «Холодильник»
+- `guest.*` — guest-блок (title/description/register/login)
+- `telegram.*` — TelegramBanner (title/subtitle/connect/loading/polling/errorLink/linkedToast/closeAria)
+- `family.*` — FamilyBanner с плюрализацией `memberCount_one/few/many`
+- `metaStrip.*` — total / basic
+- `cookCta.*` — AI-кнопка «Что можно приготовить?»
+- `card.*` — ProductCard (deleteAria/saveAria/cancelAria/qtyPlaceholder/basicBadge)
+- `empty.*` — пустой холодильник
+- `picker.*` — bottom-sheet (title/closeAria/searchPlaceholder/clearAria/searchResultsLabel/nothingFound/allInFridge/addingMany/addCount_one/few/many/doneEmpty)
+- `actions.*` — clearAll/clearAllConfirm/clearAllToast/fab/fabAria
+- `toast.*` — addedList/removed (с interpolation)
+- `aiPrompt` — текст промпта для AI-чата
+
+### DishesPage.jsx
+
+- `useTranslation('dish')` пробрасывается во все субкомпоненты
+- `MEAL_TIMES` — теперь `labelKey` вместо `label`, рендер через `t(\`list.${labelKey}\`)`
+- `DIFFICULTIES` — список просто `id`, рендер через `t('common:difficulty.${id}')`
+- `CUISINE_LIST` — массив `{value, key}`. На бэк уходит `value` (русское), показывается через `t('common:cuisines.${key}')`
+- `POPULAR_TAGS` — массив `{value, key}`. На бэк уходит `value` (русское), показывается через `t(\`popularTags.${key}\`)`
+- Удалён локальный `pluralDish` — теперь через i18next plural (`t('list.countDish', { count })`)
+- Toast'ы и заголовок страницы через `t()`
+- FilterSheet использует мульти-namespace `useTranslation(['dish', 'common'])` для cuisines/difficulty
+
+### FridgePage.jsx
+
+- `CAT_META` разделён: `CAT_EMOJI` остаётся (эмодзи универсальны), label берётся через `t('common:ingCategory.${cat}')` с фолбэком на 'other' для `pantry`
+- Удалён локальный `pluralProduct` — через i18next `addCount_one/few/many` и `memberCount_one/few/many`
+- TelegramBanner использует `useTranslation('fridge')` для всех состояний
+- PickerSheet использует мульти-namespace `useTranslation(['fridge', 'common'])` для категорий
+- Все confirm-диалоги, toast'ы, aria-labels через `t()`
+- `aiPrompt` для AI-кнопки — теперь локализованный (но это ок — бэк-чат принимает любой язык)
 
 ## Файлы
 
 ```
 modified:   COMMIT_INSTRUCTIONS.md
-modified:   frontend/src/locales/ru/home.json
-modified:   frontend/src/locales/en/home.json
-modified:   frontend/src/pages/HomePage.jsx
+modified:   frontend/src/locales/ru/dish.json
+modified:   frontend/src/locales/en/dish.json
+modified:   frontend/src/locales/ru/fridge.json
+modified:   frontend/src/locales/en/fridge.json
+modified:   frontend/src/pages/DishesPage.jsx
+modified:   frontend/src/pages/FridgePage.jsx
 ```
 
 Сборка: 1859 модулей, без ошибок.
@@ -51,18 +77,28 @@ git status
 git branch --show-current      # main
 
 git add COMMIT_INSTRUCTIONS.md \
-        frontend/src/locales/ru/home.json \
-        frontend/src/locales/en/home.json \
-        frontend/src/pages/HomePage.jsx
+        frontend/src/locales/ru/dish.json \
+        frontend/src/locales/en/dish.json \
+        frontend/src/locales/ru/fridge.json \
+        frontend/src/locales/en/fridge.json \
+        frontend/src/pages/DishesPage.jsx \
+        frontend/src/pages/FridgePage.jsx
 
-git commit -m "i18n(home): перенос HomePage на t() + ru/en/home.json
+git commit -m "i18n(dish, fridge): перенос DishesPage и FridgePage на t()
 
-- ru/home.json и en/home.json заполнены (en — placeholder'ы [EN])
-- MealChips, FridgeSuggest, TodayPinned, QuickActions, AddOwnDish — useTranslation('home')
-- Заголовок страницы (titleLine1/titleLine2) и greeting (interpolation {{name}})
-- fridgeSuggest с плюрализацией i18next (suffix_one/few/many)
-- toast'ы (addToPlan.success/error) и состояния списка
-- MEAL_TIMES хранит labelKey, метки берутся из mealChips namespace
+DishesPage:
+- ru/dish.json и en/dish.json (часть list/filters/empty/popularTags)
+- MEAL_TIMES, DIFFICULTIES, CUISINE_LIST, POPULAR_TAGS — value (бэк) +
+  labelKey/key (UI через t()). Бэк продолжает получать русские строки.
+- pluralDish удалён → i18next plural (countDish_one/few/many)
+- FilterSheet берёт ключи из dish + common (cuisines, difficulty)
+
+FridgePage:
+- ru/fridge.json и en/fridge.json (полностью)
+- CAT_META → CAT_EMOJI + t('common:ingCategory.{cat}'); label берётся
+  через i18n, фолбэк на 'other' для pantry
+- pluralProduct удалён → i18next plural (addCount/memberCount)
+- TelegramBanner, PickerSheet, ProductCard, FamilyBanner — все через t()
 
 Хардкоженный русский остался только в комментариях."
 
@@ -77,33 +113,48 @@ ssh root@194.87.130.215 "cd /var/www/mealbot && git pull && cd frontend && npm r
 
 ## Что проверить после деплоя
 
-### `/` (главная), RU
-- Заголовок «Что приготовить / сегодня?» (две строки)
-- Если залогинен — приветствие «Добрый день, {имя} 👋»
-- Чипы фильтра «Все / Завтрак / Обед / Ужин / Перекус»
-- Если есть блюда из холодильника — sage-баннер «Из вашего холодильника можно приготовить N блюд» (плюрализация: 1 блюдо / 2-4 блюда / 5+ блюд)
-- Метрики: «В плане», «В холодильнике», «В избранном»
+### `/dishes`, RU
+- Заголовок «Мои блюда», справа счётчик «N блюд» (плюрализация)
+- Search-поле «Искать блюда, ингредиенты…»
+- Чипы «Все / Завтрак / Обед / Ужин / Перекус»
+- Кнопки «Холодильник» / «Избранное»
+- FAB «Добавить блюдо»
+- Hint «Несколько блюд — добавь через запятую»
+- Empty: «Ваша кухня пока пуста» / «Добавь свои блюда» / «Ничего не найдено»
 
-### Переключение в EN
-- Заголовок: «[EN] Что приготовить / [EN] сегодня?»
-- Приветствие: «[EN] Добрый день, {имя} 👋»
-- Чипы: «[EN] Все», «[EN] Завтрак», и т.д.
-- Метрики: «[EN] В плане», и т.д.
-- Кнопки: «[EN] Избранное», «[EN] Холодильник», «[EN] Добавить своё блюдо»
-- TodayPinned: «[EN] Сегодня в плане», «[EN] Готовлю!»
-- Toast при добавлении в план: «[EN] «{name}» добавлено на сегодня»
+### `/dishes`, EN
+- Все строки `[EN] ...`
+- Плюрализация: 1 блюдо / 2 блюда / 5 блюд → 1 [EN] блюдо / 2 [EN] блюда / 5 [EN] блюд (правила русского сохраняются для plural в этом placeholder'е, профперевод заменит на правильный английский)
 
-### Что НЕ переводится пока
-- Названия самих блюд из БД — на русском (это контент)
-- Текст кнопок DishCard (Heart, Plus) — без текста, иконки
-- Названия `mealTime` в DishCard meta-строке — это уже из общих констант, могут отображаться. Это будет в шаге переноса DishCard на t().
+### Фильтры (bottom-sheet)
+- Заголовок «Фильтры», ссылка «Сбросить»
+- Секции: «Теги» / «Кухня» / «Сложность»
+- В EN — все `[EN] ...`
+- Кнопка снизу «Показать N блюд»
+
+### `/fridge`, RU
+- Гость → guest-блок «Готовь из того, что есть дома»
+- Залогинен пустой → «Холодильник пустой» с кнопкой
+- Залогинен с продуктами → MetaStrip всего/базовых, AI-кнопка «Что можно приготовить?», категории через Бренд (Молочное/Мясо/Овощи)
+- Telegram banner если не подключён
+- FAB «Добавить»
+- «Очистить всё» внизу (с confirm-диалогом)
+
+### `/fridge`, EN
+- Все строки `[EN] ...`
+- Категории через `common:ingCategory.*` — должны переключаться
+
+### Picker
+- Заголовок «Что у вас есть?»
+- Поиск «Найти продукт…»
+- Группировка по категориям (с эмодзи)
+- Кнопка «Добавить N продуктов» (плюрализация)
+- При пустом списке: «Все продукты уже в холодильнике 🎉»
 
 ## Прогресс i18n
 
-- ✅ Foundation (en/ структура, i18n.js, common.json)
-- ✅ Layout + TabBar
-- ✅ ProfilePage
-- ✅ **HomePage**
-- ⏳ DishesPage, DishDetailPage, FridgePage, MealPlanPage, AuthPage, ChatPage, GroupsPage, GroupDetailPage, GroupFormPage, DishFormPage
+- ✅ Foundation, Layout, ProfilePage, HomePage
+- ✅ **DishesPage, FridgePage**
+- ⏳ DishDetailPage, MealPlanPage, AuthPage, ChatPage, GroupsPage, GroupDetailPage, GroupFormPage, DishFormPage
 - ⏳ Компоненты (DishCard, MetaStrip, GuestBlock, HintBanner, etc.)
-- ⏳ Финальный pass проф-перевода (заменить `[EN] ...` на нормальный английский)
+- ⏳ Финальный pass проф-перевода

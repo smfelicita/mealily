@@ -1,1 +1,64 @@
-{}
+{
+  "list": {
+    "pageTitle": "[EN] Мои блюда",
+    "searchPlaceholder": "[EN] Искать блюда, ингредиенты…",
+    "mealAll": "[EN] Все",
+    "mealBreakfast": "[EN] Завтрак",
+    "mealLunch": "[EN] Обед",
+    "mealDinner": "[EN] Ужин",
+    "mealSnack": "[EN] Перекус",
+    "fridge": "[EN] Холодильник",
+    "favorites": "[EN] Избранное",
+    "sortAria": "[EN] Сортировка",
+    "sortTitleSoon": "[EN] Сортировка (скоро)",
+    "filtersAria": "[EN] Фильтры",
+    "bulkHint": "[EN] Несколько блюд — добавь",
+    "bulkHintAccent": "[EN] через запятую",
+    "addToFavoritesAria": "[EN] Избранное",
+    "addToPlanAria": "[EN] Добавить в план",
+    "fab": "[EN] Добавить блюдо",
+    "minSuffix": "[EN] мин",
+    "loadError": "[EN] Не удалось загрузить блюда",
+    "addToPlanSuccess": "[EN] «{{name}}» добавлено на сегодня",
+    "addToPlanError": "[EN] Не удалось добавить",
+    "countDish_one": "[EN] блюдо",
+    "countDish_few": "[EN] блюда",
+    "countDish_many": "[EN] блюд",
+    "countLabelShow": "[EN] Показать"
+  },
+  "filters": {
+    "title": "[EN] Фильтры",
+    "reset": "[EN] Сбросить",
+    "tags": "[EN] Теги",
+    "cuisine": "[EN] Кухня",
+    "difficulty": "[EN] Сложность",
+    "applyClose": "[EN] Закрыть"
+  },
+  "empty": {
+    "ownTitle": "[EN] Ваша кухня пока пуста",
+    "ownBody": "[EN] Добавьте первое блюдо — личное или для всей семьи",
+    "ownButton": "[EN] Добавить блюдо",
+    "guestTitle": "[EN] Добавь свои блюда",
+    "guestBody": "[EN] Зарегистрируйся — и MealBot каждый день будет подсказывать что приготовить",
+    "guestRegister": "[EN] Создать свою кухню",
+    "guestLogin": "[EN] Уже есть аккаунт? Войти",
+    "filteredTitle": "[EN] Ничего не найдено",
+    "filteredBody": "[EN] Попробуй изменить поиск или сбросить фильтры",
+    "filteredReset": "[EN] Сбросить фильтры"
+  },
+  "popularTags": {
+    "fast": "[EN] быстро",
+    "filling": "[EN] сытно",
+    "light": "[EN] лёгкое",
+    "lent": "[EN] постно",
+    "soup": "[EN] суп",
+    "salad": "[EN] салат",
+    "simple": "[EN] просто",
+    "meat": "[EN] мясо",
+    "glutenFree": "[EN] без глютена"
+  },
+  "common": {
+    "closeAria": "[EN] Закрыть",
+    "clearAria": "[EN] Очистить"
+  }
+}

@@ -5,6 +5,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   Refrigerator, Search, Plus, X, Check, Sparkles, Trash2, Users, Send,
 } from 'lucide-react'
@@ -15,26 +16,14 @@ import { UNITS } from '../constants'
 import { PageHeader, GuestBlock, useToast } from '../components/ui'
 
 // ─── Категории ─────────────────────────────────────────────────────
-const CAT_META = {
-  dairy:     { label: 'Молочное',  emoji: '🥛' },
-  protein:   { label: 'Белки',     emoji: '🥚' },
-  vegetable: { label: 'Овощи',     emoji: '🥕' },
-  fruit:     { label: 'Фрукты',    emoji: '🍎' },
-  grain:     { label: 'Злаки',     emoji: '🌾' },
-  meat:      { label: 'Мясо',      emoji: '🥩' },
-  fish:      { label: 'Рыба',      emoji: '🐟' },
-  egg:       { label: 'Яйца',      emoji: '🥚' },
-  bread:     { label: 'Хлеб',      emoji: '🍞' },
-  spice:     { label: 'Специи',    emoji: '🌶' },
-  herb:      { label: 'Зелень',    emoji: '🌿' },
-  oil:       { label: 'Масла',     emoji: '🫒' },
-  sauce:     { label: 'Соусы',     emoji: '🫙' },
-  nut:       { label: 'Орехи',     emoji: '🥜' },
-  sweetener: { label: 'Сладкое',   emoji: '🍯' },
-  canned:    { label: 'Консервы',  emoji: '🥫' },
-  pantry:    { label: 'Кладовая',  emoji: '🥫' },
-  legume:    { label: 'Бобовые',   emoji: '🫘' },
-  other:     { label: 'Остальное', emoji: '📦' },
+// Эмодзи остаются хардкодом (универсальны для всех языков),
+// названия берутся через t('common:ingCategory.<key>').
+// pantry в схеме нет — используем emoji, label fallback на 'other'.
+const CAT_EMOJI = {
+  dairy: '🥛', protein: '🥚', vegetable: '🥕', fruit: '🍎', grain: '🌾',
+  meat:  '🥩', fish: '🐟',     egg: '🥚',       bread: '🍞', spice: '🌶',
+  herb:  '🌿', oil: '🫒',       sauce: '🫙',     nut: '🥜',   sweetener: '🍯',
+  canned:'🥫', pantry: '🥫',   legume: '🫘',    other: '📦',
 }
 
 const CAT_ORDER = [
@@ -44,12 +33,6 @@ const CAT_ORDER = [
 ]
 
 // ─── Helpers ───────────────────────────────────────────────────────
-function pluralProduct(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'продукт'
-  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'продукта'
-  return 'продуктов'
-}
-
 function groupByCat(list) {
   const out = {}
   for (const it of list) {
@@ -61,6 +44,7 @@ function groupByCat(list) {
 
 // ═══ Telegram banner ════════════════════════════════════════════════
 function TelegramBanner({ onLinked, onError, onClose }) {
+  const { t } = useTranslation('fridge')
   const [status, setStatus] = useState('idle') // idle | loading | polling
   const pollRef    = useRef(null)
   const timeoutRef = useRef(null)
@@ -91,11 +75,14 @@ function TelegramBanner({ onLinked, onError, onClose }) {
       }, 180_000)
     } catch (err) {
       setStatus('idle')
-      onError?.(err.message || 'Не удалось получить ссылку')
+      onError?.(err.message || t('telegram.errorLink'))
     }
   }
 
-  const label = status === 'loading' ? '...' : status === 'polling' ? 'Ожидание…' : 'Подключить'
+  const label =
+    status === 'loading' ? t('telegram.loading') :
+    status === 'polling' ? t('telegram.polling') :
+    t('telegram.connect')
 
   return (
     <div className="mx-4 mt-3 rounded-2xl flex items-center gap-3 relative
@@ -105,10 +92,10 @@ function TelegramBanner({ onLinked, onError, onClose }) {
       </div>
       <div className="flex-1 min-w-0 pr-6">
         <div className="text-[13.5px] font-bold leading-snug text-text">
-          Управляй холодильником в Telegram
+          {t('telegram.title')}
         </div>
         <div className="text-[11.5px] text-text-3 mt-0.5">
-          Голосом или текстом, быстрее чем в приложении
+          {t('telegram.subtitle')}
         </div>
       </div>
       <button
@@ -122,7 +109,7 @@ function TelegramBanner({ onLinked, onError, onClose }) {
       <button
         onClick={onClose}
         className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center text-text-3"
-        aria-label="Закрыть"
+        aria-label={t('telegram.closeAria')}
       >
         <X size={13} strokeWidth={2} />
       </button>
@@ -132,17 +119,18 @@ function TelegramBanner({ onLinked, onError, onClose }) {
 
 // ═══ Family banner ═══════════════════════════════════════════════════
 function FamilyBanner({ count }) {
+  const { t } = useTranslation('fridge')
   return (
     <div className="mx-4 mt-3 rounded-xl flex items-center gap-2
       bg-sage-muted border border-sage-border px-3.5 py-2.5">
       <Users size={15} strokeWidth={2.2} className="text-sage" />
       <div className="text-[13px] font-semibold flex-1 text-sage">
-        Общий холодильник с семьёй
+        {t('family.title')}
       </div>
       {count != null && (
         <span className="text-[11px] font-bold px-2 py-0.5 rounded-full
           bg-bg-2 text-sage border border-sage-border">
-          {count} {count === 1 ? 'участник' : count < 5 ? 'участника' : 'участников'}
+          {t('family.memberCount', { count })}
         </span>
       )}
     </div>
@@ -151,9 +139,10 @@ function FamilyBanner({ count }) {
 
 // ═══ Meta strip (всего / базовых) ══════════════════════════════════
 function FridgeMetaStrip({ total, basic }) {
+  const { t } = useTranslation('fridge')
   const items = [
-    { value: total, label: 'всего' },
-    { value: basic, label: 'базовых' },
+    { value: total, label: t('metaStrip.total') },
+    { value: basic, label: t('metaStrip.basic') },
   ]
   return (
     <div className="mx-4 mt-4 rounded-2xl flex items-stretch justify-between
@@ -177,6 +166,7 @@ function FridgeMetaStrip({ total, basic }) {
 
 // ═══ AI cook CTA ═══════════════════════════════════════════════════
 function AICookCTA({ onClick }) {
+  const { t } = useTranslation('fridge')
   return (
     <div className="px-4 mt-4">
       <button
@@ -187,10 +177,10 @@ function AICookCTA({ onClick }) {
         style={{ boxShadow: '0 6px 18px rgba(92,122,89,0.35)' }}
       >
         <Sparkles size={16} strokeWidth={2.2} />
-        Что можно приготовить?
+        {t('cookCta.button')}
       </button>
       <div className="text-[11.5px] text-center mt-1.5 text-text-3">
-        ИИ подберёт блюдо по твоему холодильнику
+        {t('cookCta.subtitle')}
       </div>
     </div>
   )
@@ -198,6 +188,7 @@ function AICookCTA({ onClick }) {
 
 // ═══ Product card ══════════════════════════════════════════════════
 function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
+  const { t } = useTranslation('fridge')
   const [qty, setQty]   = useState(item.quantityValue != null ? String(item.quantityValue) : '')
   const [unit, setUnit] = useState(item.quantityUnit || UNITS[0])
 
@@ -227,7 +218,7 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
           type="button"
           onClick={onDelete}
           className="w-5 h-5 rounded flex items-center justify-center shrink-0 text-text-3"
-          aria-label="Удалить"
+          aria-label={t('card.deleteAria')}
         >
           <X size={13} strokeWidth={2} />
         </button>
@@ -237,7 +228,7 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
         {item.isBasic && (
           <span className="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md
             bg-sage-muted text-sage border border-sage-border">
-            базовый
+            {t('card.basicBadge')}
           </span>
         )}
         {item.quantityValue != null && !editing && (
@@ -255,7 +246,7 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
             value={qty}
             onChange={e => setQty(e.target.value)}
             autoFocus
-            placeholder="Кол-во"
+            placeholder={t('card.qtyPlaceholder')}
             className="flex-1 min-w-0 h-8 px-2 rounded-lg text-[12.5px] outline-none tabular-nums
               bg-bg-3 border border-border text-text focus:border-accent"
           />
@@ -272,7 +263,7 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
             type="button"
             onClick={() => onSave(qty, unit)}
             className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-sage text-white"
-            aria-label="Сохранить"
+            aria-label={t('card.saveAria')}
           >
             <Check size={14} strokeWidth={3} />
           </button>
@@ -281,7 +272,7 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
             onClick={onCancel}
             className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0
               bg-bg-3 border border-border text-text-2"
-            aria-label="Отмена"
+            aria-label={t('card.cancelAria')}
           >
             <X size={14} strokeWidth={2.4} />
           </button>
@@ -293,12 +284,16 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
 
 // ═══ Category block ═════════════════════════════════════════════════
 function CategoryBlock({ cat, items, editingId, setEditingId, onDelete, onSave }) {
-  const meta = CAT_META[cat] || CAT_META.other
+  const { t } = useTranslation('common')
+  const emoji = CAT_EMOJI[cat] || CAT_EMOJI.other
+  // pantry → other (нет в ingCategory) — фолбэк на 'other'
+  const labelKey = cat === 'pantry' ? 'other' : cat
+  const label = t(`ingCategory.${labelKey}`, { defaultValue: t('ingCategory.other') })
   return (
     <section className="mt-6 px-4">
       <div className="text-[11px] font-bold uppercase tracking-wider mb-2.5 flex items-center gap-1.5 text-text-2">
-        <span className="text-[13px] leading-none">{meta.emoji}</span>
-        <span>{meta.label}</span>
+        <span className="text-[13px] leading-none">{emoji}</span>
+        <span>{label}</span>
         <span className="text-text-3">· {items.length}</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
@@ -320,6 +315,7 @@ function CategoryBlock({ cat, items, editingId, setEditingId, onDelete, onSave }
 
 // ═══ Picker modal ═══════════════════════════════════════════════════
 function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading }) {
+  const { t } = useTranslation(['fridge', 'common'])
   const [selected, setSelected] = useState(() => new Set())
   const [query, setQuery]       = useState('')
 
@@ -373,7 +369,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
         type="button"
         onClick={onClose}
         className="flex-1"
-        aria-label="Закрыть"
+        aria-label={t('picker.closeAria')}
       />
 
       {/* sheet */}
@@ -388,12 +384,12 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
 
         {/* header */}
         <div className="flex items-center justify-between px-5 pt-2 pb-3 shrink-0">
-          <h2 className="text-[17px] font-bold text-text">Что у вас есть?</h2>
+          <h2 className="text-[17px] font-bold text-text">{t('picker.title')}</h2>
           <button
             type="button"
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center bg-bg-3 text-text-2"
-            aria-label="Закрыть"
+            aria-label={t('picker.closeAria')}
           >
             <X size={15} strokeWidth={2} />
           </button>
@@ -406,7 +402,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
             <input
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Найти продукт…"
+              placeholder={t('picker.searchPlaceholder')}
               className="flex-1 bg-transparent outline-none text-[13.5px] text-text"
             />
             {query && (
@@ -414,6 +410,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
                 type="button"
                 onClick={() => setQuery('')}
                 className="w-5 h-5 rounded-full flex items-center justify-center bg-border text-text-2"
+                aria-label={t('picker.clearAria')}
               >
                 <X size={11} strokeWidth={2.4} />
               </button>
@@ -426,15 +423,16 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
           {searchResults ? (
             <div className="flex flex-col gap-1">
               <div className="text-[11px] font-bold uppercase tracking-wider mb-1 text-text-3">
-                Результаты по «{query}»
+                {t('picker.searchResultsLabel', { query })}
               </div>
               {searchResults.length === 0 && (
                 <div className="text-[13px] text-center py-8 text-text-3">
-                  Ничего не найдено
+                  {t('picker.nothingFound')}
                 </div>
               )}
               {searchResults.map(it => {
                 const on = selected.has(it.id)
+                const catKey = it.category === 'pantry' ? 'other' : (it.category || 'other')
                 return (
                   <button
                     key={it.id}
@@ -448,7 +446,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
                     <span className="text-[20px] leading-none">{it.emoji || '📦'}</span>
                     <span className="flex-1 text-[13.5px] font-semibold text-text">{it.nameRu}</span>
                     <span className="text-[11px] text-text-3">
-                      {CAT_META[it.category]?.label || ''}
+                      {t(`common:ingCategory.${catKey}`, { defaultValue: '' })}
                     </span>
                     <div className={[
                       'w-7 h-7 rounded-full flex items-center justify-center',
@@ -464,16 +462,18 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
             <div className="flex flex-col gap-4">
               {orderedCats.length === 0 && (
                 <div className="text-[13px] text-center py-8 text-text-3">
-                  Все продукты уже в холодильнике 🎉
+                  {t('picker.allInFridge')}
                 </div>
               )}
               {orderedCats.map(cat => {
-                const meta = CAT_META[cat] || CAT_META.other
+                const emoji = CAT_EMOJI[cat] || CAT_EMOJI.other
+                const labelKey = cat === 'pantry' ? 'other' : cat
+                const label = t(`common:ingCategory.${labelKey}`, { defaultValue: t('common:ingCategory.other') })
                 return (
                   <div key={cat}>
                     <div className="text-[11px] font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5 text-text-2">
-                      <span className="text-[13px] leading-none">{meta.emoji}</span>
-                      {meta.label}
+                      <span className="text-[13px] leading-none">{emoji}</span>
+                      {label}
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {groupedAdd[cat].map(it => {
@@ -521,9 +521,9 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
             {count > 0 ? (
               <>
                 <Plus size={16} strokeWidth={2.4} />
-                {loading ? 'Добавляем…' : `Добавить ${count} ${pluralProduct(count)}`}
+                {loading ? t('picker.addingMany') : t('picker.addCount', { count })}
               </>
-            ) : 'Готово'}
+            ) : t('picker.doneEmpty')}
           </button>
         </div>
       </div>
@@ -533,15 +533,16 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
 
 // ═══ Empty state ════════════════════════════════════════════════════
 function FridgeEmpty({ onAdd }) {
+  const { t } = useTranslation('fridge')
   return (
     <div className="px-5 mt-16 flex flex-col items-center text-center">
       <div className="w-16 h-16 rounded-full flex items-center justify-center
         bg-bg-3 border border-border">
         <Refrigerator size={28} strokeWidth={1.8} className="text-accent" />
       </div>
-      <h2 className="mt-4 text-[17px] font-bold text-text">Холодильник пустой</h2>
+      <h2 className="mt-4 text-[17px] font-bold text-text">{t('empty.title')}</h2>
       <p className="mt-2 text-[13px] max-w-[280px] leading-relaxed text-text-2">
-        Добавь продукты — MealBot подберёт что приготовить из того, что есть
+        {t('empty.description')}
       </p>
       <button
         type="button"
@@ -551,7 +552,7 @@ function FridgeEmpty({ onAdd }) {
         style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
       >
         <Plus size={16} strokeWidth={2.4} />
-        Добавить продукты
+        {t('empty.addButton')}
       </button>
     </div>
   )
@@ -559,16 +560,17 @@ function FridgeEmpty({ onAdd }) {
 
 // ═══ Guest block ═══════════════════════════════════════════════════
 function GuestFridgeBlock() {
+  const { t } = useTranslation('fridge')
   return (
     <div className="pt-5 pb-24 px-4">
-      <PageHeader title="Холодильник" />
+      <PageHeader title={t('title')} />
       <div className="mt-4">
         <GuestBlock
           icon={<Refrigerator size={26} strokeWidth={1.8} />}
-          title="Готовь из того, что есть дома"
-          description="Добавь продукты из холодильника — MealBot подберёт блюда, которые можно приготовить прямо сейчас."
-          registerText="Создать свою кухню"
-          loginText="Уже есть аккаунт? Войти"
+          title={t('guest.title')}
+          description={t('guest.description')}
+          registerText={t('guest.register')}
+          loginText={t('guest.login')}
         />
       </div>
     </div>
@@ -580,6 +582,7 @@ export default function FridgePage() {
   const { token } = useStore()
   if (!token) return <GuestFridgeBlock />
 
+  const { t } = useTranslation('fridge')
   const { fridge, setFridge, addToFridge, removeFromFridge, updateFridgeItem } = useStore()
   const { show, Toast } = useToast()
   const navigate = useNavigate()
@@ -630,7 +633,7 @@ export default function FridgePage() {
         category:     ing.category,
         isBasic:      ing.isBasic || false,
       }))
-      show(`Добавлено: ${added.map(i => i.nameRu).join(', ')}`, 'success')
+      show(t('toast.addedList', { names: added.map(i => i.nameRu).join(', ') }), 'success')
       setShowPicker(false)
     } catch (e) {
       show(e.message, 'error')
@@ -643,7 +646,7 @@ export default function FridgePage() {
     try {
       await api.removeFromFridge(ingredientId)
       removeFromFridge(ingredientId)
-      show(`${name} убран`, 'success')
+      show(t('toast.removed', { name }), 'success')
     } catch (e) { show(e.message, 'error') }
   }
 
@@ -658,26 +661,26 @@ export default function FridgePage() {
   }
 
   async function clearAll() {
-    if (!confirm('Очистить холодильник?')) return
+    if (!confirm(t('actions.clearAllConfirm'))) return
     try {
       await api.clearFridge()
       setFridge([])
-      show('Холодильник очищен', 'success')
+      show(t('actions.clearAllToast'), 'success')
     } catch (e) { show(e.message, 'error') }
   }
 
   function goAICook() {
-    navigate('/chat?prompt=' + encodeURIComponent('Что можно приготовить из продуктов в моём холодильнике?'))
+    navigate('/chat?prompt=' + encodeURIComponent(t('aiPrompt')))
   }
 
   // ── Render ───────────────────────────────────────────────────────
   return (
     <div className="pb-28">
-      <PageHeader title="Холодильник" />
+      <PageHeader title={t('title')} />
 
       {telegramLinked === false && tgBannerOpen && (
         <TelegramBanner
-          onLinked={() => { setTelegramLinked(true); show('Telegram подключён!', 'success') }}
+          onLinked={() => { setTelegramLinked(true); show(t('telegram.linkedToast'), 'success') }}
           onError={(msg) => show(msg, 'error')}
           onClose={() => setTgBannerOpen(false)}
         />
@@ -711,7 +714,7 @@ export default function FridgePage() {
               className="flex items-center gap-1.5 text-[12.5px] text-text-3"
             >
               <Trash2 size={13} strokeWidth={1.8} />
-              Очистить всё
+              {t('actions.clearAll')}
             </button>
           </div>
         </>
@@ -725,10 +728,10 @@ export default function FridgePage() {
           className="fixed bottom-[76px] right-4 h-12 px-4 rounded-full flex items-center gap-2
             bg-accent text-white text-[13.5px] font-bold z-40 active:scale-95 transition-transform"
           style={{ boxShadow: '0 8px 24px rgba(196,112,74,0.45)' }}
-          aria-label="Добавить продукты"
+          aria-label={t('actions.fabAria')}
         >
           <Plus size={16} strokeWidth={2.4} />
-          Добавить
+          {t('actions.fab')}
         </button>
       )}
 

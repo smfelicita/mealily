@@ -6,6 +6,7 @@
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   Search, Heart, Refrigerator, SlidersHorizontal, ArrowUpDown,
   Plus, Clock, Flame, X, Check,
@@ -18,40 +19,52 @@ import { PageHeader, useToast } from '../components/ui'
 import { useHintDismiss } from '../hooks/useHintDismiss'
 
 // ─── Константы / справочники ────────────────────────────────────
+// Метки берутся через t('dish:list.mealXxx')
 const MEAL_TIMES = [
-  { id: '',          label: 'Все'     },
-  { id: 'BREAKFAST', label: 'Завтрак' },
-  { id: 'LUNCH',     label: 'Обед'    },
-  { id: 'DINNER',    label: 'Ужин'    },
-  { id: 'SNACK',     label: 'Перекус' },
+  { id: '',          labelKey: 'mealAll'       },
+  { id: 'BREAKFAST', labelKey: 'mealBreakfast' },
+  { id: 'LUNCH',     labelKey: 'mealLunch'     },
+  { id: 'DINNER',    labelKey: 'mealDinner'    },
+  { id: 'SNACK',     labelKey: 'mealSnack'     },
 ]
 
+// Сложность — id совпадает с ключом common:difficulty.<id>
 const DIFFICULTIES = [
-  { id: 'easy',   label: 'Легко'  },
-  { id: 'medium', label: 'Средне' },
-  { id: 'hard',   label: 'Сложно' },
+  { id: 'easy'   },
+  { id: 'medium' },
+  { id: 'hard'   },
 ]
 
-const CUISINES = [
-  'Русская', 'Итальянская', 'Азиатская', 'Средиземноморская',
-  'Грузинская', 'Французская', 'Японская', 'Мексиканская',
+// Пресет кухонь — value (русское) уходит на бэк, key — для t()
+const CUISINE_LIST = [
+  { value: 'Русская',           key: 'russian'       },
+  { value: 'Итальянская',       key: 'italian'       },
+  { value: 'Азиатская',         key: 'asian'         },
+  { value: 'Средиземноморская', key: 'mediterranean' },
+  { value: 'Грузинская',        key: 'georgian'      },
+  { value: 'Французская',       key: 'french'        },
+  { value: 'Японская',          key: 'japanese'      },
+  { value: 'Мексиканская',      key: 'mexican'       },
 ]
 
+// Популярные теги: value (русский) уходит на бэк, key — для t()
 const POPULAR_TAGS = [
-  'быстро', 'сытно', 'лёгкое', 'постно', 'суп', 'салат', 'просто', 'мясо', 'без глютена',
+  { value: 'быстро',       key: 'fast'        },
+  { value: 'сытно',        key: 'filling'     },
+  { value: 'лёгкое',       key: 'light'       },
+  { value: 'постно',       key: 'lent'        },
+  { value: 'суп',          key: 'soup'        },
+  { value: 'салат',        key: 'salad'       },
+  { value: 'просто',       key: 'simple'      },
+  { value: 'мясо',         key: 'meat'        },
+  { value: 'без глютена',  key: 'glutenFree'  },
 ]
 
 const LIMIT = 20
 
-// ─── Helpers ─────────────────────────────────────────────────────
-function pluralDish(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'блюдо'
-  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'блюда'
-  return 'блюд'
-}
-
 // ═══ SearchInput ═══════════════════════════════════════════════════
 function SearchInput({ value, onChange }) {
+  const { t } = useTranslation('dish')
   const [focused, setFocused] = useState(false)
   return (
     <div
@@ -67,7 +80,7 @@ function SearchInput({ value, onChange }) {
         onChange={e => onChange(e.target.value)}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        placeholder="Искать блюда, ингредиенты…"
+        placeholder={t('list.searchPlaceholder')}
         className="flex-1 bg-transparent outline-none text-[14px] text-text"
       />
       {value && (
@@ -75,7 +88,7 @@ function SearchInput({ value, onChange }) {
           type="button"
           onClick={() => onChange('')}
           className="w-5 h-5 rounded-full flex items-center justify-center bg-border text-text-2"
-          aria-label="Очистить"
+          aria-label={t('common.clearAria')}
         >
           <X size={11} strokeWidth={2.4} />
         </button>
@@ -86,16 +99,17 @@ function SearchInput({ value, onChange }) {
 
 // ═══ MealTypeChips ═══════════════════════════════════════════════════
 function MealTypeChips({ active, onChange }) {
+  const { t } = useTranslation('dish')
   return (
     <div className="-mx-5 px-5 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
       <div className="flex gap-2" style={{ width: 'max-content' }}>
-        {MEAL_TIMES.map(t => {
-          const on = t.id === active
+        {MEAL_TIMES.map(mt => {
+          const on = mt.id === active
           return (
             <button
-              key={t.id || 'all'}
+              key={mt.id || 'all'}
               type="button"
-              onClick={() => onChange(t.id)}
+              onClick={() => onChange(mt.id)}
               className={[
                 'h-9 px-3.5 rounded-full text-[13px] font-bold whitespace-nowrap shrink-0 border',
                 on
@@ -103,7 +117,7 @@ function MealTypeChips({ active, onChange }) {
                   : 'bg-bg-2 border-border text-text-2',
               ].join(' ')}
             >
-              {t.label}
+              {t(`list.${mt.labelKey}`)}
             </button>
           )
         })}
@@ -114,6 +128,7 @@ function MealTypeChips({ active, onChange }) {
 
 // ═══ QuickFilters ═══════════════════════════════════════════════════
 function QuickFilters({ inFridge, fav, hasFilters, onToggleFridge, onToggleFav, onOpenFilters }) {
+  const { t } = useTranslation('dish')
   return (
     <div className="flex items-center gap-2">
       <button
@@ -127,7 +142,7 @@ function QuickFilters({ inFridge, fav, hasFilters, onToggleFridge, onToggleFav, 
         ].join(' ')}
       >
         <Refrigerator size={14} strokeWidth={2} />
-        Холодильник
+        {t('list.fridge')}
       </button>
       <button
         type="button"
@@ -140,14 +155,14 @@ function QuickFilters({ inFridge, fav, hasFilters, onToggleFridge, onToggleFav, 
         ].join(' ')}
       >
         <Heart size={14} strokeWidth={2} fill={fav ? 'currentColor' : 'none'} />
-        Избранное
+        {t('list.favorites')}
       </button>
       <div className="flex-1" />
       <button
         type="button"
         className="w-9 h-9 rounded-full flex items-center justify-center bg-bg-2 border border-border text-text-2"
-        aria-label="Сортировка"
-        title="Сортировка (скоро)"
+        aria-label={t('list.sortAria')}
+        title={t('list.sortTitleSoon')}
       >
         <ArrowUpDown size={15} strokeWidth={2} />
       </button>
@@ -160,7 +175,7 @@ function QuickFilters({ inFridge, fav, hasFilters, onToggleFridge, onToggleFav, 
             ? 'bg-accent border-accent text-white'
             : 'bg-bg-2 border-border text-text-2',
         ].join(' ')}
-        aria-label="Фильтры"
+        aria-label={t('list.filtersAria')}
       >
         <SlidersHorizontal size={15} strokeWidth={2} />
         {hasFilters && (
@@ -176,6 +191,7 @@ function QuickFilters({ inFridge, fav, hasFilters, onToggleFridge, onToggleFav, 
 
 // ═══ HintBanner ═══════════════════════════════════════════════════
 function HintBanner({ onClose, onClick }) {
+  const { t } = useTranslation('dish')
   return (
     <div className="rounded-xl flex items-center gap-2 relative bg-bg-2 px-3.5 py-2.5"
       style={{ border: '1px dashed rgba(196,112,74,0.25)' }}>
@@ -185,13 +201,14 @@ function HintBanner({ onClose, onClick }) {
         onClick={onClick}
         className="flex-1 text-[12.5px] leading-snug text-text-2 text-left"
       >
-        Несколько блюд — добавь <span className="text-accent font-bold">через запятую</span>
+        {t('list.bulkHint')}{' '}
+        <span className="text-accent font-bold">{t('list.bulkHintAccent')}</span>
       </button>
       <button
         type="button"
         onClick={onClose}
         className="w-6 h-6 rounded-full flex items-center justify-center text-text-3"
-        aria-label="Закрыть"
+        aria-label={t('common.closeAria')}
       >
         <X size={13} strokeWidth={2} />
       </button>
@@ -201,6 +218,7 @@ function HintBanner({ onClose, onClick }) {
 
 // ═══ DishRow ═══════════════════════════════════════════════════════
 function DishRow({ dish, isFav, missing, inFridge, onClick, onToggleFav, onAddToPlan }) {
+  const { t } = useTranslation('dish')
   const tags = (dish.tags || []).slice(0, 2)
   const cookTime = dish.cookTime
   const cal = dish.nutrition?.calories ?? dish.calories
@@ -271,7 +289,7 @@ function DishRow({ dish, isFav, missing, inFridge, onClick, onToggleFav, onAddTo
           {cookTime != null && (
             <span className="inline-flex items-center gap-1 text-[12px] tabular-nums whitespace-nowrap">
               <Clock size={11} strokeWidth={2.2} />
-              {cookTime} мин
+              {cookTime} {t('list.minSuffix')}
             </span>
           )}
           {cal != null && (
@@ -301,7 +319,7 @@ function DishRow({ dish, isFav, missing, inFridge, onClick, onToggleFav, onAddTo
               'w-8 h-8 rounded-full flex items-center justify-center border',
               isFav ? 'bg-accent border-accent text-white' : 'bg-bg-3 border-border text-text-3',
             ].join(' ')}
-            aria-label="Избранное"
+            aria-label={t('list.addToFavoritesAria')}
           >
             <Heart size={14} strokeWidth={2.2} fill={isFav ? 'currentColor' : 'none'} />
           </button>
@@ -311,7 +329,7 @@ function DishRow({ dish, isFav, missing, inFridge, onClick, onToggleFav, onAddTo
             type="button"
             onClick={(e) => { e.stopPropagation(); onAddToPlan(dish) }}
             className="w-8 h-8 rounded-full flex items-center justify-center bg-bg-3 border border-border text-text-2"
-            aria-label="Добавить в план"
+            aria-label={t('list.addToPlanAria')}
           >
             <Plus size={14} strokeWidth={2.4} />
           </button>
@@ -335,6 +353,7 @@ function Sentinel() {
 
 // ═══ FAB ═══════════════════════════════════════════════════════════
 function FAB({ onClick }) {
+  const { t } = useTranslation('dish')
   return (
     <button
       type="button"
@@ -342,25 +361,26 @@ function FAB({ onClick }) {
       className="fixed h-12 px-4 rounded-full flex items-center gap-2 bg-accent text-white text-[13.5px] font-bold z-40
         active:scale-95 transition-transform"
       style={{ right: 16, bottom: 80, boxShadow: '0 8px 24px rgba(196,112,74,0.45)' }}
-      aria-label="Добавить блюдо"
+      aria-label={t('list.fab')}
     >
       <Plus size={16} strokeWidth={2.4} />
-      Добавить блюдо
+      {t('list.fab')}
     </button>
   )
 }
 
 // ═══ EmptyState ═══════════════════════════════════════════════════
 function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDish, ownEmpty }) {
+  const { t } = useTranslation('dish')
   if (ownEmpty) {
     return (
       <div className="flex flex-col items-center text-center px-4" style={{ paddingTop: 56 }}>
         <div className="w-14 h-14 rounded-full flex items-center justify-center bg-bg-3 border border-border text-accent">
           <Flame size={24} strokeWidth={1.8} />
         </div>
-        <div className="mt-4 text-[16px] font-bold text-text">Ваша кухня пока пуста</div>
+        <div className="mt-4 text-[16px] font-bold text-text">{t('empty.ownTitle')}</div>
         <p className="mt-1 text-[13px] max-w-[280px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
-          Добавьте первое блюдо — личное или для всей семьи
+          {t('empty.ownBody')}
         </p>
         <button
           type="button"
@@ -368,7 +388,7 @@ function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDi
           className="mt-4 h-11 px-5 rounded-full bg-accent text-white text-[13.5px] font-bold"
           style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
         >
-          Добавить блюдо
+          {t('empty.ownButton')}
         </button>
       </div>
     )
@@ -380,9 +400,9 @@ function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDi
         <div className="w-14 h-14 rounded-full flex items-center justify-center bg-bg-3 border border-border text-accent">
           <Heart size={22} strokeWidth={1.8} />
         </div>
-        <div className="mt-4 text-[16px] font-bold text-text">Добавь свои блюда</div>
+        <div className="mt-4 text-[16px] font-bold text-text">{t('empty.guestTitle')}</div>
         <p className="mt-1 text-[13px] max-w-[280px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
-          Зарегистрируйся — и MealBot каждый день будет подсказывать что приготовить
+          {t('empty.guestBody')}
         </p>
         <button
           type="button"
@@ -390,14 +410,14 @@ function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDi
           className="mt-4 h-11 px-5 rounded-full bg-accent text-white text-[13.5px] font-bold"
           style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
         >
-          Создать свою кухню
+          {t('empty.guestRegister')}
         </button>
         <button
           type="button"
           onClick={onLogin}
           className="mt-2 text-[13px] text-text-3"
         >
-          Уже есть аккаунт? Войти
+          {t('empty.guestLogin')}
         </button>
       </div>
     )
@@ -408,16 +428,16 @@ function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDi
       <div className="w-14 h-14 rounded-full flex items-center justify-center bg-bg-3 border border-border text-text-3">
         <Search size={22} strokeWidth={2} />
       </div>
-      <div className="mt-4 text-[15px] font-bold text-text">Ничего не найдено</div>
+      <div className="mt-4 text-[15px] font-bold text-text">{t('empty.filteredTitle')}</div>
       <p className="mt-1 text-[13px] max-w-[260px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
-        Попробуй изменить поиск или сбросить фильтры
+        {t('empty.filteredBody')}
       </p>
       <button
         type="button"
         onClick={onReset}
         className="mt-3 h-10 px-4 rounded-full text-[13px] font-bold text-accent"
       >
-        Сбросить фильтры
+        {t('empty.filteredReset')}
       </button>
     </div>
   )
@@ -443,6 +463,7 @@ function FilterSheet({
   difficulty, setDifficulty,
   countLabel,
 }) {
+  const { t } = useTranslation(['dish', 'common'])
   if (!open) return null
 
   const toggle = (set, setter) => (v) => setter(s => {
@@ -454,7 +475,7 @@ function FilterSheet({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col" style={{ background: 'rgba(28,25,23,0.45)' }}>
-      <button type="button" onClick={onClose} className="flex-1" aria-label="Закрыть" />
+      <button type="button" onClick={onClose} className="flex-1" aria-label={t('common.closeAria')} />
       <div
         className="bg-bg-2 px-5 pt-3 pb-6 overflow-y-auto"
         style={{
@@ -468,21 +489,21 @@ function FilterSheet({
         </div>
 
         <div className="flex items-center justify-between">
-          <h2 className="text-[17px] font-bold text-text">Фильтры</h2>
+          <h2 className="text-[17px] font-bold text-text">{t('filters.title')}</h2>
           <button type="button" onClick={reset} className="text-[13px] font-bold text-accent">
-            Сбросить
+            {t('filters.reset')}
           </button>
         </div>
 
-        <FilterSection title="Теги">
+        <FilterSection title={t('filters.tags')}>
           <div className="flex flex-wrap gap-2">
-            {POPULAR_TAGS.map(t => {
-              const on = tags.has(t)
+            {POPULAR_TAGS.map(tag => {
+              const on = tags.has(tag.value)
               return (
                 <button
-                  key={t}
+                  key={tag.value}
                   type="button"
-                  onClick={() => toggle(tags, setTags)(t)}
+                  onClick={() => toggle(tags, setTags)(tag.value)}
                   className={[
                     'h-8 px-3 rounded-full text-[12.5px] font-bold border',
                     on
@@ -490,22 +511,22 @@ function FilterSheet({
                       : 'bg-bg-2 border-border text-text-2',
                   ].join(' ')}
                 >
-                  {t}
+                  {t(`popularTags.${tag.key}`)}
                 </button>
               )
             })}
           </div>
         </FilterSection>
 
-        <FilterSection title="Кухня">
+        <FilterSection title={t('filters.cuisine')}>
           <div className="flex flex-wrap gap-2">
-            {CUISINES.map(c => {
-              const on = cuisines.has(c)
+            {CUISINE_LIST.map(c => {
+              const on = cuisines.has(c.value)
               return (
                 <button
-                  key={c}
+                  key={c.value}
                   type="button"
-                  onClick={() => toggle(cuisines, setCuisines)(c)}
+                  onClick={() => toggle(cuisines, setCuisines)(c.value)}
                   className={[
                     'h-8 px-3 rounded-full text-[12.5px] font-bold border',
                     on
@@ -513,14 +534,14 @@ function FilterSheet({
                       : 'bg-bg-2 border-border text-text-2',
                   ].join(' ')}
                 >
-                  {c}
+                  {t(`common:cuisines.${c.key}`)}
                 </button>
               )
             })}
           </div>
         </FilterSection>
 
-        <FilterSection title="Сложность">
+        <FilterSection title={t('filters.difficulty')}>
           <div className="flex rounded-full p-1 bg-bg-3 border border-border">
             {DIFFICULTIES.map(d => {
               const on = difficulty === d.id
@@ -534,7 +555,7 @@ function FilterSheet({
                     on ? 'bg-accent text-white' : 'bg-transparent text-text-2',
                   ].join(' ')}
                 >
-                  {d.label}
+                  {t(`common:difficulty.${d.id}`)}
                 </button>
               )
             })}
@@ -556,6 +577,7 @@ function FilterSheet({
 
 // ═══ Main page ═════════════════════════════════════════════════════
 export default function DishesPage() {
+  const { t } = useTranslation('dish')
   const navigate = useNavigate()
   const { token, fridge } = useStore()
   const { show, Toast } = useToast()
@@ -627,11 +649,11 @@ export default function DishesPage() {
     } catch (e) {
       setDishes([])
       setHasMore(false)
-      show(e.message || 'Не удалось загрузить блюда', 'error')
+      show(e.message || t('list.loadError'), 'error')
     } finally {
       setLoading(false)
     }
-  }, [getParams, show])
+  }, [getParams, show, t])
 
   const loadMore = useCallback(async () => {
     if (!canLoadRef.current) return
@@ -690,9 +712,9 @@ export default function DishesPage() {
   async function handleAddToPlan(dish) {
     try {
       await api.addMealPlan({ dishId: dish.id })
-      show(`«${dish.name}» добавлено на сегодня`, 'success')
+      show(t('list.addToPlanSuccess', { name: dish.name }), 'success')
     } catch (e) {
-      show(e.message || 'Не удалось добавить', 'error')
+      show(e.message || t('list.addToPlanError'), 'error')
     }
   }
 
@@ -720,19 +742,21 @@ export default function DishesPage() {
     !q && !mealTime && !inFridge && !favOnly && !hasFilters
   const filteredEmpty = !loading && dishes.length === 0 && !ownKitchenEmpty
 
+  // Плюрализация «блюдо/блюда/блюд» через i18next
+  const dishWord = (n) => t('list.countDish', { count: n })
   const countLabel = total
-    ? `Показать ${total} ${pluralDish(total)}`
-    : 'Закрыть'
+    ? `${t('list.countLabelShow')} ${total} ${dishWord(total)}`
+    : t('filters.applyClose')
 
   // ── Render ────────────────────────────────────────────────────
   return (
     <div>
       <div className="px-5 pt-1 pb-24">
         <PageHeader
-          title="Мои блюда"
+          title={t('list.pageTitle')}
           right={total > 0 && (
             <span className="text-[12px] tabular-nums text-text-3">
-              {total} {pluralDish(total)}
+              {total} {dishWord(total)}
             </span>
           )}
           className="!px-0 !pt-4 !pb-0"
