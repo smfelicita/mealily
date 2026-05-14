@@ -357,10 +357,10 @@ export default function ProfilePage() {
           />
         </div>
 
-        <div className="mt-7">
+        {/* <div className="mt-7">
           <SectionLabel>{t('sections.settings')}</SectionLabel>
           <LanguagePicker current={lang} onChange={changeLang} />
-        </div>
+        </div> */}
 
         <div className="mt-7">
           <SectionLabel>{t('sections.account')}</SectionLabel>
