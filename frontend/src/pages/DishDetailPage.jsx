@@ -10,6 +10,7 @@ import {
   CalendarPlus, Refrigerator, Pin, ArrowUp,
   Check, Edit3, Trash2, Copy,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { api } from '../api'
 import { useStore } from '../store'
@@ -17,19 +18,9 @@ import { Loader, Avatar, useToast } from '../components/ui'
 import AddToPlanModal from '../components/domain/AddToPlanModal'
 import { CAT_RU } from '../components/domain/dishCategories'
 
-const MEAL_LABEL = {
-  BREAKFAST: 'Завтрак',
-  LUNCH:     'Обед',
-  DINNER:    'Ужин',
-  SNACK:     'Перекус',
-  ANYTIME:   'Любое',
-}
-const DIFF_LABEL = { easy: 'Легко', medium: 'Средне', hard: 'Сложно' }
-
 const SUPABASE_IMG = 'https://nwtqeytmmqmkwqafkgin.supabase.co/storage/v1/object/public/media/images'
 
 // Парсит recipe-строку на список шагов.
-// Если есть "1. ..." — берём эти пункты, иначе режем по \n\n.
 function parseSteps(recipe) {
   if (!recipe) return []
   const lines = recipe.split('\n').map(l => l.trim()).filter(Boolean)
@@ -43,6 +34,7 @@ function parseSteps(recipe) {
 
 // ═══ Hero (слайдер фото) ══════════════════════════════════════════
 function Hero({ images, photoIdx, setPhotoIdx, children }) {
+  const { t } = useTranslation('dish')
   const scrollRef = useRef(null)
 
   function handleScroll() {
@@ -78,7 +70,6 @@ function Hero({ images, photoIdx, setPhotoIdx, children }) {
         ))}
       </div>
 
-      {/* градиенты */}
       <div
         className="absolute top-0 inset-x-0 h-28 pointer-events-none"
         style={{ background: 'linear-gradient(180deg, rgba(28,25,23,0.5) 0%, rgba(28,25,23,0) 100%)' }}
@@ -88,12 +79,10 @@ function Hero({ images, photoIdx, setPhotoIdx, children }) {
         style={{ background: 'linear-gradient(0deg, var(--color-bg) 0%, rgba(246,244,239,0) 100%)' }}
       />
 
-      {/* верхние контролы */}
       <div className="absolute top-3 inset-x-3 flex items-center justify-between">
         {children}
       </div>
 
-      {/* индикаторы */}
       {images.length > 1 && (
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
           {images.map((_, i) => (
@@ -106,7 +95,7 @@ function Hero({ images, photoIdx, setPhotoIdx, children }) {
                 width: i === photoIdx ? 20 : 6,
                 background: i === photoIdx ? 'var(--color-text)' : 'rgba(28,25,23,0.28)',
               }}
-              aria-label={`Фото ${i + 1}`}
+              aria-label={t('detail.photoAria', { n: i + 1 })}
             />
           ))}
         </div>
@@ -115,7 +104,7 @@ function Hero({ images, photoIdx, setPhotoIdx, children }) {
   )
 }
 
-// ═══ Круглая кнопка в hero ═════════════════════════════════════════
+// ═══ Круглая кнопка в hero ════════════════════════════════════════
 function HeroButton({ icon, onClick, active, ariaLabel }) {
   return (
     <button
@@ -133,15 +122,17 @@ function HeroButton({ icon, onClick, active, ariaLabel }) {
   )
 }
 
-// ═══ MetaStripInline (4 метрики с разделителями) ═══════════════════
+// ═══ MetaStrip ════════════════════════════════════════════════════
 function DishMetaStrip({ cookTime, difficulty, cuisine, mealTime }) {
+  const { t } = useTranslation(['dish', 'common'])
   const firstMeal = Array.isArray(mealTime) ? mealTime[0] : mealTime
-  const mealLabel = MEAL_LABEL[firstMeal] || MEAL_LABEL.ANYTIME
+  const mealLabel = firstMeal ? t(`common:mealTimeShort.${firstMeal}`, { defaultValue: t('common:mealTimeShort.ANYTIME') }) : t('common:mealTimeShort.ANYTIME')
+  const diffLabel = difficulty ? t(`common:difficulty.${difficulty}`, { defaultValue: '—' }) : '—'
   const items = [
-    { Icon: Clock,    value: cookTime || '—',                 unit: cookTime ? 'мин' : null,    label: 'время' },
-    { Icon: Utensils, value: mealLabel,                        unit: null,                       label: 'приём' },
-    { Icon: ChefHat,  value: DIFF_LABEL[difficulty] || '—',    unit: null,                       label: 'сложность' },
-    { Icon: Globe,    value: cuisine || '—',                   unit: null,                       label: 'кухня' },
+    { Icon: Clock,    value: cookTime || '—', unit: cookTime ? t('common:units.min') : null, label: t('dish:detail.metaTime') },
+    { Icon: Utensils, value: mealLabel,        unit: null,                                   label: t('dish:detail.metaMeal') },
+    { Icon: ChefHat,  value: diffLabel,        unit: null,                                   label: t('dish:detail.metaDifficulty') },
+    { Icon: Globe,    value: cuisine || '—',   unit: null,                                   label: t('dish:detail.metaCuisine') },
   ]
   return (
     <div className="mx-5 mt-5 rounded-2xl bg-bg-2 border border-border flex justify-between items-stretch px-2.5 py-3.5">
@@ -169,8 +160,9 @@ function DishMetaStrip({ cookTime, difficulty, cuisine, mealTime }) {
   )
 }
 
-// ═══ Ingredients (Вариант В — карточки строкой с фоном) ════════════
+// ═══ Ingredients ══════════════════════════════════════════════════
 function IngredientsSection({ ingredients, fridgeIds, token }) {
+  const { t } = useTranslation('dish')
   const [fridgeMode, setFridgeMode] = useState(false)
 
   if (!ingredients?.length) return null
@@ -179,16 +171,9 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
     const inFridge = fridgeIds.has(i.ingredientId ?? i.id)
     const basic = i.toTaste || i.isBasic
     const amountStr = i.toTaste
-      ? 'по вкусу'
+      ? t('detail.toTaste')
       : (i.amountValue && i.unit ? `${i.amountValue} ${i.unit}` : i.amount || '')
-    return {
-      id: i.id,
-      name: i.name,
-      amount: amountStr,
-      inFridge,
-      basic,
-      optional: i.optional,
-    }
+    return { id: i.id, name: i.name, amount: amountStr, inFridge, basic, optional: i.optional }
   })
 
   const missingCount = items.filter(i => !i.inFridge && !i.basic).length
@@ -199,7 +184,7 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
   return (
     <section className="mt-7">
       <div className="px-5 flex items-center justify-between mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">Ингредиенты</h2>
+        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('detail.ingredients')}</h2>
         {canToggleFridge && (
           <button
             type="button"
@@ -212,7 +197,7 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
             ].join(' ')}
           >
             <Refrigerator size={14} strokeWidth={2.2} />
-            {fridgeMode ? 'из моего' : `не хватает ${missingCount}`}
+            {fridgeMode ? t('detail.fromFridge') : t('detail.missingCount', { n: missingCount })}
           </button>
         )}
       </div>
@@ -226,9 +211,7 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
               key={ing.id}
               className={[
                 'flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl border transition-colors',
-                checked
-                  ? 'bg-sage-muted border-sage-border'
-                  : 'bg-bg-2 border-border',
+                checked ? 'bg-sage-muted border-sage-border' : 'bg-bg-2 border-border',
               ].join(' ')}
               style={{ opacity: dim ? 0.35 : 1 }}
             >
@@ -237,31 +220,21 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
                   <Check size={12} strokeWidth={3} />
                 </div>
               ) : (
-                <div
-                  className="w-[22px] h-[22px] rounded-full flex items-center justify-center flex-shrink-0 border-[1.5px] border-dashed border-accent"
-                >
+                <div className="w-[22px] h-[22px] rounded-full flex items-center justify-center flex-shrink-0 border-[1.5px] border-dashed border-accent">
                   <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                 </div>
               )}
               <div
-                className={[
-                  'flex-1 min-w-0 text-[14.5px] font-semibold',
-                  ing.basic ? 'text-text-3' : 'text-text',
-                ].join(' ')}
+                className={['flex-1 min-w-0 text-[14.5px] font-semibold', ing.basic ? 'text-text-3' : 'text-text'].join(' ')}
                 style={{ textWrap: 'pretty' }}
               >
                 {ing.name}
                 {ing.optional && (
-                  <span className="text-text-3 text-xs ml-1.5 font-normal">· необязательно</span>
+                  <span className="text-text-3 text-xs ml-1.5 font-normal">{t('detail.optional')}</span>
                 )}
               </div>
               {ing.amount && (
-                <div
-                  className={[
-                    'text-[13px] tabular-nums flex-shrink-0',
-                    checked ? 'text-sage font-bold' : 'text-text-3 font-medium',
-                  ].join(' ')}
-                >
+                <div className={['text-[13px] tabular-nums flex-shrink-0', checked ? 'text-sage font-bold' : 'text-text-3 font-medium'].join(' ')}>
                   {ing.amount}
                 </div>
               )}
@@ -273,21 +246,22 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
       {canToggleFridge && totalCount > 0 && (
         <div className="mx-5 mt-3.5 rounded-xl bg-sage-muted text-sage text-[12.5px] font-semibold flex items-center gap-2.5 px-3.5 py-2.5">
           <Refrigerator size={16} strokeWidth={2} />
-          В холодильнике есть {haveCount} из {totalCount}
+          {t('detail.inFridgeCount', { have: haveCount, total: totalCount })}
         </div>
       )}
     </section>
   )
 }
 
-// ═══ Steps ═════════════════════════════════════════════════════════
+// ═══ Steps ════════════════════════════════════════════════════════
 function StepsSection({ steps }) {
+  const { t } = useTranslation('dish')
   if (!steps.length) return null
   return (
     <section className="mt-8">
       <div className="px-5 mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">Приготовление</h2>
-        <div className="text-[12px] mt-0.5 text-text-3">{steps.length} шагов</div>
+        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('detail.steps')}</h2>
+        <div className="text-[12px] mt-0.5 text-text-3">{t('detail.stepsCount', { count: steps.length })}</div>
       </div>
       <div className="px-5 flex flex-col gap-3.5">
         {steps.map((s, i) => (
@@ -295,10 +269,7 @@ function StepsSection({ steps }) {
             <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-[20px] font-extrabold tabular-nums bg-accent-muted text-accent">
               {i + 1}
             </div>
-            <div
-              className="flex-1 pt-1 text-[14.5px] leading-relaxed text-text"
-              style={{ textWrap: 'pretty' }}
-            >
+            <div className="flex-1 pt-1 text-[14.5px] leading-relaxed text-text" style={{ textWrap: 'pretty' }}>
               {s}
             </div>
           </div>
@@ -308,38 +279,32 @@ function StepsSection({ steps }) {
   )
 }
 
-// ═══ Nutrition ═════════════════════════════════════════════════════
+// ═══ Nutrition ════════════════════════════════════════════════════
 function NutritionSection({ nutrition }) {
+  const { t } = useTranslation('dish')
   if (!nutrition || !nutrition.calories) return null
   const items = [
-    { value: nutrition.calories, unit: 'ккал', label: 'калории',  color: 'var(--color-accent)'          },
-    { value: nutrition.protein,  unit: 'г',    label: 'белки',    color: 'var(--color-sage)'            },
-    { value: nutrition.fat,      unit: 'г',    label: 'жиры',     color: 'var(--color-nutrition-fat)'   },
-    { value: nutrition.carbs,    unit: 'г',    label: 'углеводы', color: 'var(--color-nutrition-carbs)' },
+    { value: nutrition.calories, unit: t('common:units.kcal'), label: t('detail.nutritionCalories'), color: 'var(--color-accent)'          },
+    { value: nutrition.protein,  unit: t('common:units.gram'), label: t('detail.nutritionProtein'),  color: 'var(--color-sage)'            },
+    { value: nutrition.fat,      unit: t('common:units.gram'), label: t('detail.nutritionFat'),      color: 'var(--color-nutrition-fat)'   },
+    { value: nutrition.carbs,    unit: t('common:units.gram'), label: t('detail.nutritionCarbs'),    color: 'var(--color-nutrition-carbs)' },
   ]
   return (
     <section className="mt-7">
       <div className="px-5 mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">Пищевая ценность</h2>
-        <div className="text-[12px] mt-0.5 text-text-3">на 100 г</div>
+        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('detail.nutrition')}</h2>
+        <div className="text-[12px] mt-0.5 text-text-3">{t('detail.per100g')}</div>
       </div>
       <div className="mx-5 rounded-2xl bg-bg-2 border border-border flex justify-between items-stretch px-2.5 py-3.5">
-        {items.map((t, i, arr) => (
+        {items.map((it, i, arr) => (
           <div key={i} className="flex-1 min-w-0 flex items-stretch">
             <div className="flex-1 flex flex-col items-center gap-1 px-0.5">
-              <span
-                className="w-2 h-2 rounded-full"
-                style={{ background: t.color }}
-              />
+              <span className="w-2 h-2 rounded-full" style={{ background: it.color }} />
               <div className="text-[13px] font-bold leading-tight text-center text-text">
-                {t.value ?? '—'}
-                {t.unit && (
-                  <span className="ml-0.5 text-[10.5px] font-semibold text-text-2">{t.unit}</span>
-                )}
+                {it.value ?? '—'}
+                {it.unit && <span className="ml-0.5 text-[10.5px] font-semibold text-text-2">{it.unit}</span>}
               </div>
-              <div className="text-[10px] font-semibold uppercase tracking-wide text-text-3">
-                {t.label}
-              </div>
+              <div className="text-[10px] font-semibold uppercase tracking-wide text-text-3">{it.label}</div>
             </div>
             {i < arr.length - 1 && <div className="w-px bg-border my-1" />}
           </div>
@@ -349,13 +314,14 @@ function NutritionSection({ nutrition }) {
   )
 }
 
-// ═══ Categories + tags ═════════════════════════════════════════════
+// ═══ Categories + tags ═══════════════════════════════════════════
 function TagsSection({ categories, tags, onCategoryClick, onTagClick }) {
+  const { t } = useTranslation(['dish', 'common'])
   if (!categories?.length && !tags?.length) return null
   return (
     <section className="mt-8">
       <div className="px-5 mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">Категории и теги</h2>
+        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('dish:detail.tagsTitle')}</h2>
       </div>
       <div className="px-5 flex flex-wrap gap-1.5">
         {categories?.map(c => (
@@ -365,17 +331,17 @@ function TagsSection({ categories, tags, onCategoryClick, onTagClick }) {
             onClick={() => onCategoryClick?.(c)}
             className="px-3 py-1.5 rounded-full text-[12.5px] font-bold bg-accent-muted text-accent border border-accent-border"
           >
-            {CAT_RU[c] || MEAL_LABEL[c] || c}
+            {t(`common:dishCategory.${c}`, { defaultValue: CAT_RU[c] || c })}
           </button>
         ))}
-        {tags?.map(t => (
+        {tags?.map(tag => (
           <button
-            key={t}
+            key={tag}
             type="button"
-            onClick={() => onTagClick?.(t)}
+            onClick={() => onTagClick?.(tag)}
             className="px-3 py-1.5 rounded-full text-[12.5px] font-semibold bg-bg-2 text-text-2 border border-border"
           >
-            #{t}
+            #{tag}
           </button>
         ))}
       </div>
@@ -383,18 +349,16 @@ function TagsSection({ categories, tags, onCategoryClick, onTagClick }) {
   )
 }
 
-// ═══ Similar (похожие блюда) ═══════════════════════════════════════
+// ═══ Similar ══════════════════════════════════════════════════════
 function SimilarSection({ dishes, onOpen }) {
+  const { t } = useTranslation(['dish', 'common'])
   if (!dishes?.length) return null
   return (
     <section className="mt-8">
       <div className="px-5 mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">Попробуй также</h2>
+        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('dish:detail.similar')}</h2>
       </div>
-      <div
-        className="flex gap-3 overflow-x-auto px-5 pb-1.5"
-        style={{ scrollbarWidth: 'none' }}
-      >
+      <div className="flex gap-3 overflow-x-auto px-5 pb-1.5" style={{ scrollbarWidth: 'none' }}>
         {dishes.map(d => {
           const img = d.images?.[0] || d.imageUrl
           return (
@@ -409,14 +373,11 @@ function SimilarSection({ dishes, onOpen }) {
                 {d.cookTime && (
                   <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-1.5 py-0.5 rounded-full text-[11px] font-bold flex items-center gap-0.5 text-text">
                     <Clock size={10} strokeWidth={2.5} />
-                    {d.cookTime}м
+                    {d.cookTime}{t('common:units.min')}
                   </div>
                 )}
               </div>
-              <div
-                className="mt-2 text-[13.5px] font-bold leading-tight text-text"
-                style={{ textWrap: 'pretty' }}
-              >
+              <div className="mt-2 text-[13.5px] font-bold leading-tight text-text" style={{ textWrap: 'pretty' }}>
                 {d.name}
               </div>
             </button>
@@ -427,8 +388,9 @@ function SimilarSection({ dishes, onOpen }) {
   )
 }
 
-// ═══ Comments ══════════════════════════════════════════════════════
+// ═══ Comments ═════════════════════════════════════════════════════
 function CommentsSection({ dishId, comments, setComments, token, currentUserId, dishAuthorId }) {
+  const { t } = useTranslation('dish')
   const [draft, setDraft] = useState('')
   const { show } = useToast()
   const canPin = currentUserId && currentUserId === dishAuthorId
@@ -441,7 +403,7 @@ function CommentsSection({ dishId, comments, setComments, token, currentUserId, 
       setComments(prev => [c, ...(prev || [])])
       setDraft('')
     } catch (e) {
-      show(e.message || 'Не удалось отправить', 'error')
+      show(e.message || t('comments.sendError'), 'error')
     }
   }
 
@@ -463,7 +425,7 @@ function CommentsSection({ dishId, comments, setComments, token, currentUserId, 
   return (
     <section className="mt-8">
       <div className="px-5 mb-3 flex items-baseline gap-2">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">Комментарии</h2>
+        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('comments.title')}</h2>
         <div className="text-[12px] text-text-3">{list.length}</div>
       </div>
 
@@ -471,51 +433,37 @@ function CommentsSection({ dishId, comments, setComments, token, currentUserId, 
         {list.map(c => (
           <div
             key={c.id}
-            className={[
-              'flex gap-2.5',
-              c.pinned ? 'p-3 rounded-xl bg-accent-muted border border-accent-border' : '',
-            ].join(' ')}
+            className={['flex gap-2.5', c.pinned ? 'p-3 rounded-xl bg-accent-muted border border-accent-border' : ''].join(' ')}
           >
             <Avatar name={c.author?.name} size="md" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[13.5px] font-bold text-text">{c.author?.name || 'Пользователь'}</span>
+                <span className="text-[13.5px] font-bold text-text">{c.author?.name || t('comments.unknownAuthor')}</span>
                 {c.pinned && (
                   <span className="inline-flex items-center gap-0.5 text-[10.5px] font-bold uppercase tracking-wide rounded-full bg-accent-muted text-accent border border-accent-border px-1.5 py-0.5">
                     <Pin size={9} strokeWidth={2.5} />
-                    закреплено
+                    {t('comments.pinnedBadge')}
                   </span>
                 )}
                 {c.createdAt && (
                   <span className="text-[11.5px] text-text-3">
-                    · {new Date(c.createdAt).toLocaleDateString('ru-RU')}
+                    · {new Date(c.createdAt).toLocaleDateString()}
                   </span>
                 )}
               </div>
-              <div
-                className="text-[13.5px] leading-relaxed mt-1 text-text"
-                style={{ textWrap: 'pretty' }}
-              >
+              <div className="text-[13.5px] leading-relaxed mt-1 text-text" style={{ textWrap: 'pretty' }}>
                 {c.content}
               </div>
               {(canPin || currentUserId === c.authorId) && (
                 <div className="mt-1.5 flex gap-3">
                   {canPin && (
-                    <button
-                      type="button"
-                      onClick={() => handlePin(c.id)}
-                      className="text-[11.5px] text-text-3 hover:text-accent"
-                    >
-                      {c.pinned ? 'Открепить' : 'Закрепить'}
+                    <button type="button" onClick={() => handlePin(c.id)} className="text-[11.5px] text-text-3 hover:text-accent">
+                      {c.pinned ? t('comments.unpin') : t('comments.pin')}
                     </button>
                   )}
                   {currentUserId === c.authorId && (
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(c.id)}
-                      className="text-[11.5px] text-text-3 hover:text-red-500"
-                    >
-                      Удалить
+                    <button type="button" onClick={() => handleDelete(c.id)} className="text-[11.5px] text-text-3 hover:text-red-500">
+                      {t('comments.delete')}
                     </button>
                   )}
                 </div>
@@ -532,18 +480,15 @@ function CommentsSection({ dishId, comments, setComments, token, currentUserId, 
               value={draft}
               onChange={e => setDraft(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
-              placeholder="Написать комментарий…"
+              placeholder={t('comments.placeholder')}
               className="flex-1 bg-transparent outline-none text-[13.5px] text-text placeholder:text-text-3 min-w-0"
             />
             <button
               type="button"
               onClick={send}
               disabled={!draft.trim()}
-              aria-label="Отправить"
-              className={[
-                'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors',
-                draft.trim() ? 'bg-accent text-white' : 'bg-border text-text-3',
-              ].join(' ')}
+              aria-label={t('comments.sendAria')}
+              className={['w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors', draft.trim() ? 'bg-accent text-white' : 'bg-border text-text-3'].join(' ')}
             >
               <ArrowUp size={16} strokeWidth={2.6} />
             </button>
@@ -554,8 +499,9 @@ function CommentsSection({ dishId, comments, setComments, token, currentUserId, 
   )
 }
 
-// ═══ Actions bottom sheet ══════════════════════════════════════════
+// ═══ Actions bottom sheet ═════════════════════════════════════════
 function ActionsSheet({ onClose, isOwner, hasUser, onCopy, onEdit, onDelete }) {
+  const { t } = useTranslation('dish')
   return (
     <div className="fixed inset-0 z-[300] flex items-end bg-black/30" onClick={onClose}>
       <div
@@ -563,49 +509,34 @@ function ActionsSheet({ onClose, isOwner, hasUser, onCopy, onEdit, onDelete }) {
         onClick={e => e.stopPropagation()}
       >
         {hasUser && (
-          <button
-            type="button"
-            onClick={onCopy}
-            className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-text hover:bg-bg-3 text-left"
-          >
+          <button type="button" onClick={onCopy} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-text hover:bg-bg-3 text-left">
             <Copy size={18} className="text-text-2" />
-            Копировать рецепт
+            {t('actionsSheet.copyRecipe')}
           </button>
         )}
         {isOwner && (
-          <button
-            type="button"
-            onClick={onEdit}
-            className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-text hover:bg-bg-3 text-left"
-          >
+          <button type="button" onClick={onEdit} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-text hover:bg-bg-3 text-left">
             <Edit3 size={18} className="text-text-2" />
-            Редактировать
+            {t('actionsSheet.edit')}
           </button>
         )}
         {isOwner && (
-          <button
-            type="button"
-            onClick={onDelete}
-            className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-red-500 hover:bg-red-50 text-left"
-          >
+          <button type="button" onClick={onDelete} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-red-500 hover:bg-red-50 text-left">
             <Trash2 size={18} />
-            Удалить
+            {t('actionsSheet.delete')}
           </button>
         )}
-        <button
-          type="button"
-          onClick={onClose}
-          className="mt-2 py-3 text-[15px] text-text-2 font-medium text-center rounded-2xl bg-bg-3"
-        >
-          Отмена
+        <button type="button" onClick={onClose} className="mt-2 py-3 text-[15px] text-text-2 font-medium text-center rounded-2xl bg-bg-3">
+          {t('actionsSheet.cancel')}
         </button>
       </div>
     </div>
   )
 }
 
-// ═══ DishDetailPage ══════════════════════════════════════════════
+// ═══ DishDetailPage ═══════════════════════════════════════════════
 export default function DishDetailPage() {
+  const { t } = useTranslation('dish')
   const { id } = useParams()
   const navigate = useNavigate()
   const user   = useStore(s => s.user)
@@ -633,7 +564,7 @@ export default function DishDetailPage() {
           api.getComments(id).then(setComments).catch(() => {})
         }
       })
-      .catch(e => setLoadError(e.message || 'Не удалось загрузить блюдо'))
+      .catch(e => setLoadError(e.message || t('detail.loadError')))
       .finally(() => setLoading(false))
 
     api.getRecommendations(id).then(setRecs).catch(() => {})
@@ -664,14 +595,14 @@ export default function DishDetailPage() {
     } else {
       try {
         await navigator.clipboard.writeText(url)
-        show('Ссылка скопирована', 'success')
+        show(t('detail.linkCopied'), 'success')
       } catch {}
     }
   }
 
   async function handleDelete() {
     setShowMenu(false)
-    if (!confirm(`Удалить "${dish.name}"?`)) return
+    if (!confirm(t('detail.deleteConfirm', { name: dish.name }))) return
     try {
       await api.deleteDish(id)
       navigate('/', { replace: true })
@@ -690,7 +621,9 @@ export default function DishDetailPage() {
         type="button"
         onClick={() => navigate(-1)}
         className="px-5 py-2.5 rounded-2xl bg-bg-2 border border-border text-sm font-medium text-text"
-      >Назад</button>
+      >
+        {t('detail.backAria')}
+      </button>
     </div>
   )
   if (!dish) return null
@@ -719,37 +652,36 @@ export default function DishDetailPage() {
               <HeroButton
                 icon={<ChevronLeft size={20} strokeWidth={2} />}
                 onClick={() => navigate(-1)}
-                ariaLabel="Назад"
+                ariaLabel={t('detail.backAria')}
               />
               <div className="flex gap-2">
                 <HeroButton
                   icon={<Share2 size={18} strokeWidth={2} />}
                   onClick={handleShare}
-                  ariaLabel="Поделиться"
+                  ariaLabel={t('detail.shareAria')}
                 />
                 {user && (
                   <HeroButton
                     icon={<Heart size={18} strokeWidth={2.2} fill={isFav ? '#fff' : 'none'} />}
                     onClick={toggleFav}
                     active={isFav}
-                    ariaLabel={isFav ? 'Убрать из избранного' : 'В избранное'}
+                    ariaLabel={isFav ? t('detail.favRemoveAria') : t('detail.favAddAria')}
                   />
                 )}
                 <HeroButton
                   icon={<MoreVertical size={18} strokeWidth={2} />}
                   onClick={() => setShowMenu(true)}
-                  ariaLabel="Ещё"
+                  ariaLabel={t('detail.moreAria')}
                 />
               </div>
             </Hero>
           ) : (
-            /* без фото: компактный top-bar */
             <div className="px-4 pt-4 pb-2 flex items-center justify-between">
               <button
                 type="button"
                 onClick={() => navigate(-1)}
                 className="w-10 h-10 rounded-full bg-bg-2 border border-border flex items-center justify-center text-text"
-                aria-label="Назад"
+                aria-label={t('detail.backAria')}
               >
                 <ChevronLeft size={20} strokeWidth={2} />
               </button>
@@ -758,7 +690,7 @@ export default function DishDetailPage() {
                   type="button"
                   onClick={handleShare}
                   className="w-10 h-10 rounded-full bg-bg-2 border border-border flex items-center justify-center text-text"
-                  aria-label="Поделиться"
+                  aria-label={t('detail.shareAria')}
                 >
                   <Share2 size={18} strokeWidth={2} />
                 </button>
@@ -766,10 +698,7 @@ export default function DishDetailPage() {
                   <button
                     type="button"
                     onClick={toggleFav}
-                    className={[
-                      'w-10 h-10 rounded-full border flex items-center justify-center',
-                      isFav ? 'bg-accent text-white border-accent' : 'bg-bg-2 border-border text-text',
-                    ].join(' ')}
+                    className={['w-10 h-10 rounded-full border flex items-center justify-center', isFav ? 'bg-accent text-white border-accent' : 'bg-bg-2 border-border text-text'].join(' ')}
                   >
                     <Heart size={18} strokeWidth={2.2} fill={isFav ? '#fff' : 'none'} />
                   </button>
@@ -778,7 +707,7 @@ export default function DishDetailPage() {
                   type="button"
                   onClick={() => setShowMenu(true)}
                   className="w-10 h-10 rounded-full bg-bg-2 border border-border flex items-center justify-center text-text"
-                  aria-label="Ещё"
+                  aria-label={t('detail.moreAria')}
                 >
                   <MoreVertical size={18} strokeWidth={2} />
                 </button>
@@ -788,35 +717,29 @@ export default function DishDetailPage() {
 
           {/* ── Title + description ──────────────────────────── */}
           <div className={['px-5 relative', images.length > 0 ? '-mt-4' : 'mt-3'].join(' ')}>
-            <h1
-              className="text-[26px] font-extrabold leading-[1.2] tracking-tight text-text"
-              style={{ textWrap: 'pretty' }}
-            >
+            <h1 className="text-[26px] font-extrabold leading-[1.2] tracking-tight text-text" style={{ textWrap: 'pretty' }}>
               {dish.name}
             </h1>
             {dish.description && (
-              <p className="mt-2.5 text-[15px] leading-relaxed text-text-2">
-                {dish.description}
-              </p>
+              <p className="mt-2.5 text-[15px] leading-relaxed text-text-2">{dish.description}</p>
             )}
 
             {(author.name || isOwner) && (
               <div className="mt-3.5 flex items-center gap-2">
                 <Avatar name={author.name || user?.name} size="sm" />
                 <div className="text-[13px] text-text-2">
-                  Рецепт от{' '}
+                  {t('detail.authorPrefix')}{' '}
                   <span className="font-semibold text-text">
                     {author.name || (isOwner ? user?.name : '—')}
                   </span>
                   {isOwner && (
-                    <span className="ml-2 font-semibold text-accent">· Ваш рецепт</span>
+                    <span className="ml-2 font-semibold text-accent">{t('detail.yourRecipe')}</span>
                   )}
                 </div>
               </div>
             )}
           </div>
 
-          {/* ── Meta strip ───────────────────────────────────── */}
           <DishMetaStrip
             cookTime={dish.cookTime}
             difficulty={dish.difficulty}
@@ -824,34 +747,17 @@ export default function DishDetailPage() {
             mealTime={dish.mealTime}
           />
 
-          {/* ── Ingredients ──────────────────────────────────── */}
-          <IngredientsSection
-            ingredients={dish.ingredients}
-            fridgeIds={fridgeIds}
-            token={token}
-          />
-
-          {/* ── Steps ────────────────────────────────────────── */}
+          <IngredientsSection ingredients={dish.ingredients} fridgeIds={fridgeIds} token={token} />
           <StepsSection steps={steps} />
-
-          {/* ── Nutrition ────────────────────────────────────── */}
           <NutritionSection nutrition={dish.nutrition} />
-
-          {/* ── Categories + tags ────────────────────────────── */}
           <TagsSection
             categories={dish.categories}
             tags={dish.tags}
             onCategoryClick={c => navigate(`/dishes?category=${c}`)}
-            onTagClick={t => navigate(`/dishes?tag=${encodeURIComponent(t)}`)}
+            onTagClick={tag => navigate(`/dishes?tag=${encodeURIComponent(tag)}`)}
           />
+          <SimilarSection dishes={similar} onOpen={dishId => navigate(`/dishes/${dishId}`)} />
 
-          {/* ── Similar ──────────────────────────────────────── */}
-          <SimilarSection
-            dishes={similar}
-            onOpen={dishId => navigate(`/dishes/${dishId}`)}
-          />
-
-          {/* ── Comments ─────────────────────────────────────── */}
           {comments !== null && (
             <CommentsSection
               dishId={id}
@@ -865,7 +771,7 @@ export default function DishDetailPage() {
         </div>
       </div>
 
-      {/* ── FAB «В план» ──────────────────────────────────────── */}
+      {/* ── FAB «В план» ─────────────────────────────────────── */}
       <button
         type="button"
         onClick={() => token ? setShowPlanModal(true) : navigate('/auth?mode=register')}
@@ -873,10 +779,9 @@ export default function DishDetailPage() {
         style={{ boxShadow: '0 8px 24px rgba(196,112,74,0.45), 0 2px 6px rgba(196,112,74,0.3)' }}
       >
         <CalendarPlus size={18} strokeWidth={2.2} />
-        В план готовки
+        {t('detail.toPlan')}
       </button>
 
-      {/* ── Modals ────────────────────────────────────────────── */}
       {showMenu && (
         <ActionsSheet
           onClose={() => setShowMenu(false)}
@@ -892,7 +797,7 @@ export default function DishDetailPage() {
           dish={dish}
           hasFamilyGroup={hasFamilyGroup}
           onClose={() => setShowPlanModal(false)}
-          onAdded={() => show('Добавлено в план', 'success')}
+          onAdded={() => show(t('detail.addedToPlan'), 'success')}
         />
       )}
 

@@ -8,39 +8,29 @@ import { useNavigate } from 'react-router-dom'
 import {
   Users, Crown, ChevronRight, Mail, X, Plus, Home, Heart,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { api } from '../api'
 import { useStore } from '../store'
 import { Loader, GuestBlock, PageHeader, useToast } from '../components/ui'
 
 // ─── Helpers ──────────────────────────────────────────────────────
-function pluralGroup(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'группа'
-  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'группы'
-  return 'групп'
-}
-
-function pluralMember(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'участник'
-  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'участника'
-  return 'участников'
-}
-
-function relativeTime(iso) {
+function relativeTime(iso, t) {
   if (!iso) return ''
   const ms = Date.now() - new Date(iso).getTime()
   const days = Math.floor(ms / 86400000)
-  if (days === 0) return 'сегодня'
-  if (days === 1) return 'вчера'
-  if (days < 7) return `${days} ${days === 1 ? 'день' : days < 5 ? 'дня' : 'дней'} назад`
+  if (days === 0) return t('relative.today')
+  if (days === 1) return t('relative.yesterday')
+  if (days < 7) return t('relative.daysAgo', { count: days })
   const weeks = Math.floor(days / 7)
-  if (weeks < 4) return `${weeks} ${weeks === 1 ? 'неделю' : weeks < 5 ? 'недели' : 'недель'} назад`
+  if (weeks < 4) return t('relative.weeksAgo', { count: weeks })
   const months = Math.floor(days / 30)
-  return `${months} ${months === 1 ? 'месяц' : months < 5 ? 'месяца' : 'месяцев'} назад`
+  return t('relative.monthsAgo', { count: months })
 }
 
 // ═══ TypeBadge ════════════════════════════════════════════════════
 function TypeBadge({ type }) {
+  const { t } = useTranslation('groups')
   const isFamily = type === 'FAMILY'
   return (
     <span className={[
@@ -51,7 +41,7 @@ function TypeBadge({ type }) {
     ].join(' ')}
     style={{ letterSpacing: 0.6 }}
     >
-      {isFamily ? 'Семья' : 'Группа'}
+      {t(`typeBadge.${type}`)}
     </span>
   )
 }
@@ -71,6 +61,7 @@ function SectionLabel({ children, count }) {
 
 // ═══ Incoming invite card ═════════════════════════════════════════
 function IncomingInviteCard({ invite, onAccept, onDecline }) {
+  const { t } = useTranslation('groups')
   return (
     <div className="rounded-2xl bg-bg-2 border border-accent-border p-4 flex items-center gap-3">
       <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-accent-muted">
@@ -81,7 +72,7 @@ function IncomingInviteCard({ invite, onAccept, onDecline }) {
           {invite.groupName}
         </div>
         <div className="text-[12px] mt-0.5 text-text-3 truncate">
-          от {invite.invitedByName} · {relativeTime(invite.invitedAt)}
+          {t('invite.from', { name: invite.invitedByName, time: relativeTime(invite.invitedAt, t) })}
         </div>
       </div>
       <div className="flex items-center gap-1 shrink-0">
@@ -90,13 +81,13 @@ function IncomingInviteCard({ invite, onAccept, onDecline }) {
           onClick={() => onAccept(invite)}
           className="h-8 px-3 rounded-full text-white text-[12.5px] font-bold bg-accent"
         >
-          Принять
+          {t('invite.accept')}
         </button>
         <button
           type="button"
           onClick={() => onDecline(invite)}
           className="w-8 h-8 rounded-full flex items-center justify-center text-text-3"
-          aria-label="Отклонить"
+          aria-label={t('invite.declineAria')}
         >
           <X size={15} strokeWidth={2.2} />
         </button>
@@ -107,10 +98,10 @@ function IncomingInviteCard({ invite, onAccept, onDecline }) {
 
 // ═══ Group card ═══════════════════════════════════════════════════
 function GroupCard({ group, currentUserId, onClick }) {
+  const { t } = useTranslation('groups')
   const isFamily = group.type === 'FAMILY'
   const TypeIcon = isFamily ? Home : Heart
   const meIsOwner = group.ownerId === currentUserId
-  // GET /api/groups возвращает membersCount/dishesCount (не вложенные members[]/dishes[])
   const memberCount = group.membersCount ?? 0
   const dishesCount = group.dishesCount ?? 0
 
@@ -151,7 +142,7 @@ function GroupCard({ group, currentUserId, onClick }) {
         className="mt-3 pt-3 text-[12px] tabular-nums text-text-3"
         style={{ borderTop: '1px dashed var(--color-border)' }}
       >
-        {memberCount} {pluralMember(memberCount)} · {dishesCount} блюд
+        {memberCount} {t('member', { count: memberCount })} · {dishesCount} {t('dishesLabel')}
       </div>
     </button>
   )
@@ -159,6 +150,7 @@ function GroupCard({ group, currentUserId, onClick }) {
 
 // ═══ FAB ══════════════════════════════════════════════════════════
 function FAB({ onClick }) {
+  const { t } = useTranslation('groups')
   return (
     <button
       type="button"
@@ -166,16 +158,17 @@ function FAB({ onClick }) {
       className="fixed h-12 px-4 rounded-full flex items-center gap-1.5 bg-accent text-white text-[13.5px] font-bold z-40
         active:scale-95 transition-transform"
       style={{ right: 16, bottom: 80, boxShadow: '0 8px 24px rgba(196,112,74,0.45)' }}
-      aria-label="Создать группу"
+      aria-label={t('page.createFab')}
     >
       <Plus size={16} strokeWidth={2.4} />
-      Создать группу
+      {t('page.createFab')}
     </button>
   )
 }
 
 // ═══ Empty state (нет групп) ══════════════════════════════════════
 function NoGroupsEmpty({ onCreate }) {
+  const { t } = useTranslation('groups')
   return (
     <div className="flex flex-col items-center text-center px-4" style={{ paddingTop: 40 }}>
       <div
@@ -184,10 +177,10 @@ function NoGroupsEmpty({ onCreate }) {
         <Users size={30} strokeWidth={2} className="text-accent" />
       </div>
       <h2 className="mt-4 text-[17px] font-bold text-text" style={{ textWrap: 'balance' }}>
-        У тебя пока нет групп
+        {t('empty.title')}
       </h2>
       <p className="mt-1 text-[13px] leading-relaxed max-w-[290px] text-text-2" style={{ textWrap: 'pretty' }}>
-        Создай семейную группу, чтобы делить холодильник, или обычную — чтобы обмениваться рецептами с друзьями
+        {t('empty.desc')}
       </p>
       <button
         type="button"
@@ -196,7 +189,7 @@ function NoGroupsEmpty({ onCreate }) {
         style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.30)' }}
       >
         <Plus size={15} strokeWidth={2.4} />
-        Создать группу
+        {t('empty.create')}
       </button>
     </div>
   )
@@ -204,16 +197,17 @@ function NoGroupsEmpty({ onCreate }) {
 
 // ═══ Guest block ══════════════════════════════════════════════════
 function GuestGroupsBlock() {
+  const { t } = useTranslation('groups')
   return (
     <div>
-      <PageHeader title="Мои группы" />
+      <PageHeader title={t('page.title')} />
       <div className="px-5 pt-4">
         <GuestBlock
           icon={<Users size={26} strokeWidth={1.8} />}
-          title="Готовьте вместе"
-          description="Создайте семейную группу — общий холодильник, план и любимые блюда"
-          registerText="Создать свою кухню"
-          loginText="Уже есть аккаунт? Войти"
+          title={t('guest.title')}
+          description={t('guest.desc')}
+          registerText={t('guest.register')}
+          loginText={t('guest.login')}
         />
       </div>
     </div>
@@ -222,6 +216,7 @@ function GuestGroupsBlock() {
 
 // ═══ Main page ════════════════════════════════════════════════════
 export default function GroupsPage() {
+  const { t } = useTranslation('groups')
   const navigate = useNavigate()
   const user  = useStore(s => s.user)
   const token = useStore(s => s.token)
@@ -246,8 +241,7 @@ export default function GroupsPage() {
   async function handleAccept(invite) {
     try {
       await api.acceptInvite(invite.token)
-      show(`Вы вступили в «${invite.groupName}»`, 'success')
-      // Обновляем оба списка
+      show(t('invite.acceptedSuccess', { name: invite.groupName }), 'success')
       const [g, i] = await Promise.all([api.getGroups(), api.getIncomingInvites()])
       setGroups(g)
       setInvites(i)
@@ -255,11 +249,11 @@ export default function GroupsPage() {
   }
 
   async function handleDecline(invite) {
-    if (!confirm(`Отклонить приглашение в «${invite.groupName}»?`)) return
+    if (!confirm(t('invite.declineConfirm', { name: invite.groupName }))) return
     try {
       await api.revokeInvite(invite.groupId, invite.token)
       setInvites(prev => prev.filter(x => x.token !== invite.token))
-      show('Приглашение отклонено', 'success')
+      show(t('invite.declinedSuccess'), 'success')
     } catch (e) { show(e.message, 'error') }
   }
 
@@ -271,10 +265,10 @@ export default function GroupsPage() {
   return (
     <div>
       <PageHeader
-        title="Мои группы"
+        title={t('page.title')}
         right={groups.length > 0 && (
           <span className="text-[12px] tabular-nums text-text-3">
-            {groups.length} {pluralGroup(groups.length)}
+            {groups.length} {t('group', { count: groups.length })}
           </span>
         )}
       />
@@ -288,7 +282,7 @@ export default function GroupsPage() {
           <>
             {invites.length > 0 && (
               <div className="mt-7">
-                <SectionLabel count={invites.length}>Приглашения</SectionLabel>
+                <SectionLabel count={invites.length}>{t('sections.invites')}</SectionLabel>
                 <div className="flex flex-col gap-2">
                   {invites.map(inv => (
                     <IncomingInviteCard
@@ -304,7 +298,7 @@ export default function GroupsPage() {
 
             {groups.length > 0 && (
               <div className="mt-7">
-                <SectionLabel count={groups.length}>Мои группы</SectionLabel>
+                <SectionLabel count={groups.length}>{t('sections.myGroups')}</SectionLabel>
                 <div className="flex flex-col gap-2">
                   {groups.map(g => (
                     <GroupCard

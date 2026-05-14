@@ -1,1 +1,109 @@
-{}
+{
+  "page": {
+    "title": "My Groups",
+    "createFab": "Create group"
+  },
+  "sections": {
+    "invites": "Invitations",
+    "myGroups": "My groups"
+  },
+  "typeBadge": {
+    "FAMILY": "Family",
+    "REGULAR": "Group"
+  },
+  "empty": {
+    "title": "You have no groups yet",
+    "desc": "Create a family group to share your fridge, or a regular group to share recipes with friends",
+    "create": "Create group"
+  },
+  "guest": {
+    "title": "Cook together",
+    "desc": "Create a family group — shared fridge, meal plan and favourite dishes",
+    "register": "Create your kitchen",
+    "login": "Already have an account? Sign in"
+  },
+  "invite": {
+    "accept": "Accept",
+    "declineAria": "Decline",
+    "from": "from {{name}} · {{time}}",
+    "acceptedSuccess": "You joined «{{name}}»",
+    "declineConfirm": "Decline invitation to «{{name}}»?",
+    "declinedSuccess": "Invitation declined"
+  },
+  "relative": {
+    "today": "today",
+    "yesterday": "yesterday",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "weeksAgo_one": "{{count}} week ago",
+    "weeksAgo_other": "{{count}} weeks ago",
+    "monthsAgo_one": "{{count}} month ago",
+    "monthsAgo_other": "{{count}} months ago"
+  },
+  "member_one": "member",
+  "member_other": "members",
+  "group_one": "group",
+  "group_other": "groups",
+  "dishesLabel": "dishes",
+  "detail": {
+    "sinceDate": "Since {{date}}",
+    "familyFridge": "Shared fridge and plan",
+    "regularCatalog": "Shared dish catalogue",
+    "metricsMembers": "Members",
+    "metricsDishes": "Dishes",
+    "membersTitle": "Members",
+    "inviteLink": "Invite",
+    "dishesTitle": "Group dishes",
+    "addDish": "Add",
+    "ownerRole": "owner",
+    "memberRole": "member",
+    "joinedSince": "since {{date}}",
+    "thisIsYou": "That's you",
+    "memberMenuAria": "Member menu",
+    "closeMenuAria": "Close menu",
+    "kickAction": "Remove from group",
+    "pendingStatus": "pending",
+    "inviteSentAt": "invitation sent · {{time}}",
+    "revokeAria": "Revoke",
+    "inviteTitle": "Invite to group",
+    "inviteFamilyOnly": "Only the group owner can send invitations",
+    "inviteEmailHint": "Send email — the invitee will receive a link",
+    "joinCodeLabel": "Join code",
+    "copyAria": "Copy",
+    "copied": "Copied ✓",
+    "regenCode": "Generate new code",
+    "emailInviteLabel": "Email invitation",
+    "sendBtn": "Send",
+    "emailError": "Please enter a valid email",
+    "emailSendError": "Failed to send",
+    "deleteGroup": "Delete group permanently",
+    "leaveGroup": "Leave group",
+    "inviteSentSuccess": "Invitation sent to {{email}}",
+    "revokeSuccess": "Invitation revoked",
+    "kickConfirm": "Remove {{name}} from the group?",
+    "kickSuccess": "Member removed",
+    "leaveConfirm": "Leave group «{{name}}»?",
+    "deleteConfirm": "Delete group «{{name}}» permanently?",
+    "codeCopied": "Code copied",
+    "codeUpdated": "Code updated"
+  },
+  "form": {
+    "photoLabel": "Group photo",
+    "typeLabel": "Group type",
+    "nameLabel": "Name",
+    "descLabel": "Description",
+    "submitCreate": "Create group",
+    "submitEdit": "Save changes",
+    "nameError": "Please enter a name",
+    "namePlaceholderFamily": "Our Family",
+    "namePlaceholderRegular": "Friends, Team…",
+    "descPlaceholder": "Describe the group…",
+    "uploadPhoto": "Upload photo",
+    "changePhoto": "Change photo",
+    "removePhoto": "Remove",
+    "typeFamily": "Family",
+    "typeFamilyDesc": "Shared fridge, plan and dishes",
+    "typeRegular": "Regular",
+    "typeRegularDesc": "Share dishes with friends via code"
+  }
+}

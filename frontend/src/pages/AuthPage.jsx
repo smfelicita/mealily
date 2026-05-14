@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 import { ChefHat, Mail, Phone, AlertCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { api } from '../api'
 import { useStore } from '../store'
@@ -50,12 +51,13 @@ function ErrorMsg({ msg }) {
   )
 }
 
-function ResendLine({ countdown, onResend, loading, label = 'Отправить повторно' }) {
+function ResendLine({ countdown, onResend, loading }) {
+  const { t } = useTranslation('auth')
   return (
     <p className="text-center mt-4 text-[13px] text-text-2">
-      Не получили?{' '}
+      {t('resend.notReceived')}{' '}
       {countdown > 0
-        ? <span className="text-text-3">Повторно через {countdown} с</span>
+        ? <span className="text-text-3">{t('resend.countdown', { n: countdown })}</span>
         : (
           <button
             type="button"
@@ -63,7 +65,7 @@ function ResendLine({ countdown, onResend, loading, label = 'Отправить 
             onClick={onResend}
             disabled={loading}
           >
-            {label}
+            {t('resend.label')}
           </button>
         )
       }
@@ -73,9 +75,10 @@ function ResendLine({ countdown, onResend, loading, label = 'Отправить 
 
 // ─── Tab switcher (email | phone) ────────────────────────────────
 function TabSwitcher({ tab, onChange }) {
+  const { t } = useTranslation('auth')
   const items = [
-    { id: 'email', label: 'Email',   Icon: Mail  },
-    { id: 'phone', label: 'Телефон', Icon: Phone },
+    { id: 'email', label: 'Email',          Icon: Mail  },
+    { id: 'phone', label: t('tab.phone'),   Icon: Phone },
   ]
   return (
     <div className="flex rounded-full p-1 bg-bg-3 border border-border">
@@ -102,6 +105,7 @@ function TabSwitcher({ tab, onChange }) {
 
 // ═══ Page ═════════════════════════════════════════════════════════
 export default function AuthPage() {
+  const { t } = useTranslation('auth')
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirect') || '/'
   const [tab,  setTab]  = useState('email')
@@ -212,7 +216,7 @@ export default function AuthPage() {
           <ChefHat size={28} strokeWidth={2} className="text-accent" />
         </div>
         <h1 className="text-[26px] font-extrabold tracking-tight text-text">MealBot</h1>
-        <p className="text-[13px] text-text-2 mt-1">Умный помощник для выбора блюд</p>
+        <p className="text-[13px] text-text-2 mt-1">{t('brand.subtitle')}</p>
       </div>
 
       {/* Card */}
@@ -222,15 +226,15 @@ export default function AuthPage() {
         {step === 'verify-email' && (
           <>
             <h2 className="text-[20px] font-extrabold tracking-tight text-text mb-1">
-              Подтверди email
+              {t('verifyEmail.title')}
             </h2>
             <p className="text-[13px] text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
-              Код отправлен на <strong className="text-text">{pendingEmail}</strong>.
-              Если не нашли — проверь папку «Спам».
+              {t('verifyEmail.descPart1')} <strong className="text-text">{pendingEmail}</strong>.{' '}
+              {t('verifyEmail.descPart2')}
             </p>
             <form onSubmit={submitVerifyEmail} className="flex flex-col gap-4">
               <div>
-                <FieldLabel>Код из письма</FieldLabel>
+                <FieldLabel>{t('verifyEmail.codeLabel')}</FieldLabel>
                 <PillInput
                   placeholder="123456"
                   inputMode="numeric"
@@ -243,7 +247,7 @@ export default function AuthPage() {
               </div>
               <ErrorMsg msg={error} />
               <Button type="submit" className="w-full" loading={loading}>
-                {!loading && 'Подтвердить'}
+                {!loading && t('verifyEmail.confirm')}
               </Button>
             </form>
             <ResendLine countdown={resendCountdown} onResend={resendEmail} loading={loading} />
@@ -255,13 +259,13 @@ export default function AuthPage() {
           <>
             <TabSwitcher tab={tab} onChange={switchTab} />
             <h2 className="text-[20px] font-extrabold tracking-tight text-text mt-5 mb-4">
-              Вход по телефону
+              {t('phoneEnter.title')}
             </h2>
             <form onSubmit={submitSendPhone} className="flex flex-col gap-4">
               <div>
-                <FieldLabel>Номер телефона</FieldLabel>
+                <FieldLabel>{t('phoneEnter.phoneLabel')}</FieldLabel>
                 <PillInput
-                  placeholder="+7 999 000-00-00"
+                  placeholder={t('phoneEnter.phonePlaceholder')}
                   type="tel"
                   value={form.phone}
                   onChange={upd('phone')}
@@ -271,7 +275,7 @@ export default function AuthPage() {
               </div>
               <ErrorMsg msg={error} />
               <Button type="submit" className="w-full" loading={loading}>
-                {!loading && 'Получить код'}
+                {!loading && t('phoneEnter.sendCode')}
               </Button>
             </form>
           </>
@@ -281,14 +285,14 @@ export default function AuthPage() {
         {step === 'phone-code' && (
           <>
             <h2 className="text-[20px] font-extrabold tracking-tight text-text mb-1">
-              Введи код
+              {t('phoneCode.title')}
             </h2>
             <p className="text-[13px] text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
-              Код отправлен на <strong className="text-text">{pendingPhone}</strong>
+              {t('phoneCode.descPart1')} <strong className="text-text">{pendingPhone}</strong>
             </p>
             <form onSubmit={submitVerifyPhone} className="flex flex-col gap-4">
               <div>
-                <FieldLabel>Код из SMS</FieldLabel>
+                <FieldLabel>{t('phoneCode.smsLabel')}</FieldLabel>
                 <PillInput
                   placeholder="123456"
                   inputMode="numeric"
@@ -300,28 +304,28 @@ export default function AuthPage() {
                 />
               </div>
               <div>
-                <FieldLabel>Имя (опционально)</FieldLabel>
+                <FieldLabel>{t('phoneCode.nameLabel')}</FieldLabel>
                 <PillInput
-                  placeholder="Как тебя зовут?"
+                  placeholder={t('phoneCode.namePlaceholder')}
                   value={form.name}
                   onChange={upd('name')}
                 />
               </div>
               <ErrorMsg msg={error} />
               <Button type="submit" className="w-full" loading={loading}>
-                {!loading && 'Войти'}
+                {!loading && t('phoneCode.login')}
               </Button>
             </form>
             <p className="text-center mt-4 text-[13px] text-text-2">
               {resendCountdown > 0
-                ? <span className="text-text-3">Повторно через {resendCountdown} с</span>
+                ? <span className="text-text-3">{t('resend.countdown', { n: resendCountdown })}</span>
                 : (
                   <button
                     type="button"
                     className="text-accent font-bold"
                     onClick={() => { setStep('phone-enter'); setForm(f => ({ ...f, code: '' })) }}
                   >
-                    Изменить номер
+                    {t('phoneCode.changePhone')}
                   </button>
                 )
               }
@@ -335,22 +339,22 @@ export default function AuthPage() {
             <TabSwitcher tab={tab} onChange={switchTab} />
 
             <h2 className="text-[20px] font-extrabold tracking-tight text-text mt-5 mb-4">
-              {step === 'login' ? 'Войти' : 'Создать аккаунт'}
+              {step === 'login' ? t('login.title') : t('register.title')}
             </h2>
 
             <form onSubmit={submitEmailAuth} className="flex flex-col gap-4">
               {step === 'register' && (
                 <div>
-                  <FieldLabel>Имя</FieldLabel>
+                  <FieldLabel>{t('fields.name')}</FieldLabel>
                   <PillInput
-                    placeholder="Как тебя зовут?"
+                    placeholder={t('fields.namePlaceholder')}
                     value={form.name}
                     onChange={upd('name')}
                   />
                 </div>
               )}
               <div>
-                <FieldLabel>Email</FieldLabel>
+                <FieldLabel>{t('fields.email')}</FieldLabel>
                 <PillInput
                   type="email"
                   required
@@ -360,7 +364,7 @@ export default function AuthPage() {
                 />
               </div>
               <div>
-                <FieldLabel>Пароль</FieldLabel>
+                <FieldLabel>{t('fields.password')}</FieldLabel>
                 <PillInput
                   type="password"
                   required
@@ -372,18 +376,18 @@ export default function AuthPage() {
               </div>
               <ErrorMsg msg={error} />
               <Button type="submit" className="w-full" loading={loading}>
-                {!loading && (step === 'login' ? 'Войти' : 'Зарегистрироваться')}
+                {!loading && (step === 'login' ? t('login.submit') : t('register.submit'))}
               </Button>
             </form>
 
             <p className="text-center mt-4 text-[13px] text-text-2">
-              {step === 'login' ? 'Нет аккаунта? ' : 'Уже есть аккаунт? '}
+              {step === 'login' ? t('login.noAccount') : t('register.hasAccount')}{' '}
               <button
                 type="button"
                 className="text-accent font-bold"
                 onClick={() => { setStep(s => s === 'login' ? 'register' : 'login'); setError('') }}
               >
-                {step === 'login' ? 'Зарегистрироваться' : 'Войти'}
+                {step === 'login' ? t('login.switchToRegister') : t('register.switchToLogin')}
               </button>
             </p>
 
@@ -392,13 +396,13 @@ export default function AuthPage() {
               <>
                 <div className="flex items-center gap-3 my-5">
                   <div className="flex-1 h-px bg-border" />
-                  <span className="text-[12px] text-text-3 font-semibold uppercase tracking-wide" style={{ letterSpacing: 0.6 }}>или</span>
+                  <span className="text-[12px] text-text-3 font-semibold uppercase tracking-wide" style={{ letterSpacing: 0.6 }}>{t('divider')}</span>
                   <div className="flex-1 h-px bg-border" />
                 </div>
                 <div className="flex justify-center">
                   <GoogleLogin
                     onSuccess={r => handleGoogle(r.credential)}
-                    onError={() => setError('Ошибка Google авторизации')}
+                    onError={() => setError(t('googleError'))}
                     text="continue_with"
                     shape="pill"
                     width="100%"
@@ -417,7 +421,7 @@ export default function AuthPage() {
         className="mt-6 text-[13px] text-text-3 hover:text-text-2"
         onClick={() => navigate('/')}
       >
-        Продолжить без регистрации →
+        {t('skip')}
       </button>
     </div>
   )

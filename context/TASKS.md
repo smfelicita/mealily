@@ -154,7 +154,9 @@
 
 ### Дизайн-система / фронтенд
 - [ ] Произвольные размеры шрифта — ввести именованные токены в tailwind.config для `text-[13px]`, `text-[15px]`, `text-[17px]`, `text-[22px]`, `text-[24px]`, `text-[26px]` и заменить (text-[11px] → text-2xs уже сделано)
-- [ ] **i18n: обернуть строки в t() и добавить английский перевод** — инфраструктура (i18next + LanguageDetector + namespaces) уже подключена в `frontend/src/i18n.js`, переключатель в ProfilePage добавлен и работает (`localStorage.mealbot_lang`), но реального переключения языка не происходит — нет вызовов `t()` в коде. Надо: (1) пройтись по всем страницам/компонентам, заменить хардкод русского на `t('namespace:key')`; (2) заполнить `frontend/src/locales/en/*.json`. После этого выбор «English» в селекторе профиля начнёт работать.
+- [x] **i18n: все основные страницы переведены на t()** — 12/14 страниц используют `useTranslation`. Namespaces: common, errors, dish, fridge, chat, auth, profile, groups, plan, home. Locale-файлы ru/en заполнены. Переключатель в ProfilePage работает. Остались служебные: InvitePage, TelegramAuthPage (низкий приоритет).
+- [ ] **i18n: задеплоить** — `git push` + `npm run build` на сервере, чтобы переключатель языка в профиле заработал в проде
+- [ ] **i18n: InvitePage + TelegramAuthPage** — дотянуть оставшиеся 2 служебные страницы
 
 ### Прочее
 - [ ] SEO: SSR или prerender для карточек блюд

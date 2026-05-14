@@ -7,6 +7,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Home, Heart, Camera, AlertCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { api } from '../api'
 import { Button, Loader, useToast } from '../components/ui'
@@ -59,24 +60,12 @@ function ErrorMsg({ msg }) {
 }
 
 // ─── Type radio-cards ────────────────────────────────────────────
-const TYPE_OPTIONS = [
-  {
-    value: 'FAMILY',
-    Icon: Home,
-    label: 'Семейная',
-    desc: 'Общий холодильник, план и блюда',
-  },
-  {
-    value: 'REGULAR',
-    Icon: Heart,
-    label: 'Обычная',
-    desc: 'Делиться блюдами с друзьями по коду',
-  },
-]
-
 function TypeCard({ option, active, onClick }) {
-  const { Icon, label, desc, value } = option
+  const { t } = useTranslation('groups')
+  const { value, Icon } = option
   const isFamily = value === 'FAMILY'
+  const label = isFamily ? t('form.typeFamily') : t('form.typeRegular')
+  const desc  = isFamily ? t('form.typeFamilyDesc') : t('form.typeRegularDesc')
   return (
     <button
       type="button"
@@ -108,7 +97,7 @@ function TypeCard({ option, active, onClick }) {
 
 // ─── Avatar uploader ─────────────────────────────────────────────
 function AvatarUploader({ url, uploading, onUpload, onRemove }) {
-  const initial = '👥'
+  const { t } = useTranslation('groups')
   return (
     <div className="flex items-center gap-4">
       <div
@@ -116,7 +105,7 @@ function AvatarUploader({ url, uploading, onUpload, onRemove }) {
       >
         {url
           ? <img src={url} alt="" className="w-full h-full object-cover" />
-          : <span>{initial}</span>}
+          : <span>👥</span>}
       </div>
       <div className="flex flex-col gap-2">
         <label className="cursor-pointer">
@@ -124,7 +113,7 @@ function AvatarUploader({ url, uploading, onUpload, onRemove }) {
             {!uploading && (
               <span className="inline-flex items-center gap-1.5">
                 <Camera size={14} strokeWidth={2.2} />
-                {url ? 'Заменить фото' : 'Загрузить фото'}
+                {url ? t('form.changePhoto') : t('form.uploadPhoto')}
               </span>
             )}
           </Button>
@@ -136,7 +125,7 @@ function AvatarUploader({ url, uploading, onUpload, onRemove }) {
             onClick={onRemove}
             className="text-[12px] font-semibold text-red-500 self-start"
           >
-            Удалить
+            {t('form.removePhoto')}
           </button>
         )}
       </div>
@@ -144,8 +133,14 @@ function AvatarUploader({ url, uploading, onUpload, onRemove }) {
   )
 }
 
+const TYPE_OPTIONS = [
+  { value: 'FAMILY',  Icon: Home  },
+  { value: 'REGULAR', Icon: Heart },
+]
+
 // ═══ Main ═════════════════════════════════════════════════════════
 export default function GroupFormPage() {
+  const { t } = useTranslation('groups')
   const { id } = useParams()
   const navigate = useNavigate()
   const isEdit = Boolean(id)
@@ -183,7 +178,7 @@ export default function GroupFormPage() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!form.name.trim()) { setNameError('Укажите название'); return }
+    if (!form.name.trim()) { setNameError(t('form.nameError')); return }
     setNameError('')
     setSaving(true)
     try {
@@ -205,7 +200,7 @@ export default function GroupFormPage() {
       <form onSubmit={handleSubmit} className="px-5 pt-4 pb-24 fade-in flex flex-col gap-7">
         {/* Avatar */}
         <div>
-          <FieldLabel>Фото группы</FieldLabel>
+          <FieldLabel>{t('form.photoLabel')}</FieldLabel>
           <AvatarUploader
             url={form.avatarUrl}
             uploading={uploading}
@@ -217,7 +212,7 @@ export default function GroupFormPage() {
         {/* Тип — только при создании */}
         {!isEdit && (
           <div>
-            <FieldLabel>Тип группы</FieldLabel>
+            <FieldLabel>{t('form.typeLabel')}</FieldLabel>
             <div className="flex flex-col gap-2">
               {TYPE_OPTIONS.map(opt => (
                 <TypeCard
@@ -233,9 +228,9 @@ export default function GroupFormPage() {
 
         {/* Название */}
         <div>
-          <FieldLabel required>Название</FieldLabel>
+          <FieldLabel required>{t('form.nameLabel')}</FieldLabel>
           <PillInput
-            placeholder={form.type === 'FAMILY' ? 'Наша семья' : 'Друзья, Команда…'}
+            placeholder={form.type === 'FAMILY' ? t('form.namePlaceholderFamily') : t('form.namePlaceholderRegular')}
             value={form.name}
             onChange={e => { setForm(f => ({ ...f, name: e.target.value })); if (nameError) setNameError('') }}
             error={!!nameError}
@@ -247,10 +242,10 @@ export default function GroupFormPage() {
 
         {/* Описание */}
         <div>
-          <FieldLabel>Описание</FieldLabel>
+          <FieldLabel>{t('form.descLabel')}</FieldLabel>
           <PillTextarea
             rows={3}
-            placeholder="Расскажите о группе…"
+            placeholder={t('form.descPlaceholder')}
             value={form.description}
             onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
             maxLength={300}
@@ -259,7 +254,7 @@ export default function GroupFormPage() {
 
         {/* Submit */}
         <Button type="submit" className="w-full" loading={saving}>
-          {!saving && (isEdit ? 'Сохранить изменения' : 'Создать группу')}
+          {!saving && (isEdit ? t('form.submitEdit') : t('form.submitCreate'))}
         </Button>
       </form>
 

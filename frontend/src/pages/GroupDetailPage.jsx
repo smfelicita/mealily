@@ -9,6 +9,7 @@ import {
   Crown, UserPlus, MoreVertical, Mail, Copy, Check, X,
   Trash2, LogOut, AlertCircle, ChefHat,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { api } from '../api'
 import { useStore } from '../store'
@@ -16,25 +17,19 @@ import { Loader, useToast } from '../components/ui'
 import { DishCard } from '../components/domain'
 
 // ─── Helpers ──────────────────────────────────────────────────────
-function pluralMember(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'участник'
-  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'участника'
-  return 'участников'
-}
-
-function fmtMonth(iso) {
+function fmtMonth(iso, lang) {
   if (!iso) return ''
-  return new Date(iso).toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })
+  return new Date(iso).toLocaleDateString(lang === 'en' ? 'en-US' : 'ru-RU', { month: 'long', year: 'numeric' })
 }
 
-function relativeShort(iso) {
+function relativeShort(iso, t, lang) {
   if (!iso) return ''
   const ms = Date.now() - new Date(iso).getTime()
   const days = Math.floor(ms / 86400000)
-  if (days === 0) return 'сегодня'
-  if (days === 1) return 'вчера'
-  if (days < 7) return `${days} ${days < 5 ? 'дня' : 'дней'} назад`
-  return fmtMonth(iso)
+  if (days === 0) return t('relative.today')
+  if (days === 1) return t('relative.yesterday')
+  if (days < 7) return t('relative.daysAgo', { count: days })
+  return fmtMonth(iso, lang)
 }
 
 // ═══ Initial avatar ═══════════════════════════════════════════════
@@ -62,6 +57,7 @@ function InitialAvatar({ name, size = 40, isOwner = false }) {
 
 // ═══ TypeBadge ════════════════════════════════════════════════════
 function TypeBadge({ type }) {
+  const { t } = useTranslation('groups')
   const isFamily = type === 'FAMILY'
   return (
     <span className={[
@@ -72,13 +68,14 @@ function TypeBadge({ type }) {
     ].join(' ')}
     style={{ letterSpacing: 0.6 }}
     >
-      {isFamily ? 'Семья' : 'Группа'}
+      {t(`typeBadge.${type}`)}
     </span>
   )
 }
 
 // ═══ Hero ═════════════════════════════════════════════════════════
 function GroupHero({ group, dishesCount }) {
+  const { t, i18n } = useTranslation('groups')
   const isFamily = group.type === 'FAMILY'
   const memberCount = group.members?.length || 0
 
@@ -90,7 +87,9 @@ function GroupHero({ group, dishesCount }) {
       <div className="flex items-center justify-between gap-2">
         <TypeBadge type={group.type} />
         {group.createdAt && (
-          <span className="text-[12px] text-text-3">С {fmtMonth(group.createdAt)}</span>
+          <span className="text-[12px] text-text-3">
+            {t('detail.sinceDate', { date: fmtMonth(group.createdAt, i18n.language) })}
+          </span>
         )}
       </div>
 
@@ -108,12 +107,12 @@ function GroupHero({ group, dishesCount }) {
       )}
 
       <p className="mt-1 text-[13px] text-text-2">
-        {memberCount} {pluralMember(memberCount)} · {isFamily ? 'Общий холодильник и план' : 'Общий каталог блюд'}
+        {memberCount} {t('member', { count: memberCount })} · {isFamily ? t('detail.familyFridge') : t('detail.regularCatalog')}
       </p>
 
       <div className="flex gap-2 mt-4">
-        <HeroMetric label="Блюд" value={dishesCount} />
-        <HeroMetric label="Участников" value={memberCount} />
+        <HeroMetric label={t('detail.metricsDishes')} value={dishesCount} />
+        <HeroMetric label={t('detail.metricsMembers')} value={memberCount} />
       </div>
     </div>
   )
@@ -137,6 +136,7 @@ function HeroMetric({ label, value }) {
 
 // ═══ Member row ═══════════════════════════════════════════════════
 function MemberRow({ member, isMe, ownerView, onKick }) {
+  const { t, i18n } = useTranslation('groups')
   const owner = member.role === 'OWNER'
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -148,8 +148,8 @@ function MemberRow({ member, isMe, ownerView, onKick }) {
           {member.name}
         </div>
         <div className="text-[11px] mt-0.5 text-text-3">
-          {owner ? 'владелец' : 'участник'}
-          {member.joinedAt && ` · с ${fmtMonth(member.joinedAt)}`}
+          {owner ? t('detail.ownerRole') : t('detail.memberRole')}
+          {member.joinedAt && ` · ${t('detail.joinedSince', { date: fmtMonth(member.joinedAt, i18n.language) })}`}
         </div>
       </div>
 
@@ -158,7 +158,7 @@ function MemberRow({ member, isMe, ownerView, onKick }) {
           className="text-[10.5px] font-bold uppercase tracking-wider bg-accent-muted text-accent rounded-full px-2 py-0.5"
           style={{ letterSpacing: 0.6 }}
         >
-          Это вы
+          {t('detail.thisIsYou')}
         </span>
       )}
 
@@ -170,7 +170,7 @@ function MemberRow({ member, isMe, ownerView, onKick }) {
             'w-8 h-8 rounded-full flex items-center justify-center shrink-0',
             menuOpen ? 'bg-bg-3 text-text-2' : 'text-text-2',
           ].join(' ')}
-          aria-label="Меню участника"
+          aria-label={t('detail.memberMenuAria')}
         >
           <MoreVertical size={16} strokeWidth={2} />
         </button>
@@ -178,12 +178,11 @@ function MemberRow({ member, isMe, ownerView, onKick }) {
 
       {menuOpen && (
         <>
-          {/* tap-outside */}
           <button
             type="button"
             onClick={() => setMenuOpen(false)}
             className="fixed inset-0 z-30"
-            aria-label="Закрыть меню"
+            aria-label={t('detail.closeMenuAria')}
           />
           <div
             className="absolute z-40 bg-bg-2 rounded-xl border border-border p-1.5"
@@ -195,7 +194,7 @@ function MemberRow({ member, isMe, ownerView, onKick }) {
               className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-[13.5px] font-semibold text-left text-red-500"
             >
               <Trash2 size={15} strokeWidth={2.2} />
-              Удалить из группы
+              {t('detail.kickAction')}
             </button>
           </div>
         </>
@@ -206,6 +205,7 @@ function MemberRow({ member, isMe, ownerView, onKick }) {
 
 // ═══ Pending invite row ═══════════════════════════════════════════
 function PendingRow({ invite, canRevoke, onRevoke }) {
+  const { t, i18n } = useTranslation('groups')
   return (
     <div
       className="rounded-xl bg-bg-3 p-3 flex items-center gap-3"
@@ -220,21 +220,21 @@ function PendingRow({ invite, canRevoke, onRevoke }) {
       <div className="flex-1 min-w-0">
         <div className="text-[13.5px] font-semibold truncate text-text-2">{invite.email}</div>
         <div className="text-[11px] mt-0.5 text-text-3">
-          приглашение отправлено · {relativeShort(invite.invitedAt)}
+          {t('detail.inviteSentAt', { time: relativeShort(invite.invitedAt, t, i18n.language) })}
         </div>
       </div>
       <span
         className="text-[10.5px] font-bold uppercase tracking-wider bg-bg-2 text-text-3 border border-border rounded-full px-2 py-0.5 shrink-0"
         style={{ letterSpacing: 0.6 }}
       >
-        ожидает
+        {t('detail.pendingStatus')}
       </span>
       {canRevoke && (
         <button
           type="button"
           onClick={() => onRevoke(invite)}
           className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-text-3"
-          aria-label="Отозвать"
+          aria-label={t('detail.revokeAria')}
         >
           <X size={14} strokeWidth={2.2} />
         </button>
@@ -245,13 +245,13 @@ function PendingRow({ invite, canRevoke, onRevoke }) {
 
 // ═══ Invite block (joinCode + email) ═════════════════════════════
 function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode }) {
+  const { t } = useTranslation('groups')
   const isFamily = group.type === 'FAMILY'
   const [email, setEmail] = useState('')
   const [emailErr, setEmailErr] = useState('')
   const [sending, setSending] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  // Email-приглашать в FAMILY может только owner (бэк это enforce'ит)
   const canEmailInvite = !isFamily || isOwner
 
   function handleCopy() {
@@ -265,7 +265,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
     const v = email.trim()
     if (!v) return
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
-      setEmailErr('Введите корректный email')
+      setEmailErr(t('detail.emailError'))
       return
     }
     setEmailErr('')
@@ -274,7 +274,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
       await onInviteEmail(v)
       setEmail('')
     } catch (e) {
-      setEmailErr(e.message || 'Ошибка отправки')
+      setEmailErr(e.message || t('detail.emailSendError'))
     } finally {
       setSending(false)
     }
@@ -283,11 +283,9 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
   return (
     <div className="rounded-2xl bg-bg-2 border border-border p-4 flex flex-col gap-4">
       <div>
-        <div className="text-[14px] font-bold text-text">Пригласить в группу</div>
+        <div className="text-[14px] font-bold text-text">{t('detail.inviteTitle')}</div>
         <div className="text-[12px] mt-0.5 text-text-3" style={{ textWrap: 'pretty' }}>
-          {isFamily
-            ? 'Только владелец группы может отправлять приглашения'
-            : 'Отправьте email — приглашённый получит письмо со ссылкой'}
+          {isFamily ? t('detail.inviteFamilyOnly') : t('detail.inviteEmailHint')}
         </div>
       </div>
 
@@ -298,7 +296,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
             className="text-[10.5px] font-bold uppercase tracking-wider text-text-3"
             style={{ letterSpacing: 0.6 }}
           >
-            Код для вступления
+            {t('detail.joinCodeLabel')}
           </div>
           <div
             className="flex items-center pl-4 pr-1 py-1 rounded-full bg-bg-3 border border-border relative"
@@ -310,7 +308,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
               type="button"
               onClick={handleCopy}
               className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-accent text-white"
-              aria-label="Скопировать"
+              aria-label={t('detail.copyAria')}
             >
               {copied
                 ? <Check size={14} strokeWidth={2.6} />
@@ -326,7 +324,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
                   boxShadow: '0 6px 18px rgba(0,0,0,0.18)',
                 }}
               >
-                Скопировано ✓
+                {t('detail.copied')}
               </div>
             )}
           </div>
@@ -336,7 +334,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
               onClick={onRegenCode}
               className="text-[12px] font-semibold text-accent self-start mt-0.5"
             >
-              Сгенерировать новый код
+              {t('detail.regenCode')}
             </button>
           )}
         </div>
@@ -349,7 +347,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
             className="text-[10.5px] font-bold uppercase tracking-wider text-text-3"
             style={{ letterSpacing: 0.6 }}
           >
-            Email-приглашение
+            {t('detail.emailInviteLabel')}
           </div>
           <div className="flex gap-2">
             <input
@@ -367,7 +365,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
               disabled={sending}
               className="h-10 px-4 rounded-full bg-accent text-white text-[13px] font-bold disabled:opacity-60"
             >
-              {sending ? '...' : 'Отправить'}
+              {sending ? '...' : t('detail.sendBtn')}
             </button>
           </div>
           {emailErr && (
@@ -384,6 +382,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
 
 // ═══ Danger zone ══════════════════════════════════════════════════
 function DangerZone({ isOwner, onLeave, onDelete }) {
+  const { t } = useTranslation('groups')
   return (
     <div className="pt-5 mt-7 border-t border-border flex flex-col gap-2 items-start">
       {isOwner ? (
@@ -393,7 +392,7 @@ function DangerZone({ isOwner, onLeave, onDelete }) {
           className="h-10 rounded-full text-[13px] font-bold flex items-center gap-2 px-1 text-red-500"
         >
           <Trash2 size={14} strokeWidth={2.2} />
-          Удалить группу навсегда
+          {t('detail.deleteGroup')}
         </button>
       ) : (
         <button
@@ -402,14 +401,14 @@ function DangerZone({ isOwner, onLeave, onDelete }) {
           className="h-10 rounded-full text-[13px] font-bold flex items-center gap-2 px-1 text-red-500"
         >
           <LogOut size={14} strokeWidth={2.2} />
-          Выйти из группы
+          {t('detail.leaveGroup')}
         </button>
       )}
     </div>
   )
 }
 
-// ═══ Section title (внутренний) ═══════════════════════════════════
+// ═══ Section title ════════════════════════════════════════════════
 function SectionTitleRow({ title, count, action }) {
   return (
     <div className="flex items-center justify-between mb-3">
@@ -426,6 +425,7 @@ function SectionTitleRow({ title, count, action }) {
 
 // ═══ Main page ════════════════════════════════════════════════════
 export default function GroupDetailPage() {
+  const { t } = useTranslation('groups')
   const { id } = useParams()
   const navigate = useNavigate()
   const user = useStore(s => s.user)
@@ -454,8 +454,7 @@ export default function GroupDetailPage() {
 
   async function handleInviteEmail(email) {
     await api.inviteMember(id, email)
-    show(`Приглашение отправлено на ${email}`, 'success')
-    // Обновим pending
+    show(t('detail.inviteSentSuccess', { email }), 'success')
     api.getGroupInvites(id).then(setPending).catch(() => {})
   }
 
@@ -463,21 +462,21 @@ export default function GroupDetailPage() {
     try {
       await api.revokeInvite(id, invite.token)
       setPending(prev => prev.filter(p => p.token !== invite.token))
-      show('Приглашение отозвано', 'success')
+      show(t('detail.revokeSuccess'), 'success')
     } catch (e) { show(e.message, 'error') }
   }
 
   async function handleKick(member) {
-    if (!confirm(`Удалить ${member.name} из группы?`)) return
+    if (!confirm(t('detail.kickConfirm', { name: member.name }))) return
     try {
       await api.kickMember(id, member.userId)
       setGroup(g => ({ ...g, members: g.members.filter(m => m.userId !== member.userId) }))
-      show('Участник удалён', 'success')
+      show(t('detail.kickSuccess'), 'success')
     } catch (e) { show(e.message, 'error') }
   }
 
   async function handleLeave() {
-    if (!confirm(`Выйти из группы «${group.name}»?`)) return
+    if (!confirm(t('detail.leaveConfirm', { name: group.name }))) return
     try {
       await api.leaveGroup(id)
       navigate('/groups', { replace: true })
@@ -485,7 +484,7 @@ export default function GroupDetailPage() {
   }
 
   async function handleDelete() {
-    if (!confirm(`Удалить группу «${group.name}» навсегда?`)) return
+    if (!confirm(t('detail.deleteConfirm', { name: group.name }))) return
     try {
       await api.deleteGroup(id)
       navigate('/groups', { replace: true })
@@ -495,14 +494,14 @@ export default function GroupDetailPage() {
   function handleCopyCode() {
     if (!group?.joinCode) return
     navigator.clipboard.writeText(group.joinCode).catch(() => {})
-    show('Код скопирован', 'success')
+    show(t('detail.codeCopied'), 'success')
   }
 
   async function handleRegenCode() {
     try {
       const res = await api.regenerateJoinCode(id)
       setGroup(g => ({ ...g, joinCode: res.joinCode, joinCodeExpiresAt: res.joinCodeExpiresAt }))
-      show('Код обновлён', 'success')
+      show(t('detail.codeUpdated'), 'success')
     } catch (e) { show(e.message, 'error') }
   }
 
@@ -519,7 +518,7 @@ export default function GroupDetailPage() {
         {/* Участники + pending */}
         <section className="mt-7">
           <SectionTitleRow
-            title="Участники"
+            title={t('detail.membersTitle')}
             count={group.members.length}
             action={
               isOwner && (
@@ -531,7 +530,7 @@ export default function GroupDetailPage() {
                   className="text-[13px] font-bold text-accent flex items-center gap-1"
                 >
                   <UserPlus size={14} strokeWidth={2.2} />
-                  Пригласить
+                  {t('detail.inviteLink')}
                 </button>
               )
             }
@@ -573,7 +572,7 @@ export default function GroupDetailPage() {
         {group.dishes && group.dishes.length > 0 && (
           <section className="mt-7">
             <SectionTitleRow
-              title="Блюда группы"
+              title={t('detail.dishesTitle')}
               count={group.dishes.length}
               action={
                 <button
@@ -584,7 +583,7 @@ export default function GroupDetailPage() {
                   className="text-[13px] font-bold text-accent flex items-center gap-1"
                 >
                   <ChefHat size={14} strokeWidth={2.2} />
-                  Добавить
+                  {t('detail.addDish')}
                 </button>
               }
             />

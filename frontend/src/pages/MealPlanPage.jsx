@@ -9,6 +9,7 @@ import {
   Calendar, CalendarPlus, Sun, Utensils, Moon, Cookie,
   X, Sparkles, Flame, Clock, Plus,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { api } from '../api'
 import { useStore } from '../store'
@@ -17,12 +18,12 @@ import { Loader, GuestBlock, PageHeader, useToast } from '../components/ui'
 // ─── Константы ────────────────────────────────────────────────────
 const SUPABASE_IMG = 'https://nwtqeytmmqmkwqafkgin.supabase.co/storage/v1/object/public/media/images'
 
-const MEAL_META = {
-  BREAKFAST: { label: 'Завтрак', icon: Sun },
-  LUNCH:     { label: 'Обед',    icon: Utensils },
-  DINNER:    { label: 'Ужин',    icon: Moon },
-  SNACK:     { label: 'Перекус', icon: Cookie },
-  ANYTIME:   { label: null,      icon: null },
+const MEAL_ICONS = {
+  BREAKFAST: Sun,
+  LUNCH:     Utensils,
+  DINNER:    Moon,
+  SNACK:     Cookie,
+  ANYTIME:   null,
 }
 
 const MEAL_ORDER = ['BREAKFAST', 'LUNCH', 'DINNER', 'SNACK', 'ANYTIME']
@@ -38,27 +39,12 @@ function dateKey(plan) {
   return plan.date ? plan.date.slice(0, 10) : 'no-date'
 }
 
-function fmtDate(iso) {
-  if (iso === 'no-date') return 'Без даты'
-  return new Date(iso + 'T00:00:00').toLocaleDateString('ru-RU', {
-    weekday: 'long', day: 'numeric', month: 'long',
-  })
-}
-
-function fmtDateUpper(iso) {
-  return fmtDate(iso).toUpperCase()
-}
-
-function pluralDish(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'блюдо'
-  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'блюда'
-  return 'блюд'
-}
-
-function pluralDay(n) {
-  if (n % 10 === 1 && n % 100 !== 11) return 'день'
-  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return 'дня'
-  return 'дней'
+function fmtDate(iso, lang) {
+  if (iso === 'no-date') return null
+  return new Date(iso + 'T00:00:00').toLocaleDateString(
+    lang === 'en' ? 'en-US' : 'ru-RU',
+    { weekday: 'long', day: 'numeric', month: 'long' },
+  )
 }
 
 function dishImage(dish) {
@@ -81,21 +67,22 @@ function groupBy(arr, fn) {
 
 // ═══ FilterChips ══════════════════════════════════════════════════
 function FilterChips({ active, onChange, counts }) {
+  const { t } = useTranslation('plan')
   const items = [
-    { id: 'all',    label: 'Все',      n: counts.all    },
-    { id: 'mine',   label: 'Мои',      n: counts.mine   },
-    { id: 'family', label: 'Семейные', n: counts.family },
+    { id: 'all',    label: t('filter.all'),    n: counts.all    },
+    { id: 'mine',   label: t('filter.mine'),   n: counts.mine   },
+    { id: 'family', label: t('filter.family'), n: counts.family },
   ]
   return (
     <div className="-mx-5 px-5 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
       <div className="flex gap-2" style={{ width: 'max-content' }}>
-        {items.map(t => {
-          const on = t.id === active
+        {items.map(chip => {
+          const on = chip.id === active
           return (
             <button
-              key={t.id}
+              key={chip.id}
               type="button"
-              onClick={() => onChange(t.id)}
+              onClick={() => onChange(chip.id)}
               className={[
                 'h-9 px-3.5 rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0 border',
                 on
@@ -103,11 +90,11 @@ function FilterChips({ active, onChange, counts }) {
                   : 'bg-bg-2 border-border text-text-2',
               ].join(' ')}
             >
-              {t.label}
+              {chip.label}
               <span
                 className={['tabular-nums font-bold', on ? 'text-accent' : 'text-text-3'].join(' ')}
               >
-                · {t.n}
+                · {chip.n}
               </span>
             </button>
           )
@@ -119,6 +106,7 @@ function FilterChips({ active, onChange, counts }) {
 
 // ═══ MetaStrip ════════════════════════════════════════════════════
 function MetaStrip({ today, week, total, sageTotal }) {
+  const { t } = useTranslation('plan')
   const Cell = ({ label, value, sage }) => (
     <div className={[
       'flex-1 rounded-xl px-3 py-2.5 flex flex-col border',
@@ -145,15 +133,16 @@ function MetaStrip({ today, week, total, sageTotal }) {
   )
   return (
     <div className="flex gap-2">
-      <Cell label="Сегодня" value={today} />
-      <Cell label="Неделя"  value={week} />
-      <Cell label="Всего"   value={total} sage={sageTotal} />
+      <Cell label={t('strip.today')} value={today} />
+      <Cell label={t('strip.week')}  value={week} />
+      <Cell label={t('strip.total')} value={total} sage={sageTotal} />
     </div>
   )
 }
 
-// ═══ AuthorAvatar (для plan-row, показывается только если addedBy ≠ я) ═
+// ═══ AuthorAvatar ════════════════════════════════════════════════
 function AuthorAvatar({ user, currentUserId, size = 24 }) {
+  const { t } = useTranslation('plan')
   if (!user || user.id === currentUserId) return null
   const initial = (user.name || '?').trim().charAt(0).toUpperCase()
   return (
@@ -161,7 +150,7 @@ function AuthorAvatar({ user, currentUserId, size = 24 }) {
       className="rounded-full flex items-center justify-center font-bold shrink-0
         bg-bg-3 border border-border text-accent"
       style={{ width: size, height: size, fontSize: size * 0.46 }}
-      title={`Добавил(а): ${user.name}`}
+      title={t('plan.addedBy', { name: user.name })}
     >
       {initial}
     </div>
@@ -170,14 +159,15 @@ function AuthorAvatar({ user, currentUserId, size = 24 }) {
 
 // ═══ MealSubLabel ═════════════════════════════════════════════════
 function MealSubLabel({ mealType, accent = false }) {
-  const meta = MEAL_META[mealType]
-  if (!meta?.label) return null
-  const Icon = meta.icon
+  const { t } = useTranslation('plan')
+  const label = t(`meal.${mealType}`, { defaultValue: '' })
+  const Icon  = MEAL_ICONS[mealType]
+  if (!label || !Icon) return null
   return (
     <div className="flex items-center gap-2 mb-2">
       <Icon size={14} strokeWidth={2.2} className={accent ? 'text-accent' : 'text-text'} />
       <span className={['text-[13px] font-bold', accent ? 'text-accent' : 'text-text'].join(' ')}>
-        {meta.label}
+        {label}
       </span>
     </div>
   )
@@ -185,6 +175,7 @@ function MealSubLabel({ mealType, accent = false }) {
 
 // ═══ PlanRow ══════════════════════════════════════════════════════
 function PlanRow({ plan, currentUserId, onOpen, onRemove, accent = false }) {
+  const { t } = useTranslation('plan')
   const dish = plan.dish
   const img = dishImage(dish)
   const isOwn = plan.userId === currentUserId
@@ -222,7 +213,7 @@ function PlanRow({ plan, currentUserId, onOpen, onRemove, accent = false }) {
             textWrap: 'pretty',
           }}
         >
-          {dish?.name || 'Блюдо'}
+          {dish?.name || t('plan.dishFallback')}
         </div>
         <div className="flex items-center gap-3 mt-1 text-text-3">
           {dish?.cookTime != null && (
@@ -238,7 +229,7 @@ function PlanRow({ plan, currentUserId, onOpen, onRemove, accent = false }) {
             </span>
           )}
           {plan.groupId && (
-            <span className="text-[11px] text-sage font-semibold">🏠 Семейный</span>
+            <span className="text-[11px] text-sage font-semibold">{t('plan.family')}</span>
           )}
         </div>
       </button>
@@ -250,7 +241,7 @@ function PlanRow({ plan, currentUserId, onOpen, onRemove, accent = false }) {
           type="button"
           onClick={() => onRemove?.(plan.id)}
           className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-text-3"
-          aria-label="Убрать из плана"
+          aria-label={t('plan.removeAria')}
         >
           <X size={15} strokeWidth={2.2} />
         </button>
@@ -259,22 +250,24 @@ function PlanRow({ plan, currentUserId, onOpen, onRemove, accent = false }) {
   )
 }
 
-// ═══ TodayPinned (group-box, variant A) ═══════════════════════════
+// ═══ TodayPinned ══════════════════════════════════════════════════
 function TodayPinned({ items, currentUserId, onOpen, onRemove }) {
+  const { t, i18n } = useTranslation('plan')
   const groups = [...groupBy(items, p => p.mealType).entries()]
     .sort(([a], [b]) => MEAL_ORDER.indexOf(a) - MEAL_ORDER.indexOf(b))
   const today = todayISO()
+  const dateStr = fmtDate(today, i18n.language) || today
 
   return (
     <section className="rounded-2xl bg-accent-muted border border-accent-border p-4">
       <div className="flex items-center gap-2">
         <Sparkles size={16} strokeWidth={2.2} className="text-accent" />
         <h2 className="text-[15px] font-bold text-accent">
-          Сегодня · {fmtDate(today)}
+          {t('today.heading', { date: dateStr })}
         </h2>
       </div>
       <div className="text-[12px] mt-0.5 mb-3 text-accent" style={{ opacity: 0.7 }}>
-        {items.length} {items.length === 1 ? 'приём пищи запланирован' : 'приёма пищи запланировано'}
+        {t('today.meals', { count: items.length })}
       </div>
 
       <div className="rounded-xl bg-bg-2 border border-accent-border" style={{ padding: '4px 12px' }}>
@@ -310,15 +303,19 @@ function TodayPinned({ items, currentUserId, onOpen, onRemove }) {
 
 // ═══ DayBlock ═════════════════════════════════════════════════════
 function DayBlock({ date, items, currentUserId, onOpen, onRemove }) {
+  const { t, i18n } = useTranslation('plan')
   const groups = [...groupBy(items, p => p.mealType).entries()]
     .sort(([a], [b]) => MEAL_ORDER.indexOf(a) - MEAL_ORDER.indexOf(b))
+  const label = date === 'no-date'
+    ? t('plan.noDate')
+    : (fmtDate(date, i18n.language) || date).toUpperCase()
   return (
     <section>
       <div
         className="text-[11px] font-bold uppercase tracking-wider pb-2 mb-3 text-text-2 border-b border-border"
         style={{ letterSpacing: 0.8 }}
       >
-        {fmtDateUpper(date)}
+        {label}
       </div>
       <div className="flex flex-col gap-4">
         {groups.map(([mealType, list]) => (
@@ -344,6 +341,7 @@ function DayBlock({ date, items, currentUserId, onOpen, onRemove }) {
 
 // ═══ FAB ══════════════════════════════════════════════════════════
 function FAB({ onClick }) {
+  const { t } = useTranslation('plan')
   return (
     <button
       type="button"
@@ -351,10 +349,10 @@ function FAB({ onClick }) {
       className="fixed h-12 px-4 rounded-full flex items-center gap-2 bg-accent text-white text-[13.5px] font-bold z-40
         active:scale-95 transition-transform"
       style={{ right: 16, bottom: 80, boxShadow: '0 8px 24px rgba(196,112,74,0.45)' }}
-      aria-label="Добавить в план"
+      aria-label={t('page.fabAria')}
     >
       <Plus size={16} strokeWidth={2.4} />
-      В план
+      {t('page.fab')}
     </button>
   )
 }
@@ -397,16 +395,17 @@ function EmptyState({ Icon, title, body, primary, onPrimary, secondary, onSecond
 
 // ═══ Guest block ══════════════════════════════════════════════════
 function GuestMealPlanBlock() {
+  const { t } = useTranslation('plan')
   return (
     <div>
-      <PageHeader title="План готовки" />
+      <PageHeader title={t('page.title')} />
       <div className="px-5 pt-4">
         <GuestBlock
           icon={<Calendar size={26} strokeWidth={1.8} />}
-          title="Планируй меню заранее"
-          description="Добавляй блюда на неделю вперёд — и больше не думай, что готовить каждый день"
-          registerText="Создать свою кухню"
-          loginText="Уже есть аккаунт? Войти"
+          title={t('guest.title')}
+          description={t('guest.desc')}
+          registerText={t('guest.register')}
+          loginText={t('guest.login')}
         />
       </div>
     </div>
@@ -415,6 +414,7 @@ function GuestMealPlanBlock() {
 
 // ═══ Main page ════════════════════════════════════════════════════
 export default function MealPlanPage() {
+  const { t } = useTranslation('plan')
   const navigate = useNavigate()
   const user  = useStore(s => s.user)
   const token = useStore(s => s.token)
@@ -422,7 +422,7 @@ export default function MealPlanPage() {
 
   const [plans, setPlans]     = useState([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter]   = useState('all') // all | mine | family
+  const [filter, setFilter]   = useState('all')
 
   useEffect(() => {
     if (!token) return
@@ -470,7 +470,6 @@ export default function MealPlanPage() {
 
   const days = new Set(filtered.map(dateKey)).size
 
-  // ── Render ────────────────────────────────────────────────────
   if (!token) return <GuestMealPlanBlock />
   if (loading) return <Loader fullPage />
 
@@ -479,10 +478,10 @@ export default function MealPlanPage() {
   return (
     <div>
       <PageHeader
-        title="План готовки"
+        title={t('page.title')}
         right={!isEmpty && (
           <span className="text-[12px] tabular-nums text-text-3">
-            {filtered.length} {pluralDish(filtered.length)} · {days} {pluralDay(days)}
+            {t('dish', { count: filtered.length })} · {t('day', { count: days })}
           </span>
         )}
       />
@@ -492,9 +491,9 @@ export default function MealPlanPage() {
           <div className="mt-7">
             <EmptyState
               Icon={CalendarPlus}
-              title="План пока пустой"
-              body={'Добавляй блюда в план прямо из карточки рецепта — кнопка «В план готовки»'}
-              primary="Посмотреть блюда"
+              title={t('empty.title')}
+              body={t('empty.body')}
+              primary={t('empty.browseDishes')}
               onPrimary={() => navigate('/dishes')}
             />
           </div>
@@ -543,7 +542,7 @@ export default function MealPlanPage() {
 
             {todayItems.length === 0 && futureByDate.length === 0 && (
               <div className="mt-10 text-center text-[13px] text-text-3">
-                По выбранному фильтру ничего нет
+                {t('filterEmpty')}
               </div>
             )}
           </>

@@ -1,1 +1,33 @@
-{}
+{
+  "suggestions": [
+    "What to cook for breakfast?",
+    "I want something light for lunch",
+    "Quick dinner in 15 minutes",
+    "Vegetarian option",
+    "What can I make with eggs and milk?"
+  ],
+  "topBar": {
+    "title": "AI Assistant",
+    "clear": "Clear"
+  },
+  "welcome": {
+    "title": "AI Assistant",
+    "desc": "Tell me what you're in the mood for — I'll suggest options based on your fridge"
+  },
+  "guest": {
+    "title": "AI Assistant",
+    "desc": "I'll find dishes based on your fridge and preferences. Available after registration.",
+    "register": "Register for free",
+    "login": "Already have an account? Sign in"
+  },
+  "input": {
+    "placeholder": "Ask about dishes…",
+    "disabledPlaceholder": "Sign in to chat",
+    "sendAria": "Send"
+  },
+  "limit": {
+    "reached": "Daily message limit reached. Come back tomorrow.",
+    "reachedMsg": "⚠️ Daily message limit reached. Come back tomorrow."
+  },
+  "error": "⚠️ Error: {{message}}"
+}

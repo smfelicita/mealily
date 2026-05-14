@@ -1,1 +1,114 @@
-{}
+{
+  "page": {
+    "title": "Мои группы",
+    "createFab": "Создать группу"
+  },
+  "sections": {
+    "invites": "Приглашения",
+    "myGroups": "Мои группы"
+  },
+  "typeBadge": {
+    "FAMILY": "Семья",
+    "REGULAR": "Группа"
+  },
+  "empty": {
+    "title": "У тебя пока нет групп",
+    "desc": "Создай семейную группу, чтобы делить холодильник, или обычную — чтобы обмениваться рецептами с друзьями",
+    "create": "Создать группу"
+  },
+  "guest": {
+    "title": "Готовьте вместе",
+    "desc": "Создайте семейную группу — общий холодильник, план и любимые блюда",
+    "register": "Создать свою кухню",
+    "login": "Уже есть аккаунт? Войти"
+  },
+  "invite": {
+    "accept": "Принять",
+    "declineAria": "Отклонить",
+    "from": "от {{name}} · {{time}}",
+    "acceptedSuccess": "Вы вступили в «{{name}}»",
+    "declineConfirm": "Отклонить приглашение в «{{name}}»?",
+    "declinedSuccess": "Приглашение отклонено"
+  },
+  "relative": {
+    "today": "сегодня",
+    "yesterday": "вчера",
+    "daysAgo_one": "{{count}} день назад",
+    "daysAgo_few": "{{count}} дня назад",
+    "daysAgo_many": "{{count}} дней назад",
+    "weeksAgo_one": "{{count}} неделю назад",
+    "weeksAgo_few": "{{count}} недели назад",
+    "weeksAgo_many": "{{count}} недель назад",
+    "monthsAgo_one": "{{count}} месяц назад",
+    "monthsAgo_few": "{{count}} месяца назад",
+    "monthsAgo_many": "{{count}} месяцев назад"
+  },
+  "member_one": "участник",
+  "member_few": "участника",
+  "member_many": "участников",
+  "group_one": "группа",
+  "group_few": "группы",
+  "group_many": "групп",
+  "dishesLabel": "блюд",
+  "detail": {
+    "sinceDate": "С {{date}}",
+    "familyFridge": "Общий холодильник и план",
+    "regularCatalog": "Общий каталог блюд",
+    "metricsMembers": "Участников",
+    "metricsDishes": "Блюд",
+    "membersTitle": "Участники",
+    "inviteLink": "Пригласить",
+    "dishesTitle": "Блюда группы",
+    "addDish": "Добавить",
+    "ownerRole": "владелец",
+    "memberRole": "участник",
+    "joinedSince": "с {{date}}",
+    "thisIsYou": "Это вы",
+    "memberMenuAria": "Меню участника",
+    "closeMenuAria": "Закрыть меню",
+    "kickAction": "Удалить из группы",
+    "pendingStatus": "ожидает",
+    "inviteSentAt": "приглашение отправлено · {{time}}",
+    "revokeAria": "Отозвать",
+    "inviteTitle": "Пригласить в группу",
+    "inviteFamilyOnly": "Только владелец группы может отправлять приглашения",
+    "inviteEmailHint": "Отправьте email — приглашённый получит письмо со ссылкой",
+    "joinCodeLabel": "Код для вступления",
+    "copyAria": "Скопировать",
+    "copied": "Скопировано ✓",
+    "regenCode": "Сгенерировать новый код",
+    "emailInviteLabel": "Email-приглашение",
+    "sendBtn": "Отправить",
+    "emailError": "Введите корректный email",
+    "emailSendError": "Ошибка отправки",
+    "deleteGroup": "Удалить группу навсегда",
+    "leaveGroup": "Выйти из группы",
+    "inviteSentSuccess": "Приглашение отправлено на {{email}}",
+    "revokeSuccess": "Приглашение отозвано",
+    "kickConfirm": "Удалить {{name}} из группы?",
+    "kickSuccess": "Участник удалён",
+    "leaveConfirm": "Выйти из группы «{{name}}»?",
+    "deleteConfirm": "Удалить группу «{{name}}» навсегда?",
+    "codeCopied": "Код скопирован",
+    "codeUpdated": "Код обновлён"
+  },
+  "form": {
+    "photoLabel": "Фото группы",
+    "typeLabel": "Тип группы",
+    "nameLabel": "Название",
+    "descLabel": "Описание",
+    "submitCreate": "Создать группу",
+    "submitEdit": "Сохранить изменения",
+    "nameError": "Укажите название",
+    "namePlaceholderFamily": "Наша семья",
+    "namePlaceholderRegular": "Друзья, Команда…",
+    "descPlaceholder": "Расскажите о группе…",
+    "uploadPhoto": "Загрузить фото",
+    "changePhoto": "Заменить фото",
+    "removePhoto": "Удалить",
+    "typeFamily": "Семейная",
+    "typeFamilyDesc": "Общий холодильник, план и блюда",
+    "typeRegular": "Обычная",
+    "typeRegularDesc": "Делиться блюдами с друзьями по коду"
+  }
+}

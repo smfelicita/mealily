@@ -1,1 +1,51 @@
-{}
+{
+  "page": {
+    "title": "Meal Plan",
+    "fab": "Add to plan",
+    "fabAria": "Add to plan"
+  },
+  "filter": {
+    "all": "All",
+    "mine": "Mine",
+    "family": "Family"
+  },
+  "strip": {
+    "today": "Today",
+    "week": "Week",
+    "total": "Total"
+  },
+  "today": {
+    "heading": "Today · {{date}}",
+    "meals_one": "{{count}} meal planned",
+    "meals_other": "{{count}} meals planned"
+  },
+  "plan": {
+    "dishFallback": "Dish",
+    "family": "🏠 Family",
+    "addedBy": "Added by: {{name}}",
+    "removeAria": "Remove from plan",
+    "noDate": "No date"
+  },
+  "meal": {
+    "BREAKFAST": "Breakfast",
+    "LUNCH": "Lunch",
+    "DINNER": "Dinner",
+    "SNACK": "Snack"
+  },
+  "empty": {
+    "title": "Plan is empty",
+    "body": "Add dishes to your plan from a recipe card — tap «Add to plan»",
+    "browseDishes": "Browse dishes"
+  },
+  "filterEmpty": "Nothing matches the selected filter",
+  "guest": {
+    "title": "Plan your meals in advance",
+    "desc": "Add dishes for the week ahead — no more wondering what to cook each day",
+    "register": "Create your kitchen",
+    "login": "Already have an account? Sign in"
+  },
+  "dish_one": "dish",
+  "dish_other": "dishes",
+  "day_one": "day",
+  "day_other": "days"
+}

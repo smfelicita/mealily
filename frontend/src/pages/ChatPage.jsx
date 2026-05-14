@@ -14,19 +14,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
   Sparkles, Trash2, ArrowUp, Lock, ChevronRight, Clock, Flame, ChefHat,
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { api } from '../api'
 import { useStore } from '../store'
 
 // ─── Константы ────────────────────────────────────────────────────
-const SUGGESTIONS = [
-  'Что приготовить на завтрак?',
-  'Хочу что-то лёгкое на обед',
-  'Быстрый ужин за 15 минут',
-  'Вегетарианский вариант',
-  'Что можно из яиц и молока?',
-]
-
 const SUPABASE_IMG = 'https://nwtqeytmmqmkwqafkgin.supabase.co/storage/v1/object/public/media/images'
 
 // ─── Helpers ──────────────────────────────────────────────────────
@@ -51,11 +44,12 @@ function dishImage(dish) {
 
 // ═══ Mini top bar ═════════════════════════════════════════════════
 function MiniTopBar({ canClear, onClear }) {
+  const { t } = useTranslation('chat')
   return (
     <div className="shrink-0 flex items-center justify-between h-11 px-4 border-b border-border bg-bg-2">
       <div className="flex items-center gap-1.5 text-text">
         <Sparkles size={15} strokeWidth={2.2} className="text-accent" />
-        <span className="text-[15px] font-bold">ИИ-помощник</span>
+        <span className="text-[15px] font-bold">{t('topBar.title')}</span>
       </div>
       {canClear && (
         <button
@@ -64,7 +58,7 @@ function MiniTopBar({ canClear, onClear }) {
           className="inline-flex items-center gap-1 text-[12.5px] font-bold text-text-3 hover:text-text-2"
         >
           <Trash2 size={13} strokeWidth={2.2} />
-          Очистить
+          {t('topBar.clear')}
         </button>
       )}
     </div>
@@ -185,6 +179,8 @@ function SuggestionCard({ text, onClick }) {
 
 // ═══ Empty welcome (для залогиненного, чат пуст) ═══════════════════
 function EmptyWelcome({ onSuggest }) {
+  const { t } = useTranslation('chat')
+  const suggestions = t('suggestions', { returnObjects: true })
   return (
     <div className="flex flex-col gap-3">
       <div className="text-center pt-6 pb-3">
@@ -196,18 +192,18 @@ function EmptyWelcome({ onSuggest }) {
           className="text-[19px] font-extrabold tracking-tight text-text mb-1.5"
           style={{ textWrap: 'balance' }}
         >
-          ИИ-помощник
+          {t('welcome.title')}
         </h2>
         <p
           className="text-[14px] text-text-2 leading-relaxed max-w-[280px] mx-auto"
           style={{ textWrap: 'pretty' }}
         >
-          Расскажи, что хочешь съесть — подберу варианты с учётом твоего холодильника
+          {t('welcome.desc')}
         </p>
       </div>
 
       <div className="flex flex-col gap-2">
-        {SUGGESTIONS.map(s => (
+        {suggestions.map(s => (
           <SuggestionCard key={s} text={s} onClick={() => onSuggest(s)} />
         ))}
       </div>
@@ -217,6 +213,7 @@ function EmptyWelcome({ onSuggest }) {
 
 // ═══ Guest block (центрированная карточка) ════════════════════════
 function GuestBlock({ onRegister, onLogin }) {
+  const { t } = useTranslation('chat')
   return (
     <div className="flex-1 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-[360px] rounded-2xl bg-bg-2 border border-border p-6 text-center">
@@ -228,13 +225,13 @@ function GuestBlock({ onRegister, onLogin }) {
           className="text-[17px] font-bold tracking-tight text-text mb-2"
           style={{ textWrap: 'balance' }}
         >
-          ИИ-помощник
+          {t('guest.title')}
         </h2>
         <p
           className="text-[14px] text-text-2 leading-relaxed mb-5"
           style={{ textWrap: 'pretty' }}
         >
-          Подберу блюда с учётом твоего холодильника и предпочтений. Доступно после регистрации.
+          {t('guest.desc')}
         </p>
         <button
           type="button"
@@ -242,14 +239,14 @@ function GuestBlock({ onRegister, onLogin }) {
           className="w-full h-12 rounded-full bg-accent text-white text-[14px] font-bold mb-2"
           style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
         >
-          Зарегистрироваться бесплатно
+          {t('guest.register')}
         </button>
         <button
           type="button"
           onClick={onLogin}
           className="w-full h-10 text-[13px] font-bold text-text-2"
         >
-          Уже есть аккаунт? Войти
+          {t('guest.login')}
         </button>
       </div>
     </div>
@@ -258,6 +255,8 @@ function GuestBlock({ onRegister, onLogin }) {
 
 // ═══ Input bar ════════════════════════════════════════════════════
 function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
+  const { t } = useTranslation('chat')
+
   function onKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -271,7 +270,7 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
         <div className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-bg-3 border border-border">
           <Lock size={15} strokeWidth={2} className="text-text-3 shrink-0" />
           <span className="text-[13px] text-text-2 leading-snug" style={{ textWrap: 'pretty' }}>
-            Дневной лимит сообщений исчерпан. Возвращайся завтра.
+            {t('limit.reached')}
           </span>
         </div>
       </div>
@@ -286,7 +285,7 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
         value={value}
         onChange={e => onChange(e.target.value)}
         onKeyDown={onKey}
-        placeholder={disabled ? 'Войди, чтобы общаться' : 'Спросить про блюда…'}
+        placeholder={disabled ? t('input.disabledPlaceholder') : t('input.placeholder')}
         disabled={disabled || loading}
         className="flex-1 h-11 px-4 rounded-full bg-bg-2 border border-border
           text-[14.5px] text-text placeholder:text-text-3 outline-none
@@ -301,7 +300,7 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
           canSend ? 'bg-accent' : 'bg-border',
         ].join(' ')}
         style={canSend ? { boxShadow: '0 4px 12px rgba(196,112,74,0.30)' } : undefined}
-        aria-label="Отправить"
+        aria-label={t('input.sendAria')}
       >
         {loading
           ? <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -313,6 +312,7 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
 
 // ═══ Main ═════════════════════════════════════════════════════════
 export default function ChatPage() {
+  const { t } = useTranslation('chat')
   const { chatMessages, addChatMessage, clearChatMessages, token, user, fridge } = useStore()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
@@ -345,18 +345,17 @@ export default function ChatPage() {
         id: Date.now() + 1,
       })
     } catch (e) {
-      // 429 — лимит исчерпан
       if (e.data?.limitReached || /лимит/i.test(e.message)) {
         setLimitReached(true)
         addChatMessage({
           role: 'assistant',
-          content: '⚠️ Дневной лимит сообщений исчерпан. Возвращайся завтра.',
+          content: t('limit.reachedMsg'),
           id: Date.now() + 1,
         })
       } else {
         addChatMessage({
           role: 'assistant',
-          content: '⚠️ Ошибка: ' + e.message,
+          content: t('error', { message: e.message }),
           id: Date.now() + 1,
         })
       }
