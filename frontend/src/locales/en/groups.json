@@ -22,6 +22,16 @@
     "register": "Create your kitchen",
     "login": "Already have an account? Sign in"
   },
+  "invitePage": {
+    "notFound": "Invitation not found",
+    "invalidTitle": "Link is invalid",
+    "toHome": "Go to home",
+    "familyBadge": "Family group · Shared fridge",
+    "invitedBy": "Invited by {{name}}",
+    "loginRequired": "You need to sign in or register to join",
+    "joinButton": "Join group",
+    "loginAndJoin": "Sign in and join"
+  },
   "invite": {
     "accept": "Accept",
     "declineAria": "Decline",

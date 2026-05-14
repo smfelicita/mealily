@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { api } from '../api'
 import { useStore } from '../store'
 import { Button, Loader } from '../components/ui'
@@ -7,6 +8,7 @@ import { Button, Loader } from '../components/ui'
 export default function InvitePage() {
   const { token } = useParams()
   const navigate = useNavigate()
+  const { t } = useTranslation('groups')
   const user = useStore(s => s.user)
 
   const [invite, setInvite] = useState(null)
@@ -17,7 +19,7 @@ export default function InvitePage() {
   useEffect(() => {
     api.getInvite(token)
       .then(setInvite)
-      .catch(err => setError(err.message || 'Приглашение не найдено'))
+      .catch(err => setError(err.message || t('invitePage.notFound')))
       .finally(() => setLoading(false))
   }, [token])
 
@@ -47,9 +49,9 @@ export default function InvitePage() {
         {error ? (
           <>
             <p className="text-[32px] text-center mb-3">❌</p>
-            <h2 className="font-serif text-xl font-extrabold mb-2 text-center">Ссылка недействительна</h2>
+            <h2 className="font-serif text-xl font-extrabold mb-2 text-center">{t('invitePage.invalidTitle')}</h2>
             <p className="text-[13px] text-text-2 text-center mb-5">{error}</p>
-            <Button className="w-full" onClick={() => navigate('/')}>На главную</Button>
+            <Button className="w-full" onClick={() => navigate('/')}>{t('invitePage.toHome')}</Button>
           </>
         ) : (
           <>
@@ -60,23 +62,23 @@ export default function InvitePage() {
               {invite.groupName}
             </h2>
             {invite.groupType === 'FAMILY' && (
-              <p className="text-xs text-accent text-center mb-1">Семейная группа · Общий холодильник</p>
+              <p className="text-xs text-accent text-center mb-1">{t('invitePage.familyBadge')}</p>
             )}
             <p className="text-[13px] text-text-2 text-center mb-1">
-              {invite.membersCount} {invite.membersCount === 1 ? 'участник' : 'участников'}
+              {invite.membersCount} {t('member', { count: invite.membersCount })}
             </p>
             <p className="text-[13px] text-text-2 text-center mb-5">
-              Вас пригласил <strong>{invite.invitedBy}</strong>
+              {t('invitePage.invitedBy', { name: invite.invitedBy })}
             </p>
 
             {!user && (
               <p className="text-xs text-text-3 text-center mb-4">
-                Для вступления нужно войти или зарегистрироваться
+                {t('invitePage.loginRequired')}
               </p>
             )}
 
             <Button className="w-full" loading={accepting} onClick={handleAccept}>
-              {!accepting && (user ? 'Вступить в группу' : 'Войти и вступить')}
+              {!accepting && t(user ? 'invitePage.joinButton' : 'invitePage.loginAndJoin')}
             </Button>
           </>
         )}
