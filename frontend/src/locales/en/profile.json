@@ -1,31 +1,31 @@
 {
   "hero": {
-    "noName": "[EN] Без имени",
-    "joinedAt": "[EN] С нами с {{date}}",
+    "noName": "No name",
+    "joinedAt": "Member since {{date}}",
     "badge": {
       "pro": "Pro",
       "free": "Free"
     }
   },
   "sections": {
-    "connections": "[EN] Подключения",
-    "settings": "[EN] Настройки",
-    "account": "[EN] Аккаунт"
+    "connections": "Connections",
+    "settings": "Settings",
+    "account": "Account"
   },
   "telegram": {
-    "title": "[EN] Telegram-бот",
-    "descConnected": "[EN] Подключён",
-    "descDisconnected": "[EN] Управляй приложением прямо в Telegram",
-    "statusConnected": "[EN] Подключено",
-    "openBot": "[EN] Открыть бота →",
-    "connectButton": "[EN] Подключить",
-    "errorLink": "[EN] Не удалось получить ссылку"
+    "title": "Telegram bot",
+    "descConnected": "Connected",
+    "descDisconnected": "Manage the app directly in Telegram",
+    "statusConnected": "Connected",
+    "openBot": "Open bot →",
+    "connectButton": "Connect",
+    "errorLink": "Failed to get link"
   },
   "language": {
-    "row": "[EN] Язык интерфейса",
-    "ru": "[EN] Русский",
+    "row": "Interface language",
+    "ru": "Русский",
     "en": "English",
-    "hint": "[EN] English перевод появится позже — пока подключена только инфраструктура."
+    "hint": "English translation is available."
   },
-  "logout": "[EN] Выйти из аккаунта"
+  "logout": "Sign out"
 }

@@ -1,71 +1,69 @@
 {
-  "title": "[EN] Холодильник",
+  "title": "Fridge",
   "guest": {
-    "title": "[EN] Готовь из того, что есть дома",
-    "description": "[EN] Добавь продукты из холодильника — MealBot подберёт блюда, которые можно приготовить прямо сейчас.",
-    "register": "[EN] Создать свою кухню",
-    "login": "[EN] Уже есть аккаунт? Войти"
+    "title": "Cook from what you have at home",
+    "description": "Add ingredients from your fridge — MealBot will suggest dishes you can make right now.",
+    "register": "Create your kitchen",
+    "login": "Already have an account? Sign in"
   },
   "telegram": {
-    "title": "[EN] Управляй холодильником в Telegram",
-    "subtitle": "[EN] Голосом или текстом, быстрее чем в приложении",
-    "connect": "[EN] Подключить",
+    "title": "Manage your fridge in Telegram",
+    "subtitle": "By voice or text, faster than the app",
+    "connect": "Connect",
     "loading": "...",
-    "polling": "[EN] Ожидание…",
-    "errorLink": "[EN] Не удалось получить ссылку",
-    "linkedToast": "[EN] Telegram подключён!",
-    "closeAria": "[EN] Закрыть"
+    "polling": "Waiting…",
+    "errorLink": "Failed to get link",
+    "linkedToast": "Telegram connected!",
+    "closeAria": "Close"
   },
   "family": {
-    "title": "[EN] Общий холодильник с семьёй",
-    "memberCount_one": "[EN] {{count}} участник",
-    "memberCount_few": "[EN] {{count}} участника",
-    "memberCount_many": "[EN] {{count}} участников"
+    "title": "Shared fridge with family",
+    "memberCount_one": "{{count}} member",
+    "memberCount_other": "{{count}} members"
   },
   "metaStrip": {
-    "total": "[EN] всего",
-    "basic": "[EN] базовых"
+    "total": "total",
+    "basic": "staples"
   },
   "cookCta": {
-    "button": "[EN] Что можно приготовить?",
-    "subtitle": "[EN] ИИ подберёт блюдо по твоему холодильнику"
+    "button": "What can I cook?",
+    "subtitle": "AI will suggest a dish based on your fridge"
   },
   "card": {
-    "deleteAria": "[EN] Удалить",
-    "saveAria": "[EN] Сохранить",
-    "cancelAria": "[EN] Отмена",
-    "qtyPlaceholder": "[EN] Кол-во",
-    "basicBadge": "[EN] базовый"
+    "deleteAria": "Delete",
+    "saveAria": "Save",
+    "cancelAria": "Cancel",
+    "qtyPlaceholder": "Qty",
+    "basicBadge": "staple"
   },
   "empty": {
-    "title": "[EN] Холодильник пустой",
-    "description": "[EN] Добавь продукты — MealBot подберёт что приготовить из того, что есть",
-    "addButton": "[EN] Добавить продукты"
+    "title": "Fridge is empty",
+    "description": "Add ingredients — MealBot will suggest what to cook from what you have",
+    "addButton": "Add ingredients"
   },
   "picker": {
-    "title": "[EN] Что у вас есть?",
-    "closeAria": "[EN] Закрыть",
-    "searchPlaceholder": "[EN] Найти продукт…",
-    "clearAria": "[EN] Очистить",
-    "searchResultsLabel": "[EN] Результаты по «{{query}}»",
-    "nothingFound": "[EN] Ничего не найдено",
-    "allInFridge": "[EN] Все продукты уже в холодильнике 🎉",
-    "addingMany": "[EN] Добавляем…",
-    "addCount_one": "[EN] Добавить {{count}} продукт",
-    "addCount_few": "[EN] Добавить {{count}} продукта",
-    "addCount_many": "[EN] Добавить {{count}} продуктов",
-    "doneEmpty": "[EN] Готово"
+    "title": "What do you have?",
+    "closeAria": "Close",
+    "searchPlaceholder": "Find ingredient…",
+    "clearAria": "Clear",
+    "searchResultsLabel": "Results for «{{query}}»",
+    "nothingFound": "Nothing found",
+    "allInFridge": "All ingredients are already in your fridge 🎉",
+    "addingMany": "Adding…",
+    "addCount_one": "Add {{count}} ingredient",
+    "addCount_other": "Add {{count}} ingredients",
+    "doneEmpty": "Done"
   },
   "actions": {
-    "fab": "[EN] Добавить",
-    "fabAria": "[EN] Добавить продукты",
-    "clearAll": "[EN] Очистить всё",
-    "clearAllConfirm": "[EN] Очистить холодильник?",
-    "clearAllToast": "[EN] Холодильник очищен"
+    "fab": "Add",
+    "fabAria": "Add ingredients",
+    "clearAll": "Clear all",
+    "clearAllConfirm": "Clear fridge?",
+    "clearAllToast": "Fridge cleared"
   },
   "toast": {
-    "addedList": "[EN] Добавлено: {{names}}",
-    "removed": "[EN] {{name}} убран"
+    "addedList": "Added: {{names}}",
+    "removed": "{{name}} removed"
   },
-  "aiPrompt": "[EN] Что можно приготовить из продуктов в моём холодильнике?"
+  "aiPrompt": "What can I cook from the ingredients in my fridge?"
 }

@@ -1,55 +1,54 @@
 {
-  "titleLine1": "[EN] Что приготовить",
-  "titleLine2": "[EN] сегодня?",
-  "greeting": "[EN] Добрый день, {{name}} 👋",
+  "titleLine1": "What to cook",
+  "titleLine2": "today?",
+  "greeting": "Good day, {{name}} 👋",
   "mealChips": {
-    "all": "[EN] Все",
-    "breakfast": "[EN] Завтрак",
-    "lunch": "[EN] Обед",
-    "dinner": "[EN] Ужин",
-    "snack": "[EN] Перекус"
+    "all": "All",
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "snack": "Snack"
   },
   "guestBanner": {
-    "title": "[EN] Добавь свои блюда — и больше не думай, что готовить",
-    "description": "[EN] Подборка по холодильнику, план на неделю, любимые рецепты.",
-    "registerText": "[EN] Создать свою кухню",
-    "loginText": "[EN] Войти"
+    "title": "Add your dishes — and never wonder what to cook again",
+    "description": "Fridge-based suggestions, weekly plan, favourite recipes.",
+    "registerText": "Create your kitchen",
+    "loginText": "Sign in"
   },
   "emptyFridge": {
-    "title": "[EN] Заполни холодильник",
-    "body": "[EN] Покажем рецепты из того, что есть дома"
+    "title": "Fill your fridge",
+    "body": "We'll show recipes from what you have at home"
   },
   "metrics": {
-    "inPlan": "[EN] В плане",
-    "inFridge": "[EN] В холодильнике",
-    "inFavorites": "[EN] В избранном"
+    "inPlan": "In plan",
+    "inFridge": "In fridge",
+    "inFavorites": "Favourites"
   },
   "fridgeSuggest": {
-    "prefix": "[EN] Из вашего холодильника можно приготовить",
-    "suffix_one": "[EN] блюдо",
-    "suffix_few": "[EN] блюда",
-    "suffix_many": "[EN] блюд"
+    "prefix": "From your fridge you can make",
+    "suffix_one": "dish",
+    "suffix_other": "dishes"
   },
   "todayPinned": {
-    "label": "[EN] Сегодня в плане",
-    "cookButton": "[EN] Готовлю!",
-    "cookTimeMin": "[EN] {{n}} мин"
+    "label": "Today's plan",
+    "cookButton": "Cooking!",
+    "cookTimeMin": "{{n}} min"
   },
   "quickActions": {
-    "favorites": "[EN] Избранное",
-    "fridge": "[EN] Холодильник"
+    "favorites": "Favourites",
+    "fridge": "Fridge"
   },
   "addOwnDish": {
-    "guest": "[EN] Создать свою кухню",
-    "user": "[EN] Добавить своё блюдо"
+    "guest": "Create your kitchen",
+    "user": "Add your own dish"
   },
   "list": {
-    "loading": "[EN] Загружаем блюда…",
-    "empty": "[EN] Нет подходящих блюд",
-    "loadError": "[EN] Не удалось загрузить блюда"
+    "loading": "Loading dishes…",
+    "empty": "No matching dishes",
+    "loadError": "Failed to load dishes"
   },
   "addToPlan": {
-    "success": "[EN] «{{name}}» добавлено на сегодня",
-    "error": "[EN] Не удалось добавить"
+    "success": "«{{name}}» added for today",
+    "error": "Failed to add"
   }
 }

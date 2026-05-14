@@ -1,160 +1,160 @@
 {
   "actions": {
-    "save": "[EN] Сохранить",
-    "cancel": "[EN] Отменить",
-    "delete": "[EN] Удалить",
-    "edit": "[EN] Редактировать",
-    "close": "[EN] Закрыть",
-    "back": "[EN] Назад",
-    "next": "[EN] Далее",
-    "done": "[EN] Готово",
-    "add": "[EN] Добавить",
-    "remove": "[EN] Убрать",
-    "continue": "[EN] Продолжить",
-    "confirm": "[EN] Подтвердить",
-    "copy": "[EN] Скопировать",
-    "share": "[EN] Поделиться",
-    "retry": "[EN] Попробовать снова",
-    "skip": "[EN] Пропустить",
-    "open": "[EN] Открыть"
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "add": "Add",
+    "remove": "Remove",
+    "continue": "Continue",
+    "confirm": "Confirm",
+    "copy": "Copy",
+    "share": "Share",
+    "retry": "Try again",
+    "skip": "Skip",
+    "open": "Open"
   },
   "units": {
-    "min": "[EN] мин",
-    "kcal": "[EN] ккал",
-    "gram": "[EN] г",
-    "kg": "[EN] кг",
-    "ml": "[EN] мл",
-    "litre": "[EN] л",
-    "piece": "[EN] шт",
-    "garlicClove": "[EN] зубчик",
-    "bunch": "[EN] пучок",
-    "pinch": "[EN] щепотка",
-    "tablespoon": "[EN] ст.л.",
-    "teaspoon": "[EN] ч.л."
+    "min": "min",
+    "kcal": "kcal",
+    "gram": "g",
+    "kg": "kg",
+    "ml": "ml",
+    "litre": "l",
+    "piece": "pcs",
+    "garlicClove": "clove",
+    "bunch": "bunch",
+    "pinch": "pinch",
+    "tablespoon": "tbsp",
+    "teaspoon": "tsp"
   },
   "auth": {
-    "loginCta": "[EN] Войти",
-    "registerCta": "[EN] Создать аккаунт",
-    "alreadyHaveAccount": "[EN] Уже есть аккаунт? Войти",
-    "noAccount": "[EN] Нет аккаунта? Регистрация"
+    "loginCta": "Sign in",
+    "registerCta": "Create account",
+    "alreadyHaveAccount": "Already have an account? Sign in",
+    "noAccount": "No account? Register"
   },
   "empty": {
-    "nothingFound": "[EN] Ничего не найдено"
+    "nothingFound": "Nothing found"
   },
   "nav": {
-    "home": "[EN] Главная",
-    "dishes": "[EN] Блюда",
-    "fridge": "[EN] Холодильник",
-    "plan": "[EN] План",
-    "chat": "[EN] Чат",
-    "profile": "[EN] Профиль"
+    "home": "Home",
+    "dishes": "Dishes",
+    "fridge": "Fridge",
+    "plan": "Plan",
+    "chat": "Chat",
+    "profile": "Profile"
   },
   "brand": {
     "name": "MealBot",
-    "subtitle": "[EN] Моя кухня"
+    "subtitle": "My Kitchen"
   },
   "header": {
-    "loginButton": "[EN] Войти",
-    "notifications": "[EN] Уведомления",
-    "profile": "[EN] Профиль"
+    "loginButton": "Sign in",
+    "notifications": "Notifications",
+    "profile": "Profile"
   },
   "profileMenu": {
-    "user": "[EN] Пользователь",
-    "myGroups": "[EN] Мои группы",
-    "createGroup": "[EN] Создать группу",
-    "telegramBot": "[EN] Telegram-бот",
-    "openBot": "[EN] Открыть бота →",
-    "profile": "[EN] Профиль",
-    "logout": "[EN] Выйти",
-    "errorGeneric": "[EN] Ошибка"
+    "user": "User",
+    "myGroups": "My groups",
+    "createGroup": "Create group",
+    "telegramBot": "Telegram bot",
+    "openBot": "Open bot →",
+    "profile": "Profile",
+    "logout": "Sign out",
+    "errorGeneric": "Error"
   },
   "backTitles": {
-    "profile": "[EN] Профиль",
-    "groups": "[EN] Мои группы",
-    "groupNew": "[EN] Новая группа",
-    "group": "[EN] Группа",
-    "groupEdit": "[EN] Редактирование группы"
+    "profile": "Profile",
+    "groups": "My groups",
+    "groupNew": "New group",
+    "group": "Group",
+    "groupEdit": "Edit group"
   },
   "dishCategory": {
-    "SOUP": "[EN] Суп",
-    "SALAD": "[EN] Салат",
-    "MAIN": "[EN] Основное",
-    "SIDE": "[EN] Гарнир",
-    "DESSERT": "[EN] Десерт",
-    "DRINK": "[EN] Напиток",
-    "BAKERY": "[EN] Выпечка",
-    "SAUCE": "[EN] Соус"
+    "SOUP": "Soup",
+    "SALAD": "Salad",
+    "MAIN": "Main course",
+    "SIDE": "Side dish",
+    "DESSERT": "Dessert",
+    "DRINK": "Drink",
+    "BAKERY": "Baked goods",
+    "SAUCE": "Sauce"
   },
   "mealTime": {
-    "BREAKFAST": "[EN] Утро",
-    "LUNCH": "[EN] Обед",
-    "DINNER": "[EN] Вечер",
-    "SNACK": "[EN] Перекус",
-    "ANYTIME": "[EN] Любое"
+    "BREAKFAST": "Morning",
+    "LUNCH": "Lunch",
+    "DINNER": "Evening",
+    "SNACK": "Snack",
+    "ANYTIME": "Anytime"
   },
   "mealTimeShort": {
-    "BREAKFAST": "[EN] Завтрак",
-    "LUNCH": "[EN] Обед",
-    "DINNER": "[EN] Ужин",
-    "SNACK": "[EN] Перекус",
-    "ANYTIME": "[EN] Любое"
+    "BREAKFAST": "Breakfast",
+    "LUNCH": "Lunch",
+    "DINNER": "Dinner",
+    "SNACK": "Snack",
+    "ANYTIME": "Anytime"
   },
   "planMealType": {
-    "BREAKFAST": "🌅 [EN] Завтрак",
-    "LUNCH": "☀️ [EN] Обед",
-    "DINNER": "🌙 [EN] Ужин",
-    "SNACK": "🍎 [EN] Перекус",
-    "ANYTIME": "🍽 [EN] Когда угодно"
+    "BREAKFAST": "🌅 Breakfast",
+    "LUNCH": "☀️ Lunch",
+    "DINNER": "🌙 Dinner",
+    "SNACK": "🍎 Snack",
+    "ANYTIME": "🍽 Anytime"
   },
   "difficulty": {
-    "easy": "[EN] Легко",
-    "medium": "[EN] Средне",
-    "hard": "[EN] Сложно"
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard"
   },
   "ingCategory": {
-    "dairy": "[EN] Молочное",
-    "meat": "[EN] Мясо",
-    "fish": "[EN] Рыба",
-    "vegetable": "[EN] Овощи",
-    "fruit": "[EN] Фрукты",
-    "grain": "[EN] Злаки",
-    "legume": "[EN] Бобовые",
-    "egg": "[EN] Яйца",
-    "bread": "[EN] Хлеб",
-    "oil": "[EN] Масла",
-    "sauce": "[EN] Соусы",
-    "spice": "[EN] Специи",
-    "herb": "[EN] Зелень",
-    "nut": "[EN] Орехи",
-    "sweetener": "[EN] Сладкое",
-    "canned": "[EN] Консервы",
-    "other": "[EN] Другое"
+    "dairy": "Dairy",
+    "meat": "Meat",
+    "fish": "Fish",
+    "vegetable": "Vegetables",
+    "fruit": "Fruits",
+    "grain": "Grains",
+    "legume": "Legumes",
+    "egg": "Eggs",
+    "bread": "Bread",
+    "oil": "Oils",
+    "sauce": "Sauces",
+    "spice": "Spices",
+    "herb": "Herbs",
+    "nut": "Nuts",
+    "sweetener": "Sweeteners",
+    "canned": "Canned goods",
+    "other": "Other"
   },
   "visibility": {
     "PRIVATE": {
-      "label": "[EN] Личный",
-      "desc": "[EN] Только вы"
+      "label": "Private",
+      "desc": "Only you"
     },
     "FAMILY": {
-      "label": "[EN] Семья",
-      "desc": "[EN] Только участники семейной группы"
+      "label": "Family",
+      "desc": "Family group members only"
     },
     "ALL_GROUPS": {
-      "label": "[EN] Все мои группы",
-      "desc": "[EN] Участники всех ваших групп"
+      "label": "All my groups",
+      "desc": "Members of all your groups"
     }
   },
   "cuisines": {
-    "russian": "[EN] Русская",
-    "italian": "[EN] Итальянская",
-    "asian": "[EN] Азиатская",
-    "mediterranean": "[EN] Средиземноморская",
-    "greek": "[EN] Греческая",
-    "french": "[EN] Французская",
-    "mexican": "[EN] Мексиканская",
-    "japanese": "[EN] Японская",
-    "indian": "[EN] Индийская",
-    "european": "[EN] Европейская",
-    "american": "[EN] Американская"
+    "russian": "Russian",
+    "italian": "Italian",
+    "asian": "Asian",
+    "mediterranean": "Mediterranean",
+    "greek": "Greek",
+    "french": "French",
+    "mexican": "Mexican",
+    "japanese": "Japanese",
+    "indian": "Indian",
+    "european": "European",
+    "american": "American"
   }
 }
