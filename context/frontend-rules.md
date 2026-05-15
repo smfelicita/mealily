@@ -18,7 +18,8 @@ frontend/src/
 Button, Loader, EmptyState, Modal, Avatar, Toast, SearchInput, InstallPrompt, TextInput
 
 **`/components/domain` — что здесь:**
-DishCard, DishIngredientPicker, CommentsSection, MealTypeChips, IngredientList, OnboardingModal, GroupHeader, GroupCard, PlanItem
+DishCard, DishIngredientPicker, CommentsSection, MealTypeChips, IngredientList, OnboardingModal, GroupHeader, GroupCard, BulkAddModal, AddToPlanModal, DishMeta, DishSteps
+> ⚠️ PlanItem удалён (май 2026)
 
 ## 2. Как вносить изменения в UI
 
@@ -63,7 +64,7 @@ shadow-top    — нижние оверлеи
 - Паддинги контейнера: `px-4` или `px-5`
 - Контент-секция: `pt-4 pb-8`
 
-**Никаких inline styles** — если нет нужного класса, добавить токен в `tailwind.config.js`.
+**Никаких inline styles** — если нет нужного класса, добавить токен в `@theme {}` в `index.css` (Tailwind v4, не tailwind.config.js).
 
 ## 4. Карточки и списки блюд
 

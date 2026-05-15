@@ -1,8 +1,8 @@
 # MealBot — инструкции для Claude Code
 
 ## Проект
-Сервис выбора блюд с ИИ-помощником.
-Стек: Node.js + Express + Prisma + PostgreSQL (Supabase) + React + Telegram-бот.
+Коммерческий сервис выбора блюд с ИИ-помощником (веб PWA + Telegram-бот).
+Стек: Node.js + Express + Prisma + PostgreSQL (Supabase) + React + Vite + Tailwind v4.
 
 ## Структура
 ```
@@ -13,60 +13,83 @@ backend/          — Express API (порт 3001)
     lib/
       prisma.js   — ЕДИНЫЙ PrismaClient (singleton, все роуты импортируют отсюда)
       supabase.js — Supabase Storage клиент
+      schemas.js  — Zod-схемы валидации
+      logger.js   — pino логгер
     prisma/
       schema.prisma
       seed.js
 frontend/         — React + Vite + PWA
   src/
     pages/        — ChatPage, DishesPage, FridgePage, GroupsPage, ...
-    components/   — DishCard, Layout, DishModal
-    api/index.js  — все API-вызовы
-    store/index.js — Zustand store (user, token, fridge, chatMessages)
+    components/
+      ui/         — Button, Loader, Modal, Toast, TextInput, SearchInput, Avatar...
+      domain/     — DishCard, GroupCard, GroupHeader, DishIngredientPicker, CommentsSection...
+    api/index.js  — все API-вызовы (только здесь, не в компонентах)
+    store/index.js — Zustand (user, token, fridge, chatMessages, planDishIds)
+    locales/      — ru/*.json и en/*.json (10 namespace)
 telegram/         — Telegram-бот
-context/          — документация проекта (TASKS.md, FUNCTIONAL_SPEC.md)
+context/          — документация проекта
+scripts/          — export-i18n-csv.js, import-i18n-csv.js
 ```
 
-## Деплой (VPS 194.87.130.215)
+## Деплой (VPS 194.87.130.215, домен smarussya.ru)
 - Backend: PM2, `pm2 restart mealbot-backend`
 - Frontend: `cd frontend && npm run build` (статика через nginx)
 - Логи: `pm2 logs mealbot-backend --lines 30`
-- После `git pull` на сервере: `pm2 restart mealbot-backend && cd frontend && npm run build`
+- После `git pull`: `npm install && pm2 restart mealbot-backend && cd frontend && npm run build`
 
 ## Важные правила
 
 ### БД (Supabase)
-- DATABASE_URL должен быть на порту **5432** (Session Pooler), НЕ 6543 (Transaction Pooler вызывает ошибку 42P05)
-- `prisma db push` использует DIRECT_URL (тоже порт 5432)
+- DATABASE_URL: Session Pooler, порт **5432** (НЕ 6543 — Transaction Pooler вызывает ошибку 42P05)
+- `prisma db push --accept-data-loss` (не `migrate dev` — non-interactive среда)
 - Seed: `DATABASE_URL="...5432..." npm run db:seed`
 
 ### PrismaClient
-- Всегда импортировать из `../lib/prisma`, никогда не создавать `new PrismaClient()` в роутах
+- Всегда из `../lib/prisma`, никогда `new PrismaClient()` в роутах
 
 ### Авторизация
-- `authMiddleware` — требует JWT, возвращает 401 если нет
-- `optionalAuth` — не блокирует, но кладёт userId если токен есть (для гостей)
-- `requireRole('ADMIN')` — использовать после authMiddleware
+- `authMiddleware` — требует JWT, 401 если нет
+- `optionalAuth` — не блокирует, кладёт userId если токен есть
+- `requireRole('ADMIN')` — после authMiddleware
 
-### Гости (Этап 5)
-- ИИ-чат: лимит 5 сообщений/день по IP (in-memory счётчик в chat.js)
-- Холодильник: FridgePage показывает блок-заглушку если нет token
-- AuthPage: принимает ?mode=register для открытия нужной вкладки
+### Tailwind v4
+- Токены в `@theme {}` в `index.css`, **НЕ** в `tailwind.config.js`
+- Цвета только через токены: `text-text`, `text-accent`, `bg-bg-2`, `border-border` и т.д.
+- SVG: `stroke="currentColor"`, цвет через класс Tailwind на обёртке
+- Нет inline styles, нет hardcoded hex
 
-### Видимость рецептов (Dish.visibility)
-- PUBLIC — все
+### Валидация и логирование
+- Zod-схемы в `backend/src/lib/schemas.js`, middleware — `validate.js`
+- Логгер: `const { logger } = require('../lib/logger')` — pino
+- Никогда не логировать: пароли, JWT, коды, email целиком
+
+### Прочее
+- `useToast` — файл должен быть `.jsx` (не `.js`)
+- `.env` файлы — никогда в git
+- Все API-вызовы — только через `api.*` из `frontend/src/api/index.js`
+
+## Видимость блюд (Dish.visibility)
+- PUBLIC — все (включая гостей)
 - PRIVATE — только автор
-- FAMILY — участники семейной группы (по groupId)
-- ALL_GROUPS — соучастники любой группы автора
+- FAMILY — участники FAMILY-группы автора
+- ALL_GROUPS — участники всех групп автора
 
-## Редизайн
-Редизайн идёт на ветке `main` (slim-main стратегия — без `/v2`-префикса).
-Готовые страницы: HomePage, DishesPage, DishDetailPage, FridgePage, MealPlanPage, ProfilePage, AuthPage, GroupsPage, GroupDetailPage, GroupFormPage, DishFormPage, ChatPage, Layout (header + tab bar).
+## Гости
+- Холодильник: блок-заглушка с CTA
+- ИИ-чат: недоступен, сразу CTA регистрации
+- AuthPage принимает `?mode=register`
 
-Phase A завершена. Все основные страницы редизайнены, файлы V2 переименованы в основные, бэлласт убран (старый DishCard, PlanItem, /v2 редиректы).
+## Текущий статус (май 2026)
+- Редизайн Phase A: завершён. Все страницы на Tailwind-only, slim-main стратегия.
+  Артефакты дизайн-агента — `context/design/`. Брифы — `context/design/brief-*.md`.
+- i18n: 14/14 страниц на t(), 10 namespace, ru+en locale заполнены.
+  Переключатель языка временно скрыт в ProfilePage (ждёт перевода ингредиентов из БД).
 
-Стратегия: правка существующих `*Page.jsx` напрямую, без отдельных V2-файлов.
-Артефакты дизайн-агента — в `context/design/*-v2.jsx`.
-Брифы — в `context/design/brief-*.md`.
+## Правило обновления документации
+После ЛЮБЫХ изменений обновить: `context/TASKS.md`, `context/CHAT_SUMMARY.md`,
+`CLAUDE.md` (если изменились правила/статус), `context/COMPONENTS.md`,
+`context/FUNCTIONAL_SPEC.md`, `MEMORY.md`.
 
-## Текущий статус
-Смотри context/TASKS.md — там актуальный список выполненного и бэклог.
+## Актуальный бэклог
+Смотри `context/TASKS.md`.

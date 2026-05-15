@@ -50,6 +50,13 @@
 
 ---
 
+## Последние изменения (май 2026)
+
+- **i18n завершён**: 14/14 страниц на `t()`, 10 namespace, ru+en locale заполнены. Переключатель языка временно скрыт в ProfilePage — ждёт перевода ингредиентов из БД (бэклог: `nameEn` в таблице Ingredient)
+- **Скрипты CSV**: `scripts/export-i18n-csv.js` / `scripts/import-i18n-csv.js` для workflow перевода через CSV
+- **FOR_CLAUDE_CODE.md удалён** — был дублем CLAUDE.md
+- **Обновлена документация**: CLAUDE.md, COMPONENTS.md, FUNCTIONAL_SPEC.md, frontend-rules.md, TASKS.md приведены в актуальное состояние
+
 ## Последние изменения (апрель 2026)
 
 - **Аудит безопасности (29 задач)**: token versioning, CORS-функция с логированием, Zod-валидация, единый errorHandler, индексы БД, пагинация /api/dishes, N+1 fix в buildVisibilityFilter, rate limit на comments, in-memory кэш блюд для ИИ, ErrorBoundary на фронте, XSS-защита в чате, фикс optionalAuth (async + tokenVersion)
