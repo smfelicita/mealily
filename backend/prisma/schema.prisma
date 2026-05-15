@@ -137,10 +137,20 @@ model Ingredient {
   author   User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
   isPublic Boolean @default(true)
 
-  dishes DishIngredient[]
-  fridge FridgeItem[]
+  dishes   DishIngredient[]
+  fridge   FridgeItem[]
+  aliases  IngredientAlias[]
 
   @@map("ingredients")
+}
+
+model IngredientAlias {
+  id           String     @id @default(cuid())
+  alias        String     @unique
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@map("ingredient_aliases")
 }
 
 model FridgeItem {
