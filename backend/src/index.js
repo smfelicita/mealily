@@ -18,6 +18,7 @@ const telegramRoutes = require('./routes/telegram')
 const favoriteRoutes = require('./routes/favorites')
 const commentRoutes = require('./routes/comments')
 const inviteRoutes = require('./routes/invites')
+const adminAuthRoutes = require('./routes/admin/auth')
 
 // Планировщик уведомлений (запускается сразу при старте)
 require('./lib/scheduler')
@@ -79,6 +80,7 @@ app.use('/api/telegram', telegramRoutes)
 app.use('/api/favorites', favoriteRoutes)
 app.use('/api/comments', commentRoutes)
 app.use('/api', inviteRoutes)
+app.use('/api/admin', adminAuthRoutes)
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }))

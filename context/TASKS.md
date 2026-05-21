@@ -58,16 +58,32 @@
 
 Детали по каждому этапу — отдельно, после поверхностного плана.
 
+### Архитектура (реализовано — май 2026)
+- [x] `AuditLog` таблица добавлена в схему (adminId, action, targetId, payload, createdAt)
+- [x] `backend/src/middleware/adminAuth.js` — проверяет `Authorization: Bearer <admin-jwt>` (ADMIN_JWT_SECRET)
+- [x] `POST /api/admin/auth` — логин email+пароль → проверка role=ADMIN → возвращает admin-JWT (30 мин)
+- [x] `POST /api/admin/refresh` — продление сессии (вызывается при активности)
+- [x] `frontend/src/admin/adminStore.js` — Zustand + sessionStorage, inactivity timer 30 мин
+- [x] `frontend/src/admin/AdminLayout.jsx` — сайдбар, event listeners для активности
+- [x] `frontend/src/admin/AdminLoginPage.jsx` — форма входа
+- [x] `App.jsx` — lazy-loaded admin routes под `/admin/*`
+
+**Нужно добавить в `.env` на сервере:**
+```
+ADMIN_JWT_SECRET=<сгенерировать длинный случайный секрет>
+```
+
+**Нужно запустить на сервере:**
+```bash
+cd /var/www/mealbot/backend && npx prisma db push --accept-data-loss
+```
+
 ### Этап A — Ingredients management (приоритет 1)
 - [x] Таблица `IngredientAlias` создана, поиск обновлён (exact + fuzzy по алиасам)
 - [ ] **Наполнить алиасы** — экспортировать ингредиенты в CSV, добавить колонку синонимов, импортировать SQL-ом
-
-
-Самое срочное — база ингредиентов растёт и копится мусор.
-- CRUD ингредиентов (название, nameEn, КБЖУ, категория, isBasic)
-- Merge duplicates — склейка дублей в один canonical
-- Aliases / synonyms — таблица `IngredientAlias` (alias → canonical_id)
-- Popularity — сортировка по частоте использования в блюдах/холодильниках
+- [ ] CRUD ингредиентов в UI (название, nameEn, КБЖУ, категория, isBasic) — `AdminIngredientsPage`
+- [ ] Merge duplicates — склейка дублей в один canonical
+- [ ] Popularity — сортировка по частоте использования в блюдах/холодильниках
 
 ### Этап B — Feature flags (приоритет 2)
 ⏸ Заморожен до реализации базовой админки (этапы C–F).
@@ -79,18 +95,20 @@
 
 **Расположение:** `/admin/*` в текущем фронте, lazy loading — отдельный Layout (без BottomTabBar).
 
-**Авторизация (2 слоя):**
+**Авторизация (1 слой — только ты):**
 1. Обычный вход (email + пароль) → проверка `role === ADMIN`
-2. Отдельный экран → ввод `ADMIN_SECRET` из `.env` на сервере
-3. Выдаётся отдельный admin-JWT (другой секрет `ADMIN_JWT_SECRET`)
-4. Хранится в `sessionStorage` (не переживает закрытие браузера)
+2. Выдаётся отдельный admin-JWT (подписан `ADMIN_JWT_SECRET` — другой секрет)
+3. Хранится в `sessionStorage` (не переживает закрытие браузера)
+4. Передаётся как `Authorization: Bearer <admin-jwt>` (стандартный заголовок)
 
 **Сессия:**
 - Автовыход при неактивности 30 минут
-- При активности — токен продлевается автоматически (бэкенд возвращает новый в заголовке ответа)
+- Обновление через `POST /api/admin/refresh` (не per-request, только при активности)
 - Пока работаешь — сессия живёт сколько угодно
 
-**API:** все эндпоинты под `/api/admin/*`, проверяют admin-JWT (не обычный).
+**API:** все эндпоинты под `/api/admin/*`, проверяют admin-JWT (middleware adminAuth.js).
+
+**AuditLog:** каждое destructive действие логируется (adminId, action, targetId, payload, timestamp).
 
 ---
 

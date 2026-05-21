@@ -1,4 +1,4 @@
-import { useEffect, useState, Component } from 'react'
+import { useEffect, useState, Component, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useStore } from './store'
 import { api } from './api'
@@ -18,6 +18,12 @@ import MealPlanPage from './pages/MealPlanPage'
 import TelegramAuthPage from './pages/TelegramAuthPage'
 import ProfilePage from './pages/ProfilePage'
 import InvitePage from './pages/InvitePage'
+
+const AdminLayout = lazy(() => import('./admin/AdminLayout'))
+const AdminLoginPage = lazy(() => import('./admin/AdminLoginPage'))
+const AdminIngredientsPage = lazy(() => import('./admin/pages/AdminIngredientsPage'))
+const AdminUsersPage = lazy(() => import('./admin/pages/AdminUsersPage'))
+const AdminDishesPage = lazy(() => import('./admin/pages/AdminDishesPage'))
 
 class ErrorBoundary extends Component {
   constructor(props) { super(props); this.state = { hasError: false } }
@@ -78,6 +84,15 @@ export default function App() {
         <OnboardingModal onClose={() => setShowOnboarding(false)} />
       )}
       <Routes>
+        {/* Admin panel — lazy, отдельный Layout */}
+        <Route path="/admin/login" element={<Suspense fallback={null}><AdminLoginPage /></Suspense>} />
+        <Route path="/admin" element={<Suspense fallback={null}><AdminLayout /></Suspense>}>
+          <Route index element={<Navigate to="/admin/ingredients" replace />} />
+          <Route path="ingredients" element={<Suspense fallback={null}><AdminIngredientsPage /></Suspense>} />
+          <Route path="users"       element={<Suspense fallback={null}><AdminUsersPage /></Suspense>} />
+          <Route path="dishes"      element={<Suspense fallback={null}><AdminDishesPage /></Suspense>} />
+        </Route>
+
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/auth/tg" element={<TelegramAuthPage />} />
         <Route path="/invite/:token" element={<InvitePage />} />

@@ -362,6 +362,22 @@ model Favorite {
   @@map("favorites")
 }
 
+// ─── Аудит ───────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String   // DELETE_DISH, CHANGE_VISIBILITY, DEACTIVATE_USER, etc.
+  targetId  String?  // id объекта над которым совершено действие
+  payload   Json?    // diff или дополнительные данные
+  createdAt DateTime @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
 // ─── Комментарии ──────────────────────────────────────────────────────────────
 
 model Comment {
