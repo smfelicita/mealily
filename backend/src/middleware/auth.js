@@ -13,10 +13,13 @@ async function authMiddleware(req, res, next) {
     // Проверяем tokenVersion — если пользователь вышел, версия не совпадёт
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
-      select: { tokenVersion: true },
+      select: { tokenVersion: true, isActive: true },
     })
     if (!user || user.tokenVersion !== payload.tokenVersion) {
       return res.status(401).json({ error: 'Сессия завершена' })
+    }
+    if (!user.isActive) {
+      return res.status(403).json({ error: 'Аккаунт заблокирован' })
     }
     req.userId = payload.userId
     req.userRole = payload.role
@@ -35,9 +38,9 @@ async function optionalAuth(req, res, next) {
       const payload = jwt.verify(token, process.env.JWT_SECRET)
       const user = await prisma.user.findUnique({
         where: { id: payload.userId },
-        select: { tokenVersion: true },
+        select: { tokenVersion: true, isActive: true },
       })
-      if (user && user.tokenVersion === payload.tokenVersion) {
+      if (user && user.tokenVersion === payload.tokenVersion && user.isActive) {
         req.userId = payload.userId
         req.userRole = payload.role
       }

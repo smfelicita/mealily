@@ -20,6 +20,7 @@ const commentRoutes = require('./routes/comments')
 const inviteRoutes = require('./routes/invites')
 const adminAuthRoutes = require('./routes/admin/auth')
 const adminIngredientRoutes = require('./routes/admin/ingredients')
+const adminUserRoutes = require('./routes/admin/users')
 
 // Планировщик уведомлений (запускается сразу при старте)
 require('./lib/scheduler')
@@ -83,6 +84,7 @@ app.use('/api/comments', commentRoutes)
 app.use('/api', inviteRoutes)
 app.use('/api/admin', adminAuthRoutes)
 app.use('/api/admin/ingredients', adminIngredientRoutes)
+app.use('/api/admin/users', adminUserRoutes)
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }))

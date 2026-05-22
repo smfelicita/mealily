@@ -79,6 +79,7 @@ model User {
   googleId         String?   @unique
   emailVerified    Boolean   @default(false)
   role             Role      @default(USER)
+  isActive         Boolean   @default(true)
   tokenVersion     Int       @default(0)
   subscriptionUntil DateTime?
   aiMessagesDay    Int       @default(0)
