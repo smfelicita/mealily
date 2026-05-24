@@ -24,6 +24,7 @@ const AdminLoginPage = lazy(() => import('./admin/AdminLoginPage'))
 const AdminIngredientsPage = lazy(() => import('./admin/pages/AdminIngredientsPage'))
 const AdminUsersPage = lazy(() => import('./admin/pages/AdminUsersPage'))
 const AdminDishesPage = lazy(() => import('./admin/pages/AdminDishesPage'))
+const AdminGroupsPage = lazy(() => import('./admin/pages/AdminGroupsPage'))
 
 class ErrorBoundary extends Component {
   constructor(props) { super(props); this.state = { hasError: false } }
@@ -91,6 +92,7 @@ export default function App() {
           <Route path="ingredients" element={<Suspense fallback={null}><AdminIngredientsPage /></Suspense>} />
           <Route path="users"       element={<Suspense fallback={null}><AdminUsersPage /></Suspense>} />
           <Route path="dishes"      element={<Suspense fallback={null}><AdminDishesPage /></Suspense>} />
+          <Route path="groups"      element={<Suspense fallback={null}><AdminGroupsPage /></Suspense>} />
         </Route>
 
         <Route path="/auth" element={<AuthPage />} />
