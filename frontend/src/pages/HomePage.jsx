@@ -151,7 +151,7 @@ function QuickActions({ favActive, fridgeActive, onFav, onFridge }) {
         onClick={onFav}
         className={[
           'flex-1 h-11 rounded-full flex items-center justify-center gap-2',
-          'text-[13px] font-bold transition-colors border',
+          'text-sm2 font-bold transition-colors border',
           favActive
             ? 'bg-accent text-white border-accent'
             : 'bg-bg-2 text-text-2 border-border hover:text-accent hover:border-accent',
@@ -165,7 +165,7 @@ function QuickActions({ favActive, fridgeActive, onFav, onFridge }) {
         onClick={onFridge}
         className={[
           'flex-1 h-11 rounded-full flex items-center justify-center gap-2',
-          'text-[13px] font-bold transition-colors border',
+          'text-sm2 font-bold transition-colors border',
           fridgeActive
             ? 'bg-sage text-white border-sage'
             : 'bg-sage-muted text-sage border-sage-border hover:opacity-90',
@@ -186,7 +186,7 @@ function AddOwnDish({ guest, onClick }) {
       <button
         type="button"
         onClick={onClick}
-        className="w-full h-12 rounded-full text-[14px] font-bold text-white
+        className="w-full h-12 rounded-full text-sm font-bold text-white
           flex items-center justify-center gap-2 bg-accent hover:bg-accent-2 transition-colors"
         style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
       >
@@ -199,7 +199,7 @@ function AddOwnDish({ guest, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="w-full h-12 rounded-full text-[14px] font-bold
+      className="w-full h-12 rounded-full text-sm font-bold
         flex items-center justify-center gap-2
         bg-bg-2 text-accent border border-dashed border-accent-border
         hover:bg-accent-muted transition-colors"
@@ -399,12 +399,12 @@ export default function HomePage() {
       {/* ── Dish list ────────────────────────────────────────────── */}
       <div className="px-5 mt-4 flex flex-col gap-2">
         {loading ? (
-          <div className="bg-bg-2 border border-border rounded-2xl p-6 text-center text-[14px] text-text-3">
+          <div className="bg-bg-2 border border-border rounded-2xl p-6 text-center text-sm text-text-3">
             {t('list.loading')}
           </div>
         ) : filtered.length === 0 ? (
           <div className="bg-bg-2 border border-border rounded-2xl p-6 text-center">
-            <p className="text-[14px] text-text-3">{t('list.empty')}</p>
+            <p className="text-sm text-text-3">{t('list.empty')}</p>
           </div>
         ) : (
           filtered.slice(0, 8).map(dish => (

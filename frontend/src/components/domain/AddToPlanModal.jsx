@@ -49,7 +49,7 @@ export default function AddToPlanModal({ dish, hasFamilyGroup, onClose, onAdded 
             : <span>{emoji}</span>
           }
         </div>
-        <strong className="text-[15px]">{dish.name}</strong>
+        <strong className="text-md2">{dish.name}</strong>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -59,7 +59,7 @@ export default function AddToPlanModal({ dish, hasFamilyGroup, onClose, onAdded 
             type="date"
             value={date}
             onChange={e => setDate(e.target.value)}
-            className="w-full bg-bg-3 border border-border rounded-sm text-text text-[15px]
+            className="w-full bg-bg-3 border border-border rounded-sm text-text text-md2
               px-3.5 py-2.5 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
           />
         </div>
@@ -71,7 +71,7 @@ export default function AddToPlanModal({ dish, hasFamilyGroup, onClose, onAdded 
             value={note}
             onChange={e => setNote(e.target.value)}
             placeholder="Например: без соли"
-            className="w-full bg-bg-3 border border-border rounded-sm text-text text-[15px]
+            className="w-full bg-bg-3 border border-border rounded-sm text-text text-md2
               px-3.5 py-2.5 outline-none placeholder:text-text-3
               focus:border-accent focus:ring-2 focus:ring-accent/20"
           />

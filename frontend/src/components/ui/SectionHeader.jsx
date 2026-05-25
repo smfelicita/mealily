@@ -10,7 +10,7 @@ export default function SectionHeader({
   return (
     <div className={['flex items-end justify-between gap-3 mb-3', className].join(' ')}>
       <div className="min-w-0">
-        <h2 className="text-[17px] font-bold tracking-tight text-text leading-tight">
+        <h2 className="text-lg2 font-bold tracking-tight text-text leading-tight">
           {title}
         </h2>
         {subtitle && (

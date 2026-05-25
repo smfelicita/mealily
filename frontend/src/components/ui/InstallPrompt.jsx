@@ -77,17 +77,17 @@ export default function InstallPrompt() {
   if (showAndroid) {
     return (
       <div className="mx-5 mb-1 flex items-center gap-3 rounded-2xl px-4 py-3 bg-white shadow-card">
-        <span className="text-[22px] shrink-0">📲</span>
+        <span className="text-2xl2 shrink-0">📲</span>
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-sm text-text">Установить приложение</p>
           <p className="text-xs truncate text-text-3">Работает без браузера</p>
         </div>
         <button
           onClick={installAndroid}
-          className="shrink-0 px-3 py-1.5 rounded-full text-[13px] font-semibold text-white bg-accent">
+          className="shrink-0 px-3 py-1.5 rounded-full text-sm2 font-semibold text-white bg-accent">
           Установить
         </button>
-        <button onClick={dismiss} className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-[16px] text-text-3">
+        <button onClick={dismiss} className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-base text-text-3">
           ✕
         </button>
       </div>
@@ -97,14 +97,14 @@ export default function InstallPrompt() {
   if (showIOS) {
     return (
       <div className="mx-5 mb-1 flex items-start gap-3 rounded-2xl px-4 py-3 bg-white shadow-card">
-        <span className="text-[22px] shrink-0">📲</span>
+        <span className="text-2xl2 shrink-0">📲</span>
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-sm text-text">Установить на iPhone</p>
           <p className="text-xs text-text-3">
             Нажмите ⎙ внизу браузера → «На экран "Домой"»
           </p>
         </div>
-        <button onClick={dismiss} className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-[16px] text-text-3">
+        <button onClick={dismiss} className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-base text-text-3">
           ✕
         </button>
       </div>
@@ -114,12 +114,12 @@ export default function InstallPrompt() {
   if (showIOSNotSafari) {
     return (
       <div className="mx-5 mb-1 flex items-center gap-3 rounded-2xl px-4 py-3 bg-white shadow-card">
-        <span className="text-[22px] shrink-0">🧭</span>
+        <span className="text-2xl2 shrink-0">🧭</span>
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-sm text-text">Установить приложение</p>
           <p className="text-xs text-text-3">Откройте сайт в Safari для установки</p>
         </div>
-        <button onClick={dismiss} className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-[16px] text-text-3">
+        <button onClick={dismiss} className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-base text-text-3">
           ✕
         </button>
       </div>

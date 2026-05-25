@@ -46,9 +46,13 @@
   --font-serif:          'Nunito', system-ui, sans-serif;
 
   /* Размеры шрифта (фикс под дизайн-систему) */
+  --text-2xs:            11px;
   --text-sm2:            13px;
   --text-md2:            15px;
   --text-lg2:            17px;
+  --text-xl2:            19px;
+  --text-2xl2:           22px;
+  --text-3xl2:           26px;
 
   /* Тени */
   --shadow-card:         0 2px 16px rgba(0,0,0,0.08);

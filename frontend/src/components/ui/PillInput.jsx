@@ -50,7 +50,7 @@ export default function PillInput({
         disabled={disabled}
         maxLength={maxLength}
         autoFocus={autoFocus}
-        className="flex-1 bg-transparent outline-none text-[14px] text-text placeholder:text-text-3 disabled:opacity-50"
+        className="flex-1 bg-transparent outline-none text-sm text-text placeholder:text-text-3 disabled:opacity-50"
       />
       <button
         type="button"

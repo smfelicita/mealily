@@ -18,7 +18,7 @@ import { Button } from '../components/ui'
 function FieldLabel({ children }) {
   return (
     <label
-      className="block text-[11px] font-bold uppercase tracking-wider text-text-3 mb-1.5"
+      className="block text-2xs font-bold uppercase tracking-wider text-text-3 mb-1.5"
       style={{ letterSpacing: 0.6 }}
     >
       {children}
@@ -44,7 +44,7 @@ function PillInput({ className = '', ...props }) {
 function ErrorMsg({ msg }) {
   if (!msg) return null
   return (
-    <div className="flex items-start gap-1.5 text-red-500 text-[13px]">
+    <div className="flex items-start gap-1.5 text-red-500 text-sm2">
       <AlertCircle size={14} strokeWidth={2.2} className="shrink-0 mt-0.5" />
       <span style={{ textWrap: 'pretty' }}>{msg}</span>
     </div>
@@ -54,7 +54,7 @@ function ErrorMsg({ msg }) {
 function ResendLine({ countdown, onResend, loading }) {
   const { t } = useTranslation('auth')
   return (
-    <p className="text-center mt-4 text-[13px] text-text-2">
+    <p className="text-center mt-4 text-sm2 text-text-2">
       {t('resend.notReceived')}{' '}
       {countdown > 0
         ? <span className="text-text-3">{t('resend.countdown', { n: countdown })}</span>
@@ -90,7 +90,7 @@ function TabSwitcher({ tab, onChange }) {
             type="button"
             onClick={() => onChange(id)}
             className={[
-              'flex-1 h-9 rounded-full text-[13px] font-bold inline-flex items-center justify-center gap-1.5 transition-colors',
+              'flex-1 h-9 rounded-full text-sm2 font-bold inline-flex items-center justify-center gap-1.5 transition-colors',
               on ? 'bg-accent text-white' : 'bg-transparent text-text-2',
             ].join(' ')}
           >
@@ -215,8 +215,8 @@ export default function AuthPage() {
         >
           <ChefHat size={28} strokeWidth={2} className="text-accent" />
         </div>
-        <h1 className="text-[26px] font-extrabold tracking-tight text-text">MealBot</h1>
-        <p className="text-[13px] text-text-2 mt-1">{t('brand.subtitle')}</p>
+        <h1 className="text-3xl2 font-extrabold tracking-tight text-text">MealBot</h1>
+        <p className="text-sm2 text-text-2 mt-1">{t('brand.subtitle')}</p>
       </div>
 
       {/* Card */}
@@ -225,10 +225,10 @@ export default function AuthPage() {
         {/* ── Verify email ── */}
         {step === 'verify-email' && (
           <>
-            <h2 className="text-[20px] font-extrabold tracking-tight text-text mb-1">
+            <h2 className="text-xl font-extrabold tracking-tight text-text mb-1">
               {t('verifyEmail.title')}
             </h2>
-            <p className="text-[13px] text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
+            <p className="text-sm2 text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
               {t('verifyEmail.descPart1')} <strong className="text-text">{pendingEmail}</strong>.{' '}
               {t('verifyEmail.descPart2')}
             </p>
@@ -258,7 +258,7 @@ export default function AuthPage() {
         {step === 'phone-enter' && (
           <>
             <TabSwitcher tab={tab} onChange={switchTab} />
-            <h2 className="text-[20px] font-extrabold tracking-tight text-text mt-5 mb-4">
+            <h2 className="text-xl font-extrabold tracking-tight text-text mt-5 mb-4">
               {t('phoneEnter.title')}
             </h2>
             <form onSubmit={submitSendPhone} className="flex flex-col gap-4">
@@ -284,10 +284,10 @@ export default function AuthPage() {
         {/* ── Phone code ── */}
         {step === 'phone-code' && (
           <>
-            <h2 className="text-[20px] font-extrabold tracking-tight text-text mb-1">
+            <h2 className="text-xl font-extrabold tracking-tight text-text mb-1">
               {t('phoneCode.title')}
             </h2>
-            <p className="text-[13px] text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
+            <p className="text-sm2 text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
               {t('phoneCode.descPart1')} <strong className="text-text">{pendingPhone}</strong>
             </p>
             <form onSubmit={submitVerifyPhone} className="flex flex-col gap-4">
@@ -316,7 +316,7 @@ export default function AuthPage() {
                 {!loading && t('phoneCode.login')}
               </Button>
             </form>
-            <p className="text-center mt-4 text-[13px] text-text-2">
+            <p className="text-center mt-4 text-sm2 text-text-2">
               {resendCountdown > 0
                 ? <span className="text-text-3">{t('resend.countdown', { n: resendCountdown })}</span>
                 : (
@@ -338,7 +338,7 @@ export default function AuthPage() {
           <>
             <TabSwitcher tab={tab} onChange={switchTab} />
 
-            <h2 className="text-[20px] font-extrabold tracking-tight text-text mt-5 mb-4">
+            <h2 className="text-xl font-extrabold tracking-tight text-text mt-5 mb-4">
               {step === 'login' ? t('login.title') : t('register.title')}
             </h2>
 
@@ -380,7 +380,7 @@ export default function AuthPage() {
               </Button>
             </form>
 
-            <p className="text-center mt-4 text-[13px] text-text-2">
+            <p className="text-center mt-4 text-sm2 text-text-2">
               {step === 'login' ? t('login.noAccount') : t('register.hasAccount')}{' '}
               <button
                 type="button"
@@ -418,7 +418,7 @@ export default function AuthPage() {
       {/* Skip link */}
       <button
         type="button"
-        className="mt-6 text-[13px] text-text-3 hover:text-text-2"
+        className="mt-6 text-sm2 text-text-3 hover:text-text-2"
         onClick={() => navigate('/')}
       >
         {t('skip')}

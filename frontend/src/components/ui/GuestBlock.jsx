@@ -63,7 +63,7 @@ export default function GuestBlock({
           <button
             type="button"
             onClick={goRegister}
-            className="text-[13px] font-bold text-accent hover:underline"
+            className="text-sm2 font-bold text-accent hover:underline"
           >
             {registerText}
           </button>
@@ -71,7 +71,7 @@ export default function GuestBlock({
           <button
             type="button"
             onClick={goLogin}
-            className="text-[13px] font-semibold text-text-2 hover:text-text hover:underline"
+            className="text-sm2 font-semibold text-text-2 hover:text-text hover:underline"
           >
             {loginText}
           </button>
@@ -95,14 +95,14 @@ export default function GuestBlock({
         </div>
       )}
       <h3
-        className="text-[19px] font-extrabold text-text leading-tight tracking-tight"
+        className="text-xl2 font-extrabold text-text leading-tight tracking-tight"
         style={{ textWrap: 'balance' }}
       >
         {title}
       </h3>
       {description && (
         <p
-          className="text-[14px] text-text-2 leading-relaxed max-w-sm"
+          className="text-sm text-text-2 leading-relaxed max-w-sm"
           style={{ textWrap: 'pretty' }}
         >
           {description}

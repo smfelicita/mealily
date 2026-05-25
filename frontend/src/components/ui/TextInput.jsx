@@ -22,7 +22,7 @@ export default function TextInput({
         <input
           {...props}
           className={[
-            'w-full bg-bg-3 border border-border rounded-sm text-text text-[15px]',
+            'w-full bg-bg-3 border border-border rounded-sm text-text text-md2',
             'px-3.5 py-2.5 outline-none transition-colors duration-150',
             'placeholder:text-text-3 focus:border-accent',
             'focus:outline-none focus:ring-2 focus:ring-accent/20',

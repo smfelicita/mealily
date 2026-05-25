@@ -141,7 +141,7 @@ function DishMetaStrip({ cookTime, difficulty, cuisine, mealTime }) {
           <div className="flex-1 flex flex-col items-center gap-1 px-0.5">
             <it.Icon size={17} strokeWidth={1.8} className="text-accent" />
             <div
-              className="text-[13px] font-bold leading-tight text-center text-text"
+              className="text-sm2 font-bold leading-tight text-center text-text"
               style={{ overflowWrap: 'anywhere' }}
             >
               {it.value}
@@ -184,7 +184,7 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
   return (
     <section className="mt-7">
       <div className="px-5 flex items-center justify-between mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('detail.ingredients')}</h2>
+        <h2 className="text-lg2 font-bold tracking-tight text-text">{t('detail.ingredients')}</h2>
         {canToggleFridge && (
           <button
             type="button"
@@ -234,7 +234,7 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
                 )}
               </div>
               {ing.amount && (
-                <div className={['text-[13px] tabular-nums flex-shrink-0', checked ? 'text-sage font-bold' : 'text-text-3 font-medium'].join(' ')}>
+                <div className={['text-sm2 tabular-nums flex-shrink-0', checked ? 'text-sage font-bold' : 'text-text-3 font-medium'].join(' ')}>
                   {ing.amount}
                 </div>
               )}
@@ -260,13 +260,13 @@ function StepsSection({ steps }) {
   return (
     <section className="mt-8">
       <div className="px-5 mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('detail.steps')}</h2>
+        <h2 className="text-lg2 font-bold tracking-tight text-text">{t('detail.steps')}</h2>
         <div className="text-[12px] mt-0.5 text-text-3">{t('detail.stepsCount', { count: steps.length })}</div>
       </div>
       <div className="px-5 flex flex-col gap-3.5">
         {steps.map((s, i) => (
           <div key={i} className="flex gap-3.5 items-start">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-[20px] font-extrabold tabular-nums bg-accent-muted text-accent">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl font-extrabold tabular-nums bg-accent-muted text-accent">
               {i + 1}
             </div>
             <div className="flex-1 pt-1 text-[14.5px] leading-relaxed text-text" style={{ textWrap: 'pretty' }}>
@@ -292,7 +292,7 @@ function NutritionSection({ nutrition }) {
   return (
     <section className="mt-7">
       <div className="px-5 mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('detail.nutrition')}</h2>
+        <h2 className="text-lg2 font-bold tracking-tight text-text">{t('detail.nutrition')}</h2>
         <div className="text-[12px] mt-0.5 text-text-3">{t('detail.per100g')}</div>
       </div>
       <div className="mx-5 rounded-2xl bg-bg-2 border border-border flex justify-between items-stretch px-2.5 py-3.5">
@@ -300,7 +300,7 @@ function NutritionSection({ nutrition }) {
           <div key={i} className="flex-1 min-w-0 flex items-stretch">
             <div className="flex-1 flex flex-col items-center gap-1 px-0.5">
               <span className="w-2 h-2 rounded-full" style={{ background: it.color }} />
-              <div className="text-[13px] font-bold leading-tight text-center text-text">
+              <div className="text-sm2 font-bold leading-tight text-center text-text">
                 {it.value ?? '—'}
                 {it.unit && <span className="ml-0.5 text-[10.5px] font-semibold text-text-2">{it.unit}</span>}
               </div>
@@ -321,7 +321,7 @@ function TagsSection({ categories, tags, onCategoryClick, onTagClick }) {
   return (
     <section className="mt-8">
       <div className="px-5 mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('dish:detail.tagsTitle')}</h2>
+        <h2 className="text-lg2 font-bold tracking-tight text-text">{t('dish:detail.tagsTitle')}</h2>
       </div>
       <div className="px-5 flex flex-wrap gap-1.5">
         {categories?.map(c => (
@@ -356,7 +356,7 @@ function SimilarSection({ dishes, onOpen }) {
   return (
     <section className="mt-8">
       <div className="px-5 mb-3">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('dish:detail.similar')}</h2>
+        <h2 className="text-lg2 font-bold tracking-tight text-text">{t('dish:detail.similar')}</h2>
       </div>
       <div className="flex gap-3 overflow-x-auto px-5 pb-1.5" style={{ scrollbarWidth: 'none' }}>
         {dishes.map(d => {
@@ -371,7 +371,7 @@ function SimilarSection({ dishes, onOpen }) {
               <div className="w-full h-[120px] rounded-[14px] overflow-hidden relative bg-bg-3 border border-border">
                 {img && <img src={img} alt="" className="w-full h-full object-cover" />}
                 {d.cookTime && (
-                  <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-1.5 py-0.5 rounded-full text-[11px] font-bold flex items-center gap-0.5 text-text">
+                  <div className="absolute top-2 right-2 bg-white/90 backdrop-blur px-1.5 py-0.5 rounded-full text-2xs font-bold flex items-center gap-0.5 text-text">
                     <Clock size={10} strokeWidth={2.5} />
                     {d.cookTime}{t('common:units.min')}
                   </div>
@@ -425,7 +425,7 @@ function CommentsSection({ dishId, comments, setComments, token, currentUserId, 
   return (
     <section className="mt-8">
       <div className="px-5 mb-3 flex items-baseline gap-2">
-        <h2 className="text-[17px] font-bold tracking-tight text-text">{t('comments.title')}</h2>
+        <h2 className="text-lg2 font-bold tracking-tight text-text">{t('comments.title')}</h2>
         <div className="text-[12px] text-text-3">{list.length}</div>
       </div>
 
@@ -509,24 +509,24 @@ function ActionsSheet({ onClose, isOwner, hasUser, onCopy, onEdit, onDelete }) {
         onClick={e => e.stopPropagation()}
       >
         {hasUser && (
-          <button type="button" onClick={onCopy} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-text hover:bg-bg-3 text-left">
+          <button type="button" onClick={onCopy} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-md2 font-medium text-text hover:bg-bg-3 text-left">
             <Copy size={18} className="text-text-2" />
             {t('actionsSheet.copyRecipe')}
           </button>
         )}
         {isOwner && (
-          <button type="button" onClick={onEdit} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-text hover:bg-bg-3 text-left">
+          <button type="button" onClick={onEdit} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-md2 font-medium text-text hover:bg-bg-3 text-left">
             <Edit3 size={18} className="text-text-2" />
             {t('actionsSheet.edit')}
           </button>
         )}
         {isOwner && (
-          <button type="button" onClick={onDelete} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-[15px] font-medium text-red-500 hover:bg-red-50 text-left">
+          <button type="button" onClick={onDelete} className="flex items-center gap-3 px-3 py-3.5 rounded-2xl text-md2 font-medium text-red-500 hover:bg-red-50 text-left">
             <Trash2 size={18} />
             {t('actionsSheet.delete')}
           </button>
         )}
-        <button type="button" onClick={onClose} className="mt-2 py-3 text-[15px] text-text-2 font-medium text-center rounded-2xl bg-bg-3">
+        <button type="button" onClick={onClose} className="mt-2 py-3 text-md2 text-text-2 font-medium text-center rounded-2xl bg-bg-3">
           {t('actionsSheet.cancel')}
         </button>
       </div>
@@ -717,17 +717,17 @@ export default function DishDetailPage() {
 
           {/* ── Title + description ──────────────────────────── */}
           <div className={['px-5 relative', images.length > 0 ? '-mt-4' : 'mt-3'].join(' ')}>
-            <h1 className="text-[26px] font-extrabold leading-[1.2] tracking-tight text-text" style={{ textWrap: 'pretty' }}>
+            <h1 className="text-3xl2 font-extrabold leading-[1.2] tracking-tight text-text" style={{ textWrap: 'pretty' }}>
               {dish.name}
             </h1>
             {dish.description && (
-              <p className="mt-2.5 text-[15px] leading-relaxed text-text-2">{dish.description}</p>
+              <p className="mt-2.5 text-md2 leading-relaxed text-text-2">{dish.description}</p>
             )}
 
             {(author.name || isOwner) && (
               <div className="mt-3.5 flex items-center gap-2">
                 <Avatar name={author.name || user?.name} size="sm" />
-                <div className="text-[13px] text-text-2">
+                <div className="text-sm2 text-text-2">
                   {t('detail.authorPrefix')}{' '}
                   <span className="font-semibold text-text">
                     {author.name || (isOwner ? user?.name : '—')}

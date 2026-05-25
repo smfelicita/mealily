@@ -106,7 +106,7 @@ export default function DishCard({
         className="flex-1 min-w-0 text-left focus:outline-none"
       >
         <div
-          className="text-[14px] font-bold leading-tight text-text"
+          className="text-sm font-bold leading-tight text-text"
           style={{ textWrap: 'pretty' }}
         >
           {dish.name}
@@ -124,7 +124,7 @@ export default function DishCard({
             </span>
           )}
           {missing !== null && missing.length > 0 && (
-            <span className="text-[11px] font-bold text-accent">
+            <span className="text-2xs font-bold text-accent">
               · докупить {missing.length}
             </span>
           )}

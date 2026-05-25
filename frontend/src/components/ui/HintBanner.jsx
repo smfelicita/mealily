@@ -58,11 +58,11 @@ export default function HintBanner({
       )}
       <div className="flex-1 min-w-0">
         {title && (
-          <div className="text-[14px] font-bold text-text leading-tight mb-1">
+          <div className="text-sm font-bold text-text leading-tight mb-1">
             {title}
           </div>
         )}
-        <div className="text-[13px] text-text-2 leading-snug" style={{ textWrap: 'pretty' }}>
+        <div className="text-sm2 text-text-2 leading-snug" style={{ textWrap: 'pretty' }}>
           {children}
         </div>
       </div>

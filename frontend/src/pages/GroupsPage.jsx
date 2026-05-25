@@ -50,7 +50,7 @@ function TypeBadge({ type }) {
 function SectionLabel({ children, count }) {
   return (
     <div
-      className="text-[11px] font-bold uppercase tracking-wider text-text-2 mb-3"
+      className="text-2xs font-bold uppercase tracking-wider text-text-2 mb-3"
       style={{ letterSpacing: 0.6 }}
     >
       {children}
@@ -68,7 +68,7 @@ function IncomingInviteCard({ invite, onAccept, onDecline }) {
         <Mail size={18} strokeWidth={2} className="text-accent" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-[15px] font-semibold leading-tight text-text">
+        <div className="text-md2 font-semibold leading-tight text-text">
           {invite.groupName}
         </div>
         <div className="text-[12px] mt-0.5 text-text-3 truncate">
@@ -126,7 +126,7 @@ function GroupCard({ group, currentUserId, onClick }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <div className="text-[16px] font-bold leading-tight truncate text-text">
+            <div className="text-base font-bold leading-tight truncate text-text">
               {group.name}
             </div>
             {meIsOwner && (
@@ -176,10 +176,10 @@ function NoGroupsEmpty({ onCreate }) {
       >
         <Users size={30} strokeWidth={2} className="text-accent" />
       </div>
-      <h2 className="mt-4 text-[17px] font-bold text-text" style={{ textWrap: 'balance' }}>
+      <h2 className="mt-4 text-lg2 font-bold text-text" style={{ textWrap: 'balance' }}>
         {t('empty.title')}
       </h2>
-      <p className="mt-1 text-[13px] leading-relaxed max-w-[290px] text-text-2" style={{ textWrap: 'pretty' }}>
+      <p className="mt-1 text-sm2 leading-relaxed max-w-[290px] text-text-2" style={{ textWrap: 'pretty' }}>
         {t('empty.desc')}
       </p>
       <button

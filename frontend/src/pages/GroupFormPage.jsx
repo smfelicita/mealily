@@ -16,7 +16,7 @@ import { Button, Loader, useToast } from '../components/ui'
 function FieldLabel({ children, required }) {
   return (
     <label
-      className="block text-[11px] font-bold uppercase tracking-wider text-text-3 mb-1.5"
+      className="block text-2xs font-bold uppercase tracking-wider text-text-3 mb-1.5"
       style={{ letterSpacing: 0.6 }}
     >
       {children}

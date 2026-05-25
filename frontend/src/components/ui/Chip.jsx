@@ -19,9 +19,9 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'px-2.5 py-1 text-[11px] gap-1',
+  sm: 'px-2.5 py-1 text-2xs gap-1',
   md: 'px-3 py-1.5 text-[12.5px] gap-1.5',
-  lg: 'px-3.5 py-2 text-[13px] gap-1.5',
+  lg: 'px-3.5 py-2 text-sm2 gap-1.5',
 }
 
 export default function Chip({

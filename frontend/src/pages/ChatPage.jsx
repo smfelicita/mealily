@@ -49,7 +49,7 @@ function MiniTopBar({ canClear, onClear }) {
     <div className="shrink-0 flex items-center justify-between h-11 px-4 border-b border-border bg-bg-2">
       <div className="flex items-center gap-1.5 text-text">
         <Sparkles size={15} strokeWidth={2.2} className="text-accent" />
-        <span className="text-[15px] font-bold">{t('topBar.title')}</span>
+        <span className="text-md2 font-bold">{t('topBar.title')}</span>
       </div>
       {canClear && (
         <button
@@ -83,7 +83,7 @@ function InlineDishCard({ dish, onClick }) {
       </div>
       <div className="flex-1 min-w-0">
         <div
-          className="text-[13px] font-semibold leading-snug text-text"
+          className="text-sm2 font-semibold leading-snug text-text"
           style={{
             display: '-webkit-box',
             WebkitLineClamp: 2,
@@ -93,7 +93,7 @@ function InlineDishCard({ dish, onClick }) {
         >
           {dish.name}
         </div>
-        <div className="flex items-center gap-2 mt-0.5 text-[11px] text-text-3">
+        <div className="flex items-center gap-2 mt-0.5 text-2xs text-text-3">
           {cookTime != null && (
             <span className="inline-flex items-center gap-0.5 tabular-nums">
               <Clock size={10} strokeWidth={2.2} />
@@ -117,7 +117,7 @@ function InlineDishCard({ dish, onClick }) {
 function UserBubble({ children }) {
   return (
     <div className="self-end max-w-[85%] rounded-2xl rounded-br-md px-3.5 py-2.5
-      bg-accent text-white text-[14px] leading-relaxed"
+      bg-accent text-white text-sm leading-relaxed"
       style={{ textWrap: 'pretty' }}
     >
       {children}
@@ -128,7 +128,7 @@ function UserBubble({ children }) {
 function AssistantBubble({ msg, onDishClick }) {
   return (
     <div className="self-start max-w-[90%] rounded-2xl rounded-bl-md px-3.5 py-2.5
-      bg-bg-2 border border-border text-text text-[14px] leading-relaxed"
+      bg-bg-2 border border-border text-text text-sm leading-relaxed"
       style={{ textWrap: 'pretty' }}
     >
       <span dangerouslySetInnerHTML={{ __html: cleanAndFormat(msg.content) }} />
@@ -169,7 +169,7 @@ function SuggestionCard({ text, onClick }) {
         flex items-center justify-between gap-2 text-left
         active:bg-bg-3 transition-colors"
     >
-      <span className="text-[14px] text-text-2 flex-1" style={{ textWrap: 'pretty' }}>
+      <span className="text-sm text-text-2 flex-1" style={{ textWrap: 'pretty' }}>
         {text}
       </span>
       <ChevronRight size={16} strokeWidth={2} className="text-text-3 shrink-0" />
@@ -189,13 +189,13 @@ function EmptyWelcome({ onSuggest }) {
           <Sparkles size={28} strokeWidth={2} className="text-accent" />
         </div>
         <h2
-          className="text-[19px] font-extrabold tracking-tight text-text mb-1.5"
+          className="text-xl2 font-extrabold tracking-tight text-text mb-1.5"
           style={{ textWrap: 'balance' }}
         >
           {t('welcome.title')}
         </h2>
         <p
-          className="text-[14px] text-text-2 leading-relaxed max-w-[280px] mx-auto"
+          className="text-sm text-text-2 leading-relaxed max-w-[280px] mx-auto"
           style={{ textWrap: 'pretty' }}
         >
           {t('welcome.desc')}
@@ -222,13 +222,13 @@ function GuestBlock({ onRegister, onLogin }) {
           <Sparkles size={32} strokeWidth={2} className="text-accent" />
         </div>
         <h2
-          className="text-[17px] font-bold tracking-tight text-text mb-2"
+          className="text-lg2 font-bold tracking-tight text-text mb-2"
           style={{ textWrap: 'balance' }}
         >
           {t('guest.title')}
         </h2>
         <p
-          className="text-[14px] text-text-2 leading-relaxed mb-5"
+          className="text-sm text-text-2 leading-relaxed mb-5"
           style={{ textWrap: 'pretty' }}
         >
           {t('guest.desc')}
@@ -236,7 +236,7 @@ function GuestBlock({ onRegister, onLogin }) {
         <button
           type="button"
           onClick={onRegister}
-          className="w-full h-12 rounded-full bg-accent text-white text-[14px] font-bold mb-2"
+          className="w-full h-12 rounded-full bg-accent text-white text-sm font-bold mb-2"
           style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
         >
           {t('guest.register')}
@@ -244,7 +244,7 @@ function GuestBlock({ onRegister, onLogin }) {
         <button
           type="button"
           onClick={onLogin}
-          className="w-full h-10 text-[13px] font-bold text-text-2"
+          className="w-full h-10 text-sm2 font-bold text-text-2"
         >
           {t('guest.login')}
         </button>
@@ -269,7 +269,7 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
       <div className="shrink-0 px-3 py-3 border-t border-border bg-bg-2">
         <div className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-bg-3 border border-border">
           <Lock size={15} strokeWidth={2} className="text-text-3 shrink-0" />
-          <span className="text-[13px] text-text-2 leading-snug" style={{ textWrap: 'pretty' }}>
+          <span className="text-sm2 text-text-2 leading-snug" style={{ textWrap: 'pretty' }}>
             {t('limit.reached')}
           </span>
         </div>

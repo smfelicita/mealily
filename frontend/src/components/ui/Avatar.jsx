@@ -4,10 +4,10 @@
 // Sizes: sm (26px), md (32px), lg (40px), xl (56px).
 
 const sizes = {
-  sm: { box: 'w-[26px] h-[26px]', text: 'text-[11px]' },
-  md: { box: 'w-8 h-8',            text: 'text-[13px]' },
-  lg: { box: 'w-10 h-10',          text: 'text-[15px]' },
-  xl: { box: 'w-14 h-14',          text: 'text-[22px]' },
+  sm: { box: 'w-[26px] h-[26px]', text: 'text-2xs' },
+  md: { box: 'w-8 h-8',            text: 'text-sm2' },
+  lg: { box: 'w-10 h-10',          text: 'text-md2' },
+  xl: { box: 'w-14 h-14',          text: 'text-2xl2' },
 }
 
 export default function Avatar({

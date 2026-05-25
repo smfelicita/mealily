@@ -94,19 +94,19 @@ function GroupHero({ group, dishesCount }) {
       </div>
 
       <h1
-        className="mt-2 text-[24px] font-extrabold tracking-tight leading-tight text-text"
+        className="mt-2 text-2xl font-extrabold tracking-tight leading-tight text-text"
         style={{ textWrap: 'balance' }}
       >
         {group.name}
       </h1>
 
       {group.description && (
-        <p className="mt-1 text-[13px] text-text-2" style={{ textWrap: 'pretty' }}>
+        <p className="mt-1 text-sm2 text-text-2" style={{ textWrap: 'pretty' }}>
           {group.description}
         </p>
       )}
 
-      <p className="mt-1 text-[13px] text-text-2">
+      <p className="mt-1 text-sm2 text-text-2">
         {memberCount} {t('member', { count: memberCount })} · {isFamily ? t('detail.familyFridge') : t('detail.regularCatalog')}
       </p>
 
@@ -127,7 +127,7 @@ function HeroMetric({ label, value }) {
       >
         {label}
       </div>
-      <div className="text-[18px] font-extrabold tabular-nums leading-none mt-1 text-text">
+      <div className="text-lg font-extrabold tabular-nums leading-none mt-1 text-text">
         {value}
       </div>
     </div>
@@ -147,7 +147,7 @@ function MemberRow({ member, isMe, ownerView, onKick }) {
         <div className="text-[14.5px] font-semibold leading-tight text-text truncate">
           {member.name}
         </div>
-        <div className="text-[11px] mt-0.5 text-text-3">
+        <div className="text-2xs mt-0.5 text-text-3">
           {owner ? t('detail.ownerRole') : t('detail.memberRole')}
           {member.joinedAt && ` · ${t('detail.joinedSince', { date: fmtMonth(member.joinedAt, i18n.language) })}`}
         </div>
@@ -219,7 +219,7 @@ function PendingRow({ invite, canRevoke, onRevoke }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-[13.5px] font-semibold truncate text-text-2">{invite.email}</div>
-        <div className="text-[11px] mt-0.5 text-text-3">
+        <div className="text-2xs mt-0.5 text-text-3">
           {t('detail.inviteSentAt', { time: relativeShort(invite.invitedAt, t, i18n.language) })}
         </div>
       </div>
@@ -283,7 +283,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
   return (
     <div className="rounded-2xl bg-bg-2 border border-border p-4 flex flex-col gap-4">
       <div>
-        <div className="text-[14px] font-bold text-text">{t('detail.inviteTitle')}</div>
+        <div className="text-sm font-bold text-text">{t('detail.inviteTitle')}</div>
         <div className="text-[12px] mt-0.5 text-text-3" style={{ textWrap: 'pretty' }}>
           {isFamily ? t('detail.inviteFamilyOnly') : t('detail.inviteEmailHint')}
         </div>
@@ -301,7 +301,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
           <div
             className="flex items-center pl-4 pr-1 py-1 rounded-full bg-bg-3 border border-border relative"
           >
-            <div className="flex-1 text-[14px] font-mono tracking-wide text-text-2 truncate">
+            <div className="flex-1 text-sm font-mono tracking-wide text-text-2 truncate">
               {group.joinCode}
             </div>
             <button
@@ -363,7 +363,7 @@ function InviteBlock({ group, isOwner, onInviteEmail, onCopyCode, onRegenCode })
             <button
               type="submit"
               disabled={sending}
-              className="h-10 px-4 rounded-full bg-accent text-white text-[13px] font-bold disabled:opacity-60"
+              className="h-10 px-4 rounded-full bg-accent text-white text-sm2 font-bold disabled:opacity-60"
             >
               {sending ? '...' : t('detail.sendBtn')}
             </button>
@@ -389,7 +389,7 @@ function DangerZone({ isOwner, onLeave, onDelete }) {
         <button
           type="button"
           onClick={onDelete}
-          className="h-10 rounded-full text-[13px] font-bold flex items-center gap-2 px-1 text-red-500"
+          className="h-10 rounded-full text-sm2 font-bold flex items-center gap-2 px-1 text-red-500"
         >
           <Trash2 size={14} strokeWidth={2.2} />
           {t('detail.deleteGroup')}
@@ -398,7 +398,7 @@ function DangerZone({ isOwner, onLeave, onDelete }) {
         <button
           type="button"
           onClick={onLeave}
-          className="h-10 rounded-full text-[13px] font-bold flex items-center gap-2 px-1 text-red-500"
+          className="h-10 rounded-full text-sm2 font-bold flex items-center gap-2 px-1 text-red-500"
         >
           <LogOut size={14} strokeWidth={2.2} />
           {t('detail.leaveGroup')}
@@ -412,7 +412,7 @@ function DangerZone({ isOwner, onLeave, onDelete }) {
 function SectionTitleRow({ title, count, action }) {
   return (
     <div className="flex items-center justify-between mb-3">
-      <div className="text-[15px] font-bold text-text">
+      <div className="text-md2 font-bold text-text">
         {title}
         {count != null && (
           <span className="tabular-nums text-text-3 font-semibold"> · {count}</span>
@@ -527,7 +527,7 @@ export default function GroupDetailPage() {
                   onClick={() => {
                     document.getElementById('invite-block')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
                   }}
-                  className="text-[13px] font-bold text-accent flex items-center gap-1"
+                  className="text-sm2 font-bold text-accent flex items-center gap-1"
                 >
                   <UserPlus size={14} strokeWidth={2.2} />
                   {t('detail.inviteLink')}
@@ -580,7 +580,7 @@ export default function GroupDetailPage() {
                   onClick={() => navigate('/dishes/new', {
                     state: { groupId: id, groupName: group.name, groupType: group.type },
                   })}
-                  className="text-[13px] font-bold text-accent flex items-center gap-1"
+                  className="text-sm2 font-bold text-accent flex items-center gap-1"
                 >
                   <ChefHat size={14} strokeWidth={2.2} />
                   {t('detail.addDish')}

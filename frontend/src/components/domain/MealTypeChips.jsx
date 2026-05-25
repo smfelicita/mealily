@@ -32,7 +32,7 @@ export default function MealTypeChips({ active, onChange, multi = false, showAll
             type="button"
             onClick={() => handleClick(mt.value)}
             className={[
-              'shrink-0 px-4 py-1.5 rounded-xl text-[13px] font-medium transition-all',
+              'shrink-0 px-4 py-1.5 rounded-xl text-sm2 font-medium transition-all',
               'focus:outline-none whitespace-nowrap border',
               isActive
                 ? 'bg-sage text-white border-transparent'

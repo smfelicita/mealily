@@ -26,7 +26,7 @@ export default function BulkAddModal({ onClose, onDone }) {
 
   return (
     <Modal onClose={onClose} title="Добавить несколько блюд">
-      <p className="text-[13px] text-text-2 -mt-2 mb-4">
+      <p className="text-sm2 text-text-2 -mt-2 mb-4">
         Введите названия через запятую
       </p>
 
@@ -36,17 +36,17 @@ export default function BulkAddModal({ onClose, onDone }) {
         onChange={e => setValue(e.target.value)}
         placeholder="Блины, борщ, паста, омлет…"
         rows={4}
-        className="w-full rounded-2xl border border-border px-4 py-3 text-[15px] resize-none
+        className="w-full rounded-2xl border border-border px-4 py-3 text-md2 resize-none
           focus:outline-none focus:border-accent transition-colors"
       />
 
-      {error && <p className="text-red-500 text-[13px] mt-1">{error}</p>}
+      {error && <p className="text-red-500 text-sm2 mt-1">{error}</p>}
 
       <button
         type="button"
         onClick={handleSubmit}
         disabled={saving}
-        className="mt-4 w-full rounded-2xl py-3.5 text-[15px] font-semibold text-white
+        className="mt-4 w-full rounded-2xl py-3.5 text-md2 font-semibold text-white
           transition-opacity disabled:opacity-50 bg-accent"
       >
         {saving ? 'Добавляю…' : 'Добавить'}

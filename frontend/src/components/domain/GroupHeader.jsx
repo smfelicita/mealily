@@ -6,7 +6,7 @@ export default function GroupHeader({ group, isOwner, tab, onTabChange, onBack, 
       {/* Nav row */}
       <div className="flex items-center gap-2 px-4 pt-3.5 pb-3">
         <Button variant="ghost" size="icon" onClick={onBack}>←</Button>
-        <span className="text-[13px] text-text-2">Назад</span>
+        <span className="text-sm2 text-text-2">Назад</span>
         <div className="flex-1" />
         {isOwner ? (
           <div className="flex gap-2">
@@ -33,7 +33,7 @@ export default function GroupHeader({ group, isOwner, tab, onTabChange, onBack, 
             )}
           </div>
           {group.description && (
-            <p className="text-[13px] text-text-2 leading-snug">{group.description}</p>
+            <p className="text-sm2 text-text-2 leading-snug">{group.description}</p>
           )}
           <div className="flex gap-3 mt-2 text-xs text-text-3 flex-wrap">
             <span>👤 {group.members.length}{group.type === 'FAMILY' ? '/10' : ''} участников</span>
@@ -79,7 +79,7 @@ export default function GroupHeader({ group, isOwner, tab, onTabChange, onBack, 
             type="button"
             onClick={() => onTabChange(key)}
             className={[
-              'flex-1 py-2.5 text-[13px] font-bold transition-colors',
+              'flex-1 py-2.5 text-sm2 font-bold transition-colors',
               tab === key
                 ? 'text-accent border-b-2 border-accent'
                 : 'text-text-2 border-b-2 border-transparent hover:text-text',

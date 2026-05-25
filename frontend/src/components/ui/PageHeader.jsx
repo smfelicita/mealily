@@ -11,11 +11,11 @@ export default function PageHeader({
   return (
     <div className={['px-5 pt-4 pb-2', className].join(' ')}>
       {subtitle && (
-        <div className="text-[13px] text-text-2 mb-1">{subtitle}</div>
+        <div className="text-sm2 text-text-2 mb-1">{subtitle}</div>
       )}
       <div className="flex items-end justify-between gap-3">
         <h1
-          className="text-[26px] font-extrabold leading-tight tracking-tight text-text"
+          className="text-3xl2 font-extrabold leading-tight tracking-tight text-text"
           style={{ textWrap: 'balance' }}
         >
           {title}

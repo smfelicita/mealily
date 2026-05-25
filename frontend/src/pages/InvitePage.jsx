@@ -43,14 +43,14 @@ export default function InvitePage() {
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-4 py-10 bg-bg fade-in">
       <div className="text-[40px] mb-1">🍽️</div>
-      <h1 className="font-serif text-[26px] font-extrabold mb-8">MealBot</h1>
+      <h1 className="font-serif text-3xl2 font-extrabold mb-8">MealBot</h1>
 
       <div className="w-full max-w-[360px] bg-bg-2 border border-border rounded-DEFAULT p-6 fade-up">
         {error ? (
           <>
             <p className="text-[32px] text-center mb-3">❌</p>
             <h2 className="font-serif text-xl font-extrabold mb-2 text-center">{t('invitePage.invalidTitle')}</h2>
-            <p className="text-[13px] text-text-2 text-center mb-5">{error}</p>
+            <p className="text-sm2 text-text-2 text-center mb-5">{error}</p>
             <Button className="w-full" onClick={() => navigate('/')}>{t('invitePage.toHome')}</Button>
           </>
         ) : (
@@ -64,10 +64,10 @@ export default function InvitePage() {
             {invite.groupType === 'FAMILY' && (
               <p className="text-xs text-accent text-center mb-1">{t('invitePage.familyBadge')}</p>
             )}
-            <p className="text-[13px] text-text-2 text-center mb-1">
+            <p className="text-sm2 text-text-2 text-center mb-1">
               {invite.membersCount} {t('member', { count: invite.membersCount })}
             </p>
-            <p className="text-[13px] text-text-2 text-center mb-5">
+            <p className="text-sm2 text-text-2 text-center mb-5">
               {t('invitePage.invitedBy', { name: invite.invitedBy })}
             </p>
 

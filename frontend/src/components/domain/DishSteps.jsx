@@ -65,8 +65,8 @@ export default function DishSteps({ recipe }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[17px] font-semibold text-text">Приготовление</h2>
-        <button type="button" onClick={() => setVisible(v => !v)} className="text-[13px] text-text-3 focus:outline-none">
+        <h2 className="text-lg2 font-semibold text-text">Приготовление</h2>
+        <button type="button" onClick={() => setVisible(v => !v)} className="text-sm2 text-text-3 focus:outline-none">
           {visible ? 'Скрыть' : 'Показать'}
         </button>
       </div>
@@ -81,7 +81,7 @@ export default function DishSteps({ recipe }) {
                       <span className="shrink-0 w-6 h-6 rounded-full bg-accent/15 text-accent text-xs font-bold flex items-center justify-center mt-0.5">
                         {item.num}
                       </span>
-                      <span className="text-[15px] text-text leading-snug flex-1">
+                      <span className="text-md2 text-text leading-snug flex-1">
                         {renderInline(item.text)}
                       </span>
                     </li>
@@ -94,7 +94,7 @@ export default function DishSteps({ recipe }) {
               return (
                 <ul key={idx} className="flex flex-col gap-2">
                   {node.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-2 text-[15px] text-text leading-snug">
+                    <li key={j} className="flex items-start gap-2 text-md2 text-text leading-snug">
                       <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-text-3 mt-2" />
                       <span>{renderInline(item)}</span>
                     </li>
@@ -105,14 +105,14 @@ export default function DishSteps({ recipe }) {
 
             if (node.type === 'h2') {
               return (
-                <h2 key={idx} className="text-[15px] font-semibold text-text mt-1">
+                <h2 key={idx} className="text-md2 font-semibold text-text mt-1">
                   {renderInline(node.text)}
                 </h2>
               )
             }
 
             return (
-              <p key={idx} className="text-[15px] text-text-2 leading-snug">
+              <p key={idx} className="text-md2 text-text-2 leading-snug">
                 {renderInline(node.text)}
               </p>
             )

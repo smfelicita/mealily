@@ -81,7 +81,7 @@ function SearchInput({ value, onChange }) {
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         placeholder={t('list.searchPlaceholder')}
-        className="flex-1 bg-transparent outline-none text-[14px] text-text"
+        className="flex-1 bg-transparent outline-none text-sm text-text"
       />
       {value && (
         <button
@@ -111,7 +111,7 @@ function MealTypeChips({ active, onChange }) {
               type="button"
               onClick={() => onChange(mt.id)}
               className={[
-                'h-9 px-3.5 rounded-full text-[13px] font-bold whitespace-nowrap shrink-0 border',
+                'h-9 px-3.5 rounded-full text-sm2 font-bold whitespace-nowrap shrink-0 border',
                 on
                   ? 'bg-accent-muted border-accent-border text-accent'
                   : 'bg-bg-2 border-border text-text-2',
@@ -195,7 +195,7 @@ function HintBanner({ onClose, onClick }) {
   return (
     <div className="rounded-xl flex items-center gap-2 relative bg-bg-2 px-3.5 py-2.5"
       style={{ border: '1px dashed rgba(196,112,74,0.25)' }}>
-      <span className="text-[16px]">✨</span>
+      <span className="text-base">✨</span>
       <button
         type="button"
         onClick={onClick}
@@ -378,8 +378,8 @@ function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDi
         <div className="w-14 h-14 rounded-full flex items-center justify-center bg-bg-3 border border-border text-accent">
           <Flame size={24} strokeWidth={1.8} />
         </div>
-        <div className="mt-4 text-[16px] font-bold text-text">{t('empty.ownTitle')}</div>
-        <p className="mt-1 text-[13px] max-w-[280px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
+        <div className="mt-4 text-base font-bold text-text">{t('empty.ownTitle')}</div>
+        <p className="mt-1 text-sm2 max-w-[280px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
           {t('empty.ownBody')}
         </p>
         <button
@@ -400,8 +400,8 @@ function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDi
         <div className="w-14 h-14 rounded-full flex items-center justify-center bg-bg-3 border border-border text-accent">
           <Heart size={22} strokeWidth={1.8} />
         </div>
-        <div className="mt-4 text-[16px] font-bold text-text">{t('empty.guestTitle')}</div>
-        <p className="mt-1 text-[13px] max-w-[280px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
+        <div className="mt-4 text-base font-bold text-text">{t('empty.guestTitle')}</div>
+        <p className="mt-1 text-sm2 max-w-[280px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
           {t('empty.guestBody')}
         </p>
         <button
@@ -415,7 +415,7 @@ function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDi
         <button
           type="button"
           onClick={onLogin}
-          className="mt-2 text-[13px] text-text-3"
+          className="mt-2 text-sm2 text-text-3"
         >
           {t('empty.guestLogin')}
         </button>
@@ -428,14 +428,14 @@ function EmptyState({ onReset, hasFilters, isGuest, onRegister, onLogin, onAddDi
       <div className="w-14 h-14 rounded-full flex items-center justify-center bg-bg-3 border border-border text-text-3">
         <Search size={22} strokeWidth={2} />
       </div>
-      <div className="mt-4 text-[15px] font-bold text-text">{t('empty.filteredTitle')}</div>
-      <p className="mt-1 text-[13px] max-w-[260px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
+      <div className="mt-4 text-md2 font-bold text-text">{t('empty.filteredTitle')}</div>
+      <p className="mt-1 text-sm2 max-w-[260px] text-text-2 leading-relaxed" style={{ textWrap: 'pretty' }}>
         {t('empty.filteredBody')}
       </p>
       <button
         type="button"
         onClick={onReset}
-        className="mt-3 h-10 px-4 rounded-full text-[13px] font-bold text-accent"
+        className="mt-3 h-10 px-4 rounded-full text-sm2 font-bold text-accent"
       >
         {t('empty.filteredReset')}
       </button>
@@ -489,8 +489,8 @@ function FilterSheet({
         </div>
 
         <div className="flex items-center justify-between">
-          <h2 className="text-[17px] font-bold text-text">{t('filters.title')}</h2>
-          <button type="button" onClick={reset} className="text-[13px] font-bold text-accent">
+          <h2 className="text-lg2 font-bold text-text">{t('filters.title')}</h2>
+          <button type="button" onClick={reset} className="text-sm2 font-bold text-accent">
             {t('filters.reset')}
           </button>
         </div>
@@ -551,7 +551,7 @@ function FilterSheet({
                   type="button"
                   onClick={() => setDifficulty(on ? null : d.id)}
                   className={[
-                    'flex-1 h-9 rounded-full text-[13px] font-bold transition-colors',
+                    'flex-1 h-9 rounded-full text-sm2 font-bold transition-colors',
                     on ? 'bg-accent text-white' : 'bg-transparent text-text-2',
                   ].join(' ')}
                 >
@@ -565,7 +565,7 @@ function FilterSheet({
         <button
           type="button"
           onClick={onClose}
-          className="mt-7 w-full h-12 rounded-full bg-accent text-white text-[14px] font-bold flex items-center justify-center gap-2"
+          className="mt-7 w-full h-12 rounded-full bg-accent text-white text-sm font-bold flex items-center justify-center gap-2"
           style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
         >
           {countLabel}

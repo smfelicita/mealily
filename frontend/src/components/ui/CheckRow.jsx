@@ -72,7 +72,7 @@ export default function CheckRow({
       <span className="flex-1 min-w-0">
         <span
           className={[
-            'block text-[14px] leading-tight',
+            'block text-sm leading-tight',
             checked ? 'text-text font-semibold' : 'text-text',
           ].join(' ')}
         >

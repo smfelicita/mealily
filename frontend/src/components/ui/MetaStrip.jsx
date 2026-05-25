@@ -40,10 +40,10 @@ function MetaCell({ item }) {
           {icon}
         </div>
       )}
-      <div className="text-[17px] font-extrabold tabular-nums text-text leading-none">
+      <div className="text-lg2 font-extrabold tabular-nums text-text leading-none">
         {value}
         {unit && (
-          <span className="text-[11px] font-semibold text-text-3 ml-0.5">
+          <span className="text-2xs font-semibold text-text-3 ml-0.5">
             {unit}
           </span>
         )}

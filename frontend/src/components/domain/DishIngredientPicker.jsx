@@ -89,7 +89,7 @@ export default function DishIngredientPicker({
 
         {/* header */}
         <div className="flex items-center justify-between shrink-0 mb-4">
-          <h2 className="text-[17px] font-bold text-text">Добавить ингредиент</h2>
+          <h2 className="text-lg2 font-bold text-text">Добавить ингредиент</h2>
           <button
             type="button"
             onClick={onClose}
@@ -108,7 +108,7 @@ export default function DishIngredientPicker({
               value={query}
               onChange={e => setQuery(e.target.value)}
               placeholder="Поиск ингредиента…"
-              className="flex-1 bg-transparent outline-none text-[14px] text-text"
+              className="flex-1 bg-transparent outline-none text-sm text-text"
             />
             {query && (
               <button
@@ -134,7 +134,7 @@ export default function DishIngredientPicker({
                   type="button"
                   onClick={() => setCat(c.value)}
                   className={[
-                    'h-9 px-3.5 rounded-full text-[13px] font-bold whitespace-nowrap shrink-0 border',
+                    'h-9 px-3.5 rounded-full text-sm2 font-bold whitespace-nowrap shrink-0 border',
                     on
                       ? 'bg-accent-muted border-accent-border text-accent'
                       : 'bg-bg-2 border-border text-text-2',
@@ -159,7 +159,7 @@ export default function DishIngredientPicker({
             />
           ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center text-center py-8">
-              <div className="text-[13px] mb-3 text-text-3">
+              <div className="text-sm2 mb-3 text-text-3">
                 {query ? `Не найдено «${query}»` : 'Ничего не найдено'}
               </div>
               <button
@@ -169,7 +169,7 @@ export default function DishIngredientPicker({
                   setNewIng({ nameRu: query, category: '' })
                 }}
                 className="h-10 px-4 rounded-full bg-accent-muted text-accent border border-accent-border
-                  text-[13px] font-bold flex items-center gap-1.5"
+                  text-sm2 font-bold flex items-center gap-1.5"
               >
                 <Plus size={14} strokeWidth={2.4} />
                 Создать «{query || 'свой ингредиент'}»
@@ -186,8 +186,8 @@ export default function DishIngredientPicker({
                     className="rounded-xl bg-bg-2 border border-border p-2.5 flex items-center gap-2 text-left
                       active:bg-accent-muted active:border-accent-border transition-colors"
                   >
-                    {ing.emoji && <span className="text-[16px] shrink-0">{ing.emoji}</span>}
-                    <span className="text-[13px] font-semibold flex-1 truncate text-text">
+                    {ing.emoji && <span className="text-base shrink-0">{ing.emoji}</span>}
+                    <span className="text-sm2 font-semibold flex-1 truncate text-text">
                       {ing.nameRu}
                     </span>
                     {!ing.isPublic && (
@@ -200,7 +200,7 @@ export default function DishIngredientPicker({
                 type="button"
                 onClick={() => { setShowCustom(true); setNewIng({ nameRu: '', category: '' }) }}
                 className="w-full mt-3 h-10 rounded-full bg-bg-2 border border-border
-                  flex items-center justify-center gap-1.5 text-[13px] font-bold text-accent"
+                  flex items-center justify-center gap-1.5 text-sm2 font-bold text-accent"
               >
                 <Plus size={14} strokeWidth={2.4} />
                 Нет нужного? Добавить свой
@@ -214,7 +214,7 @@ export default function DishIngredientPicker({
           <button
             type="button"
             onClick={onClose}
-            className="w-full h-12 rounded-full bg-accent text-white text-[14px] font-bold"
+            className="w-full h-12 rounded-full bg-accent text-white text-sm font-bold"
             style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
           >
             Готово
@@ -261,7 +261,7 @@ function CustomIngredientForm({ value, onChange, adding, onSubmit, onCancel }) {
           type="button"
           onClick={onSubmit}
           disabled={adding}
-          className="flex-1 h-11 rounded-full bg-accent text-white text-[14px] font-bold
+          className="flex-1 h-11 rounded-full bg-accent text-white text-sm font-bold
             flex items-center justify-center gap-1.5 disabled:opacity-60"
         >
           {adding ? '...' : (
@@ -274,7 +274,7 @@ function CustomIngredientForm({ value, onChange, adding, onSubmit, onCancel }) {
         <button
           type="button"
           onClick={onCancel}
-          className="h-11 px-4 rounded-full bg-bg-2 border border-border text-text-2 text-[13px] font-bold"
+          className="h-11 px-4 rounded-full bg-bg-2 border border-border text-text-2 text-sm2 font-bold"
         >
           Отмена
         </button>

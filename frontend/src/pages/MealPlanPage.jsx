@@ -84,7 +84,7 @@ function FilterChips({ active, onChange, counts }) {
               type="button"
               onClick={() => onChange(chip.id)}
               className={[
-                'h-9 px-3.5 rounded-full text-[13px] font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0 border',
+                'h-9 px-3.5 rounded-full text-sm2 font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0 border',
                 on
                   ? 'bg-accent-muted border-accent-border text-accent'
                   : 'bg-bg-2 border-border text-text-2',
@@ -123,7 +123,7 @@ function MetaStrip({ today, week, total, sageTotal }) {
       </div>
       <div
         className={[
-          'text-[18px] font-extrabold tabular-nums leading-none mt-1',
+          'text-lg font-extrabold tabular-nums leading-none mt-1',
           sage ? 'text-sage' : 'text-text',
         ].join(' ')}
       >
@@ -166,7 +166,7 @@ function MealSubLabel({ mealType, accent = false }) {
   return (
     <div className="flex items-center gap-2 mb-2">
       <Icon size={14} strokeWidth={2.2} className={accent ? 'text-accent' : 'text-text'} />
-      <span className={['text-[13px] font-bold', accent ? 'text-accent' : 'text-text'].join(' ')}>
+      <span className={['text-sm2 font-bold', accent ? 'text-accent' : 'text-text'].join(' ')}>
         {label}
       </span>
     </div>
@@ -217,19 +217,19 @@ function PlanRow({ plan, currentUserId, onOpen, onRemove, accent = false }) {
         </div>
         <div className="flex items-center gap-3 mt-1 text-text-3">
           {dish?.cookTime != null && (
-            <span className="inline-flex items-center gap-1 text-[11px] tabular-nums">
+            <span className="inline-flex items-center gap-1 text-2xs tabular-nums">
               <Clock size={10} strokeWidth={2.2} />
               {dish.cookTime} мин
             </span>
           )}
           {dish?.calories != null && (
-            <span className="inline-flex items-center gap-1 text-[11px] tabular-nums">
+            <span className="inline-flex items-center gap-1 text-2xs tabular-nums">
               <Flame size={10} strokeWidth={2.2} />
               {dish.calories}
             </span>
           )}
           {plan.groupId && (
-            <span className="text-[11px] text-sage font-semibold">{t('plan.family')}</span>
+            <span className="text-2xs text-sage font-semibold">{t('plan.family')}</span>
           )}
         </div>
       </button>
@@ -262,7 +262,7 @@ function TodayPinned({ items, currentUserId, onOpen, onRemove }) {
     <section className="rounded-2xl bg-accent-muted border border-accent-border p-4">
       <div className="flex items-center gap-2">
         <Sparkles size={16} strokeWidth={2.2} className="text-accent" />
-        <h2 className="text-[15px] font-bold text-accent">
+        <h2 className="text-md2 font-bold text-accent">
           {t('today.heading', { date: dateStr })}
         </h2>
       </div>
@@ -312,7 +312,7 @@ function DayBlock({ date, items, currentUserId, onOpen, onRemove }) {
   return (
     <section>
       <div
-        className="text-[11px] font-bold uppercase tracking-wider pb-2 mb-3 text-text-2 border-b border-border"
+        className="text-2xs font-bold uppercase tracking-wider pb-2 mb-3 text-text-2 border-b border-border"
         style={{ letterSpacing: 0.8 }}
       >
         {label}
@@ -364,17 +364,17 @@ function EmptyState({ Icon, title, body, primary, onPrimary, secondary, onSecond
       <div className="w-16 h-16 rounded-full flex items-center justify-center bg-bg-3 border border-border">
         <Icon size={26} strokeWidth={2} className="text-accent" />
       </div>
-      <h2 className="mt-4 text-[17px] font-bold text-text" style={{ textWrap: 'balance' }}>
+      <h2 className="mt-4 text-lg2 font-bold text-text" style={{ textWrap: 'balance' }}>
         {title}
       </h2>
-      <p className="mt-1 text-[14px] leading-relaxed max-w-[280px] text-text-2" style={{ textWrap: 'pretty' }}>
+      <p className="mt-1 text-sm leading-relaxed max-w-[280px] text-text-2" style={{ textWrap: 'pretty' }}>
         {body}
       </p>
       {primary && (
         <button
           type="button"
           onClick={onPrimary}
-          className="mt-6 h-12 px-6 rounded-full bg-accent text-white text-[14px] font-bold"
+          className="mt-6 h-12 px-6 rounded-full bg-accent text-white text-sm font-bold"
           style={{ boxShadow: '0 6px 18px rgba(196,112,74,0.35)' }}
         >
           {primary}
@@ -384,7 +384,7 @@ function EmptyState({ Icon, title, body, primary, onPrimary, secondary, onSecond
         <button
           type="button"
           onClick={onSecondary}
-          className="mt-2 h-10 px-4 rounded-full text-[13px] font-bold text-text-2"
+          className="mt-2 h-10 px-4 rounded-full text-sm2 font-bold text-text-2"
         >
           {secondary}
         </button>
@@ -541,7 +541,7 @@ export default function MealPlanPage() {
             )}
 
             {todayItems.length === 0 && futureByDate.length === 0 && (
-              <div className="mt-10 text-center text-[13px] text-text-3">
+              <div className="mt-10 text-center text-sm2 text-text-3">
                 {t('filterEmpty')}
               </div>
             )}

@@ -124,11 +124,11 @@ function FamilyBanner({ count }) {
     <div className="mx-4 mt-3 rounded-xl flex items-center gap-2
       bg-sage-muted border border-sage-border px-3.5 py-2.5">
       <Users size={15} strokeWidth={2.2} className="text-sage" />
-      <div className="text-[13px] font-semibold flex-1 text-sage">
+      <div className="text-sm2 font-semibold flex-1 text-sage">
         {t('family.title')}
       </div>
       {count != null && (
-        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full
+        <span className="text-2xs font-bold px-2 py-0.5 rounded-full
           bg-bg-2 text-sage border border-sage-border">
           {t('family.memberCount', { count })}
         </span>
@@ -150,7 +150,7 @@ function FridgeMetaStrip({ total, basic }) {
       {items.map((it, i) => (
         <div key={i} className="flex-1 flex items-stretch">
           <div className="flex-1 flex flex-col items-center gap-0.5 px-1">
-            <div className="text-[17px] font-extrabold tabular-nums tracking-tight text-text">
+            <div className="text-lg2 font-extrabold tabular-nums tracking-tight text-text">
               {it.value}
             </div>
             <div className="text-[10.5px] font-semibold uppercase tracking-wide text-text-3">
@@ -173,7 +173,7 @@ function AICookCTA({ onClick }) {
         type="button"
         onClick={onClick}
         className="w-full h-12 rounded-full flex items-center justify-center gap-2
-          bg-sage text-white text-[14px] font-bold"
+          bg-sage text-white text-sm font-bold"
         style={{ boxShadow: '0 6px 18px rgba(92,122,89,0.35)' }}
       >
         <Sparkles size={16} strokeWidth={2.2} />
@@ -203,13 +203,13 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
       item.isBasic ? 'border-accent-border' : 'border-border',
     ].join(' ')}>
       <div className="flex items-start gap-2">
-        <div className="text-[20px] leading-none select-none shrink-0 mt-0.5">
+        <div className="text-xl leading-none select-none shrink-0 mt-0.5">
           {item.emoji || '📦'}
         </div>
         <button
           type="button"
           onClick={onEdit}
-          className="text-[13px] font-semibold flex-1 min-w-0 text-left truncate text-text"
+          className="text-sm2 font-semibold flex-1 min-w-0 text-left truncate text-text"
           title={item.name}
         >
           {item.name}
@@ -232,7 +232,7 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
           </span>
         )}
         {item.quantityValue != null && !editing && (
-          <span className="text-[11px] tabular-nums text-text-3">
+          <span className="text-2xs tabular-nums text-text-3">
             {item.quantityValue} {item.quantityUnit}
           </span>
         )}
@@ -291,8 +291,8 @@ function CategoryBlock({ cat, items, editingId, setEditingId, onDelete, onSave }
   const label = t(`ingCategory.${labelKey}`, { defaultValue: t('ingCategory.other') })
   return (
     <section className="mt-6 px-4">
-      <div className="text-[11px] font-bold uppercase tracking-wider mb-2.5 flex items-center gap-1.5 text-text-2">
-        <span className="text-[13px] leading-none">{emoji}</span>
+      <div className="text-2xs font-bold uppercase tracking-wider mb-2.5 flex items-center gap-1.5 text-text-2">
+        <span className="text-sm2 leading-none">{emoji}</span>
         <span>{label}</span>
         <span className="text-text-3">· {items.length}</span>
       </div>
@@ -384,7 +384,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
 
         {/* header */}
         <div className="flex items-center justify-between px-5 pt-2 pb-3 shrink-0">
-          <h2 className="text-[17px] font-bold text-text">{t('picker.title')}</h2>
+          <h2 className="text-lg2 font-bold text-text">{t('picker.title')}</h2>
           <button
             type="button"
             onClick={onClose}
@@ -422,11 +422,11 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
         <div className="flex-1 overflow-y-auto px-5 pb-4 min-h-0">
           {searchResults ? (
             <div className="flex flex-col gap-1">
-              <div className="text-[11px] font-bold uppercase tracking-wider mb-1 text-text-3">
+              <div className="text-2xs font-bold uppercase tracking-wider mb-1 text-text-3">
                 {t('picker.searchResultsLabel', { query })}
               </div>
               {searchResults.length === 0 && (
-                <div className="text-[13px] text-center py-8 text-text-3">
+                <div className="text-sm2 text-center py-8 text-text-3">
                   {t('picker.nothingFound')}
                 </div>
               )}
@@ -443,9 +443,9 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
                       on ? 'bg-accent-muted border-accent-border' : 'bg-bg-2 border-border',
                     ].join(' ')}
                   >
-                    <span className="text-[20px] leading-none">{it.emoji || '📦'}</span>
+                    <span className="text-xl leading-none">{it.emoji || '📦'}</span>
                     <span className="flex-1 text-[13.5px] font-semibold text-text">{it.nameRu}</span>
-                    <span className="text-[11px] text-text-3">
+                    <span className="text-2xs text-text-3">
                       {t(`common:ingCategory.${catKey}`, { defaultValue: '' })}
                     </span>
                     <div className={[
@@ -461,7 +461,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
           ) : (
             <div className="flex flex-col gap-4">
               {orderedCats.length === 0 && (
-                <div className="text-[13px] text-center py-8 text-text-3">
+                <div className="text-sm2 text-center py-8 text-text-3">
                   {t('picker.allInFridge')}
                 </div>
               )}
@@ -471,8 +471,8 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
                 const label = t(`common:ingCategory.${labelKey}`, { defaultValue: t('common:ingCategory.other') })
                 return (
                   <div key={cat}>
-                    <div className="text-[11px] font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5 text-text-2">
-                      <span className="text-[13px] leading-none">{emoji}</span>
+                    <div className="text-2xs font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5 text-text-2">
+                      <span className="text-sm2 leading-none">{emoji}</span>
                       {label}
                     </div>
                     <div className="flex flex-wrap gap-1.5">
@@ -490,7 +490,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
                                 : 'bg-bg-3 border-border text-text-2',
                             ].join(' ')}
                           >
-                            <span className="text-[13px] leading-none">{it.emoji || '📦'}</span>
+                            <span className="text-sm2 leading-none">{it.emoji || '📦'}</span>
                             {it.nameRu}
                             {on && <Check size={11} strokeWidth={3} className="text-accent" />}
                           </button>
@@ -511,7 +511,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
             disabled={count === 0 || loading}
             onClick={() => onAdd(Array.from(selected))}
             className={[
-              'w-full h-12 rounded-full text-[14px] font-bold flex items-center justify-center gap-2 transition',
+              'w-full h-12 rounded-full text-sm font-bold flex items-center justify-center gap-2 transition',
               count > 0
                 ? 'bg-accent text-white'
                 : 'bg-bg-3 text-text-3 border border-border',
@@ -540,8 +540,8 @@ function FridgeEmpty({ onAdd }) {
         bg-bg-3 border border-border">
         <Refrigerator size={28} strokeWidth={1.8} className="text-accent" />
       </div>
-      <h2 className="mt-4 text-[17px] font-bold text-text">{t('empty.title')}</h2>
-      <p className="mt-2 text-[13px] max-w-[280px] leading-relaxed text-text-2">
+      <h2 className="mt-4 text-lg2 font-bold text-text">{t('empty.title')}</h2>
+      <p className="mt-2 text-sm2 max-w-[280px] leading-relaxed text-text-2">
         {t('empty.description')}
       </p>
       <button

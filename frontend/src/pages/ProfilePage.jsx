@@ -54,7 +54,7 @@ function isPro(profile) {
 function SectionLabel({ children }) {
   return (
     <div
-      className="text-[11px] font-bold uppercase tracking-wider text-text-3 mb-2.5 px-1"
+      className="text-2xs font-bold uppercase tracking-wider text-text-3 mb-2.5 px-1"
       style={{ letterSpacing: 0.6 }}
     >
       {children}
@@ -90,7 +90,7 @@ function Hero({ profile }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <div
-            className="text-[18px] font-extrabold leading-tight text-text"
+            className="text-lg font-extrabold leading-tight text-text"
             style={{ textWrap: 'pretty' }}
           >
             {profile?.name || t('hero.noName')}
@@ -159,7 +159,7 @@ function TelegramRow({ profile, onConnect, tgLink, tgLoading, tgError }) {
       </div>
       {connected ? (
         <span
-          className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide
+          className="inline-flex items-center gap-1 text-2xs font-bold uppercase tracking-wide
             bg-sage-muted border border-sage-border text-sage rounded-full px-2.5 py-1 shrink-0"
           style={{ letterSpacing: 0.3 }}
         >
@@ -199,7 +199,7 @@ function SettingRow({ Icon, label, right, onClick }) {
       <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-accent-muted">
         <Icon size={16} strokeWidth={2} className="text-accent" />
       </div>
-      <div className="flex-1 text-[14px] font-semibold text-text">{label}</div>
+      <div className="flex-1 text-sm font-semibold text-text">{label}</div>
       <div className="flex items-center gap-1 shrink-0">{right}</div>
     </>
   )
@@ -232,7 +232,7 @@ function LanguagePicker({ current, onChange }) {
         onClick={() => setOpen(o => !o)}
         right={
           <>
-            <span className="text-[13px] text-text-3">
+            <span className="text-sm2 text-text-3">
               {t(`language.${cur.code}`)} {cur.flag}
             </span>
             <ChevronRight
@@ -266,7 +266,7 @@ function LanguagePicker({ current, onChange }) {
             )
           })}
           <div
-            className="px-4 py-2 text-[11px] text-text-3 border-t border-border"
+            className="px-4 py-2 text-2xs text-text-3 border-t border-border"
             style={{ background: 'var(--color-bg-3)' }}
           >
             {t('language.hint')}
@@ -289,7 +289,7 @@ function ActionRow({ Icon, label, onClick, danger = false }) {
       ].join(' ')}
     >
       <Icon size={18} strokeWidth={2} className={danger ? 'text-red-500' : 'text-text-2'} />
-      <span className="text-[14px] font-semibold">{label}</span>
+      <span className="text-sm font-semibold">{label}</span>
     </button>
   )
 }

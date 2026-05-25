@@ -100,12 +100,12 @@ function FormHeader({ title, canSave, saving, onBack, onSave }) {
       >
         <ChevronLeft size={20} strokeWidth={2} />
       </button>
-      <div className="text-[15px] font-bold truncate max-w-[220px] text-text">{title}</div>
+      <div className="text-md2 font-bold truncate max-w-[220px] text-text">{title}</div>
       <button
         type="button"
         onClick={onSave}
         disabled={!canSave || saving}
-        className={['h-9 px-4 rounded-full text-[13px] font-bold transition-opacity', canSave && !saving ? 'bg-accent text-white' : 'bg-accent text-white opacity-50'].join(' ')}
+        className={['h-9 px-4 rounded-full text-sm2 font-bold transition-opacity', canSave && !saving ? 'bg-accent text-white' : 'bg-accent text-white opacity-50'].join(' ')}
         style={canSave && !saving ? { boxShadow: '0 4px 12px rgba(196,112,74,0.30)' } : undefined}
       >
         {saving ? '...' : t('form.save')}
@@ -118,7 +118,7 @@ function FormHeader({ title, canSave, saving, onBack, onSave }) {
 function GroupBanner({ name }) {
   const { t } = useTranslation('dish')
   return (
-    <div className="rounded-xl bg-accent-muted border border-accent-border px-3 py-2.5 flex items-center gap-2 text-[13px] text-accent">
+    <div className="rounded-xl bg-accent-muted border border-accent-border px-3 py-2.5 flex items-center gap-2 text-sm2 text-accent">
       <Sparkles size={14} strokeWidth={2.2} />
       <span style={{ textWrap: 'pretty' }}>{t('form.groupBanner', { name })}</span>
     </div>
@@ -128,7 +128,7 @@ function GroupBanner({ name }) {
 function CopyBanner({ from }) {
   const { t } = useTranslation('dish')
   return (
-    <div className="rounded-xl bg-sage-muted border border-sage-border px-3 py-2.5 flex items-center gap-2 text-[13px] text-sage">
+    <div className="rounded-xl bg-sage-muted border border-sage-border px-3 py-2.5 flex items-center gap-2 text-sm2 text-sage">
       <Eye size={14} strokeWidth={2.2} />
       <span style={{ textWrap: 'pretty' }}>{t('form.copyBanner', { from })}</span>
     </div>
@@ -147,7 +147,7 @@ function ModeSwitcher({ mode, onChange }) {
             key={o.id}
             type="button"
             onClick={() => onChange(o.id)}
-            className={['flex-1 h-9 rounded-full text-[13px] font-bold transition-colors', on ? 'bg-accent text-white' : 'bg-transparent text-text-2'].join(' ')}
+            className={['flex-1 h-9 rounded-full text-sm2 font-bold transition-colors', on ? 'bg-accent text-white' : 'bg-transparent text-text-2'].join(' ')}
           >
             {o.label}
           </button>
@@ -164,7 +164,7 @@ function Chip({ active, onClick, children }) {
       type="button"
       onClick={onClick}
       className={[
-        'h-9 px-3.5 rounded-full text-[13px] font-bold whitespace-nowrap border',
+        'h-9 px-3.5 rounded-full text-sm2 font-bold whitespace-nowrap border',
         active ? 'bg-accent-muted border-accent-border text-accent' : 'bg-bg-2 border-border text-text-2',
       ].join(' ')}
     >
@@ -313,8 +313,8 @@ function IngredientRow({ ing, onRemove, onChange }) {
   const { t } = useTranslation('dish')
   return (
     <div className="rounded-xl bg-bg-2 border border-border px-3 py-2.5 flex items-center gap-2">
-      {ing.emoji && <span className="text-[16px] shrink-0">{ing.emoji}</span>}
-      <span className="text-[13px] font-semibold flex-1 truncate text-text">{ing.name}</span>
+      {ing.emoji && <span className="text-base shrink-0">{ing.emoji}</span>}
+      <span className="text-sm2 font-semibold flex-1 truncate text-text">{ing.name}</span>
 
       <div className="flex items-center gap-1 shrink-0">
         <MiniSwitch on={ing.toTaste} onChange={v => onChange({ ...ing, toTaste: v })} />
@@ -322,7 +322,7 @@ function IngredientRow({ ing, onRemove, onChange }) {
       </div>
 
       {ing.toTaste ? (
-        <span className="text-[11px] font-bold uppercase text-text-3 shrink-0" style={{ letterSpacing: 0.4, padding: '0 4px' }}>
+        <span className="text-2xs font-bold uppercase text-text-3 shrink-0" style={{ letterSpacing: 0.4, padding: '0 4px' }}>
           {t('form.toTasteValue')}
         </span>
       ) : (
@@ -332,7 +332,7 @@ function IngredientRow({ ing, onRemove, onChange }) {
             value={ing.amountValue}
             onChange={e => onChange({ ...ing, amountValue: e.target.value })}
             placeholder="0"
-            className="text-center w-14 h-[30px] rounded-full bg-bg-3 border border-border text-[13px] text-text outline-none tabular-nums shrink-0 focus:border-accent"
+            className="text-center w-14 h-[30px] rounded-full bg-bg-3 border border-border text-sm2 text-text outline-none tabular-nums shrink-0 focus:border-accent"
           />
           <select
             value={ing.unit}
@@ -716,7 +716,7 @@ export default function DishFormPage() {
 
         <Section label={t('form.ingredientsLabel')} required={isExt}>
           {ingredients.length === 0 ? (
-            <div className="text-[13px] mb-2 px-1 text-text-3">{t('form.ingredientsEmpty')}</div>
+            <div className="text-sm2 mb-2 px-1 text-text-3">{t('form.ingredientsEmpty')}</div>
           ) : (
             <div className="flex flex-col gap-2">
               {ingredients.map(it => (
@@ -732,7 +732,7 @@ export default function DishFormPage() {
           <button
             type="button"
             onClick={() => setShowIngPicker(true)}
-            className="w-full mt-2 h-10 rounded-full bg-bg-2 border border-border flex items-center justify-center gap-2 text-[13px] font-bold text-accent"
+            className="w-full mt-2 h-10 rounded-full bg-bg-2 border border-border flex items-center justify-center gap-2 text-sm2 font-bold text-accent"
           >
             <Plus size={14} strokeWidth={2.4} />
             {t('form.addIngredient')}
@@ -762,7 +762,7 @@ export default function DishFormPage() {
           type="button"
           onClick={handleSubmit}
           disabled={!canSave}
-          className={['w-full h-12 rounded-full mt-7 text-[15px] font-bold text-white transition-opacity', canSave ? 'bg-accent' : 'bg-accent opacity-50'].join(' ')}
+          className={['w-full h-12 rounded-full mt-7 text-md2 font-bold text-white transition-opacity', canSave ? 'bg-accent' : 'bg-accent opacity-50'].join(' ')}
           style={canSave ? { boxShadow: '0 8px 22px rgba(196,112,74,0.35)' } : undefined}
         >
           {saving ? '...' : (isEdit ? t('form.submitEdit') : t('form.submitCreate'))}

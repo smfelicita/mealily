@@ -112,7 +112,7 @@ function Brand({ onClick }) {
         <ChefHat size={16} strokeWidth={2.2} className="text-accent" />
       </div>
       <div className="flex flex-col leading-tight items-start">
-        <span className="text-[16px] font-extrabold tracking-tight text-text">{t('brand.name')}</span>
+        <span className="text-base font-extrabold tracking-tight text-text">{t('brand.name')}</span>
         <span className="text-[10.5px] text-text-3">{t('brand.subtitle')}</span>
       </div>
     </button>
@@ -139,7 +139,7 @@ function Header({ mode, titleKey, token, user, onAvatarClick, onAuthClick, onBac
         <button
           type="button"
           onClick={onAuthClick}
-          className="h-8 px-3 rounded-full text-[13px] font-bold text-white bg-accent"
+          className="h-8 px-3 rounded-full text-sm2 font-bold text-white bg-accent"
         >
           {t('header.loginButton')}
         </button>
@@ -165,7 +165,7 @@ function Header({ mode, titleKey, token, user, onAvatarClick, onAuthClick, onBac
           </button>
           {title && (
             <div
-              className="absolute left-1/2 -translate-x-1/2 text-[15px] font-bold truncate max-w-[200px] text-text"
+              className="absolute left-1/2 -translate-x-1/2 text-md2 font-bold truncate max-w-[200px] text-text"
               title={title}
             >
               {title}
@@ -210,7 +210,7 @@ function ProfileModal({ onClose }) {
       <div className="flex items-center gap-3 pb-4 mb-1 border-b border-border">
         <Avatar name={user?.name} size="md" />
         <div className="min-w-0">
-          <p className="font-bold text-[15px] truncate">{user?.name || t('profileMenu.user')}</p>
+          <p className="font-bold text-md2 truncate">{user?.name || t('profileMenu.user')}</p>
           <p className="text-xs text-text-2 truncate">
             {user?.email || (user?.telegramUsername ? `@${user.telegramUsername}` : '')}
           </p>

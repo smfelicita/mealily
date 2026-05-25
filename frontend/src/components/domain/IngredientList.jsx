@@ -26,7 +26,7 @@ export default function IngredientList({ ingredients }) {
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[17px] font-semibold text-text">Ингредиенты</h2>
+        <h2 className="text-lg2 font-semibold text-text">Ингредиенты</h2>
         <div className="flex items-center gap-3">
           {showFridgeToggle && (
             <button
@@ -44,7 +44,7 @@ export default function IngredientList({ ingredients }) {
           <button
             type="button"
             onClick={() => setVisible(v => !v)}
-            className="text-[13px] text-text-3 focus:outline-none"
+            className="text-sm2 text-text-3 focus:outline-none"
           >
             {visible ? 'Скрыть' : 'Показать'}
           </button>
@@ -72,7 +72,7 @@ export default function IngredientList({ ingredients }) {
             return (
               <div key={ing.id} className={rowClass}>
                 <span className={[
-                  'text-[15px] leading-snug',
+                  'text-md2 leading-snug',
                   fridgeMode && !isNeutral ? (inFridge ? 'text-sage font-medium' : 'text-red-500') : 'text-text',
                 ].join(' ')}>
                   {ing.name}

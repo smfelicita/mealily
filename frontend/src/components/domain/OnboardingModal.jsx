@@ -32,15 +32,15 @@ export default function OnboardingModal({ onClose }) {
     <Modal onClose={finish}>
       {step === 1 ? (
         <>
-          <h2 className="text-[22px] font-bold text-text">Добро пожаловать!</h2>
-          <p className="text-[15px] text-text-2 mt-1 mb-6">
+          <h2 className="text-2xl2 font-bold text-text">Добро пожаловать!</h2>
+          <p className="text-md2 text-text-2 mt-1 mb-6">
             Добавь блюда которые готовишь — и мы каждый день будем подсказывать что приготовить.
           </p>
           <div className="flex flex-col gap-2">
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="w-full py-3 rounded-2xl text-[15px] font-semibold text-white bg-accent
+              className="w-full py-3 rounded-2xl text-md2 font-semibold text-white bg-accent
                 transition-opacity active:opacity-80"
             >
               Добавить блюда →
@@ -57,7 +57,7 @@ export default function OnboardingModal({ onClose }) {
       ) : (
         <>
           <h2 className="text-xl font-bold text-text">Какие блюда ты готовишь?</h2>
-          <p className="text-[13px] text-text-3 mt-1 mb-4">
+          <p className="text-sm2 text-text-3 mt-1 mb-4">
             Перечисли через запятую — хоть 20 сразу
           </p>
           <textarea
@@ -66,7 +66,7 @@ export default function OnboardingModal({ onClose }) {
             placeholder="Борщ, паста, омлет, блины, греческий салат..."
             rows={4}
             autoFocus
-            className="w-full rounded-2xl border border-border px-4 py-3 text-[15px] resize-none
+            className="w-full rounded-2xl border border-border px-4 py-3 text-md2 resize-none
               focus:outline-none focus:border-accent transition-colors mb-4"
           />
           <div className="flex flex-col gap-2">
@@ -74,7 +74,7 @@ export default function OnboardingModal({ onClose }) {
               type="button"
               onClick={handleAdd}
               disabled={saving}
-              className="w-full py-3 rounded-2xl text-[15px] font-semibold text-white bg-accent
+              className="w-full py-3 rounded-2xl text-md2 font-semibold text-white bg-accent
                 transition-opacity disabled:opacity-50 active:opacity-80"
             >
               {saving ? 'Добавляю...' : 'Добавить'}
