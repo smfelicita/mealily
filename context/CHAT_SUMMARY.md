@@ -50,7 +50,41 @@
 
 ---
 
-## Последние изменения (май 2026)
+## Последние изменения (май 2026) — Админка
+
+### Архитектура (реализована)
+- `Authorization: Bearer <admin-jwt>` — стандартный заголовок (не кастомный)
+- `ADMIN_JWT_SECRET` в `.env` (отдельный от JWT_SECRET)
+- Inactivity timeout 30 мин в `adminStore.js` (Zustand + sessionStorage)
+- `AuditLog` таблица в Prisma schema — логирует все destructive действия
+- `isActive Boolean` добавлен в модель `User` — при блокировке `tokenVersion++` (разлогинивает все сессии)
+
+### Реализованные этапы
+- **Этап A** — `AdminIngredientsPage`: CRUD ингредиентов, управление алиасами inline. Backend: `GET/PATCH/DELETE /api/admin/ingredients`, алиасы.
+- **Этап C** — `AdminUsersPage`: список пользователей, смена роли, блокировка/разблокировка. Backend: `GET /api/admin/users`, `PATCH /:id/role`, `PATCH /:id/deactivate`.
+- **Этап E** — `AdminDishesPage`: список блюд с превью, inline-смена видимости, удаление. Backend: `GET/PATCH/DELETE /api/admin/dishes`.
+- **Этап F** — `AdminGroupsPage`: список групп, участники, owner, transfer ownership, reset invite code.
+
+### Что осталось сделать в админке
+- **Этап D** — AI admin (статистика запросов, затраты, топ пользователей)
+- **Этап G** — Analytics (DAU, регистрации, AI usage)
+- **Этап H** — Logs/audit (просмотр AuditLog)
+- **Этап B** — Feature flags (заморожен до завершения D/G/H)
+
+### На сервере нужно (если не сделано)
+```bash
+cd /var/www/mealbot/backend
+# Добавить в .env: ADMIN_JWT_SECRET=<openssl rand -hex 32>
+npx prisma db push --accept-data-loss  # AuditLog + isActive
+pm2 restart mealbot-backend
+cd ../frontend && npm run build
+```
+
+### Пользователь smfelicitasm@gmail.com — уже ADMIN в БД
+
+---
+
+## Последние изменения (май 2026) — i18n и документация
 
 - **i18n завершён**: 14/14 страниц на `t()`, 10 namespace, ru+en locale заполнены. Переключатель языка временно скрыт в ProfilePage — ждёт перевода ингредиентов из БД (бэклог: `nameEn` в таблице Ingredient)
 - **Скрипты CSV**: `scripts/export-i18n-csv.js` / `scripts/import-i18n-csv.js` для workflow перевода через CSV
