@@ -84,9 +84,9 @@ scripts/          — export-i18n-csv.js, import-i18n-csv.js
 - Редизайн Phase A: завершён. Все страницы на Tailwind-only, slim-main стратегия.
 - i18n: 14/14 страниц на t(), 10 namespace, ru+en locale заполнены.
   Переключатель языка временно скрыт в ProfilePage (ждёт перевода ингредиентов из БД).
-- Админка: этапы A, C, E, F реализованы. Осталось D (AI), G (Analytics), H (Logs).
+- Админка: этапы A, C, D, E, F, G, H реализованы. Этап B заморожен.
   Файлы: `frontend/src/admin/`, `backend/src/routes/admin/`, `backend/src/middleware/adminAuth.js`.
-  На сервере нужен `prisma db push` (AuditLog + isActive) и `ADMIN_JWT_SECRET` в `.env`.
+  На сервере нужен `prisma db push` (AiUsageLog + AuditLog + isActive) и `ADMIN_JWT_SECRET` в `.env`.
 
 ## Правило обновления документации
 После ЛЮБЫХ изменений обновить: `context/TASKS.md`, `context/CHAT_SUMMARY.md`,

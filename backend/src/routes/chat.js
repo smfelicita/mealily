@@ -156,21 +156,32 @@ router.post('/', auth, async (req, res, next) => {
       })
     } catch (apiErr) {
       logger.error({ action: 'ai_request_failed', userId: req.userId, error: apiErr.message, requestId: req.requestId }, 'ai_request_failed')
+      prisma.aiUsageLog.create({
+        data: { userId: req.userId, model: 'claude-sonnet-4-6', inputTokens: 0, outputTokens: 0, cost: 0, status: 'error', errorMessage: apiErr.message },
+      }).catch(() => {})
       throw apiErr
     }
 
     const assistantText = aiResponse.content[0].text
     const mentionedDishes = extractMentionedDishes(assistantText, dishMap)
 
+    const inputTokens = aiResponse.usage.input_tokens
+    const outputTokens = aiResponse.usage.output_tokens
+    const cost = (inputTokens / 1_000_000) * 3 + (outputTokens / 1_000_000) * 15
+
     logger.info({
       action: 'ai_request_completed',
       userId: req.userId,
       model: aiResponse.model,
-      inputTokens: aiResponse.usage.input_tokens,
-      outputTokens: aiResponse.usage.output_tokens,
+      inputTokens,
+      outputTokens,
       dishMatches: mentionedDishes.length,
       requestId: req.requestId,
     }, 'ai_request_completed')
+
+    prisma.aiUsageLog.create({
+      data: { userId: req.userId, model: aiResponse.model, inputTokens, outputTokens, cost, status: 'success' },
+    }).catch(() => {})
 
     res.json({ message: assistantText, dishes: mentionedDishes })
   } catch (err) {

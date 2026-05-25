@@ -94,11 +94,12 @@ cd /var/www/mealbot/backend && npx prisma db push --accept-data-loss
 - [x] `AdminUsersPage` — список, поиск, фильтр по роли, inline-смена роли, кнопка блокировки/разблокировки
 - [x] `GET /api/admin/users`, `PATCH /:id/role`, `PATCH /:id/deactivate`
 
-### Этап D — AI admin ⬜
-Контроль затрат и abuse:
-- Запросы к ИИ за день/неделю/месяц + стоимость (inputTokens * цена)
-- Топ пользователей по количеству запросов
-- AI failures (ошибки Claude API)
+### Этап D — AI admin ✅
+- [x] `AiUsageLog` таблица (userId, model, inputTokens, outputTokens, cost, status, errorMessage)
+- [x] `chat.js` логирует каждый запрос (success + error) в `AiUsageLog`
+- [x] `GET /api/admin/analytics/ai?period=today|week|month` — агрегированная статистика
+- [x] `GET /api/admin/analytics/ai/requests` — последние запросы (пагинация)
+- [x] `AdminAiPage` — карточки + таблица запросов с пагинацией
 
 ### Этап E — Recipes moderation ✅
 - [x] `AdminDishesPage` — список всех блюд с превью фото, автором, inline-смена видимости, удаление
@@ -108,13 +109,11 @@ cd /var/www/mealbot/backend && npx prisma db push --accept-data-loss
 - [x] `AdminGroupsPage` — список групп, участники, owner
 - [x] `GET /api/admin/groups`, действия: удалить, transfer ownership, reset invite code
 
-### Этап G — Analytics ⬜
-Без retention, только базовое:
-- DAU, регистрации за период
-- AI usage (запросы, токены, стоимость)
-- Созданные блюда, активность холодильника
+### Этап G — Analytics ✅
+- [x] `GET /api/admin/analytics/dashboard` — totalUsers, newUsersLast7Days, aiRequestsToday, aiCostToday, aiErrorsToday
+- [x] `AdminAnalyticsPage` — карточки пользователей + AI за сегодня
 
-### Этап H — Logs / audit ⬜
-Просмотр AuditLog через интерфейс:
-- Последние N записей (adminId, action, targetId, payload, createdAt)
-- Фильтр по типу действия и дате
+### Этап H — Logs / audit ✅
+- [x] `GET /api/admin/audit?action=&from=&to=&limit=&offset=` — список с фильтрами
+- [x] `GET /api/admin/audit/actions` — уникальные типы действий для select-фильтра
+- [x] `AdminLogsPage` — таблица с фильтрами по action/дате, payload inline-expand, пагинация
