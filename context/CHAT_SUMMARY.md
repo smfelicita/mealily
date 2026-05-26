@@ -59,23 +59,24 @@
 - `AuditLog` таблица в Prisma schema — логирует все destructive действия
 - `isActive Boolean` добавлен в модель `User` — при блокировке `tokenVersion++` (разлогинивает все сессии)
 
-### Реализованные этапы
-- **Этап A** — `AdminIngredientsPage`: CRUD ингредиентов, управление алиасами inline. Backend: `GET/PATCH/DELETE /api/admin/ingredients`, алиасы.
-- **Этап C** — `AdminUsersPage`: список пользователей, смена роли, блокировка/разблокировка. Backend: `GET /api/admin/users`, `PATCH /:id/role`, `PATCH /:id/deactivate`.
-- **Этап E** — `AdminDishesPage`: список блюд с превью, inline-смена видимости, удаление. Backend: `GET/PATCH/DELETE /api/admin/dishes`.
+### Реализованные этапы (все ✅)
+- **Этап A** — `AdminIngredientsPage`: CRUD ингредиентов, управление алиасами inline.
+- **Этап C** — `AdminUsersPage`: список пользователей, смена роли, блокировка/разблокировка.
+- **Этап D** — `AdminAiPage`: AI-статистика по периодам (today/week/month), таблица запросов. `AiUsageLog` таблица в БД, логирование в chat.js.
+- **Этап E** — `AdminDishesPage`: список блюд с превью, inline-смена видимости, удаление.
 - **Этап F** — `AdminGroupsPage`: список групп, участники, owner, transfer ownership, reset invite code.
+- **Этап G** — `AdminAnalyticsPage`: дашборд — всего пользователей, новых за 7 дней, AI за сегодня.
+- **Этап H** — `AdminLogsPage`: AuditLog с фильтрами по action/дате, payload inline-expand, пагинация.
 
-### Что осталось сделать в админке
-- **Этап D** — AI admin (статистика запросов, затраты, топ пользователей)
-- **Этап G** — Analytics (DAU, регистрации, AI usage)
-- **Этап H** — Logs/audit (просмотр AuditLog)
-- **Этап B** — Feature flags (заморожен до завершения D/G/H)
+### Этап B — Feature flags ⏸
+Заморожен. REGULAR-группы оказались уже работающими (документация была устаревшей).
+Остаётся только ИИ-чат в Telegram-боте (закомментирован).
 
 ### На сервере нужно (если не сделано)
 ```bash
 cd /var/www/mealbot/backend
 # Добавить в .env: ADMIN_JWT_SECRET=<openssl rand -hex 32>
-npx prisma db push --accept-data-loss  # AuditLog + isActive
+npx prisma db push --accept-data-loss  # AuditLog + isActive + AiUsageLog
 pm2 restart mealbot-backend
 cd ../frontend && npm run build
 ```
