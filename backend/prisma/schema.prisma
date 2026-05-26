@@ -379,6 +379,17 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+// ─── Feature Flags ───────────────────────────────────────────────────────────
+
+model FeatureFlag {
+  key         String   @id
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+
+  @@map("feature_flags")
+}
+
 // ─── AI Usage Logs ───────────────────────────────────────────────────────────
 
 model AiUsageLog {

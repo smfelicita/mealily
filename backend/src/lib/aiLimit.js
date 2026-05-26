@@ -5,9 +5,11 @@ const PRO_LIMIT  = 100
 
 /**
  * Проверяет и увеличивает счётчик ИИ-сообщений для авторизованного пользователя.
+ * @param {string} userId
+ * @param {object} [flags] — флаги из lib/flags (опционально, для динамического лимита)
  * @returns {{ allowed: boolean, left: number }}
  */
-async function checkAiLimit(userId) {
+async function checkAiLimit(userId, flags) {
   const today = new Date().toDateString()
 
   const user = await prisma.user.findUnique({
@@ -18,7 +20,8 @@ async function checkAiLimit(userId) {
   if (!user) return { allowed: false, left: 0 }
   if (user.role === 'ADMIN') return { allowed: true, left: 999 }
 
-  const limit = user.role === 'PRO' ? PRO_LIMIT : USER_LIMIT
+  const userLimitFromFlag = flags?.['ai.dailyLimit.user']
+  const limit = user.role === 'PRO' ? PRO_LIMIT : (typeof userLimitFromFlag === 'number' ? userLimitFromFlag : USER_LIMIT)
 
   const isToday = user.aiMessagesDate &&
     new Date(user.aiMessagesDate).toDateString() === today

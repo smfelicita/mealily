@@ -1,6 +1,7 @@
 const cron = require('node-cron')
 const prisma = require('./prisma')
 const { sendTelegramMessage } = require('./telegram')
+const { getFlags } = require('./flags')
 
 // Получить текущий час в таймзоне пользователя
 function getLocalHour(timezone, date) {
@@ -45,6 +46,7 @@ function shuffle(arr) {
 
 async function runHourlyCheck() {
   const now = new Date()
+  const flags = await getFlags()
 
   // Получить всех пользователей с telegramId
   const users = await prisma.user.findMany({
@@ -71,15 +73,19 @@ async function runHourlyCheck() {
       if (isSameDayInTz(user.lastActiveAt, now, tz)) continue
 
       // ПРИОРИТЕТ 2: Ежедневное предложение
-      if (!isSameDayInTz(user.lastDailySuggestSentAt, now, tz)) {
-        const sent = await tryDailySuggest(user, now, tz)
-        if (sent) continue
+      if (flags['notifications.dailySuggestionEnabled'] !== false) {
+        if (!isSameDayInTz(user.lastDailySuggestSentAt, now, tz)) {
+          const sent = await tryDailySuggest(user, now, tz)
+          if (sent) continue
+        }
       }
 
       // ПРИОРИТЕТ 3: Напоминание о холодильнике
-      const threeDaysAgo = daysAgo(3, now)
-      if (!user.lastFridgeReminderSentAt || new Date(user.lastFridgeReminderSentAt) < threeDaysAgo) {
-        await tryFridgeReminder(user, now)
+      if (flags['notifications.emptyFridgeEnabled'] !== false) {
+        const threeDaysAgo = daysAgo(3, now)
+        if (!user.lastFridgeReminderSentAt || new Date(user.lastFridgeReminderSentAt) < threeDaysAgo) {
+          await tryFridgeReminder(user, now)
+        }
       }
     } catch (e) {
       console.error('[scheduler] error for user', user.id, e.message)

@@ -28,6 +28,7 @@ const AdminGroupsPage = lazy(() => import('./admin/pages/AdminGroupsPage'))
 const AdminAiPage = lazy(() => import('./admin/pages/AdminAiPage'))
 const AdminAnalyticsPage = lazy(() => import('./admin/pages/AdminAnalyticsPage'))
 const AdminLogsPage = lazy(() => import('./admin/pages/AdminLogsPage'))
+const AdminFlagsPage = lazy(() => import('./admin/pages/AdminFlagsPage'))
 
 class ErrorBoundary extends Component {
   constructor(props) { super(props); this.state = { hasError: false } }
@@ -61,10 +62,15 @@ export default function App() {
   const setAuth        = useStore(s => s.setAuth)
   const setPlanDishIds = useStore(s => s.setPlanDishIds)
   const setFridge      = useStore(s => s.setFridge)
+  const setFlags       = useStore(s => s.setFlags)
 
   const [showOnboarding, setShowOnboarding] = useState(
     () => localStorage.getItem('mealbot_show_onboarding') === '1'
   )
+
+  useEffect(() => {
+    api.getFlags().then(setFlags).catch(() => {})
+  }, [])
 
   useEffect(() => {
     if (!token) return
@@ -99,6 +105,7 @@ export default function App() {
           <Route path="ai"          element={<Suspense fallback={null}><AdminAiPage /></Suspense>} />
           <Route path="analytics"   element={<Suspense fallback={null}><AdminAnalyticsPage /></Suspense>} />
           <Route path="logs"        element={<Suspense fallback={null}><AdminLogsPage /></Suspense>} />
+          <Route path="flags"       element={<Suspense fallback={null}><AdminFlagsPage /></Suspense>} />
         </Route>
 
         <Route path="/auth" element={<AuthPage />} />

@@ -18,10 +18,30 @@ async function cleanupExpiredTokens() {
 }
 cleanupExpiredTokens().catch(console.error)
 
-const USER_AI_LIMIT = 50
+// ─── Feature flags (читаем из БД напрямую, TTL 60с) ──────────────────────────
+let _flagCache = null
+let _flagCacheAt = 0
+
+async function getFlag(key, fallback = null) {
+  if (!_flagCache || Date.now() - _flagCacheAt > 60_000) {
+    const rows = await prisma.featureFlag.findMany().catch(() => [])
+    _flagCache = {}
+    for (const r of rows) {
+      const v = r.value
+      _flagCache[r.key] = v === 'true' ? true : v === 'false' ? false : (isNaN(Number(v)) || v === '' ? v : Number(v))
+    }
+    _flagCacheAt = Date.now()
+  }
+  return key in _flagCache ? _flagCache[key] : fallback
+}
+
+const USER_AI_LIMIT = 10
 
 async function checkAiLimit(userId) {
   const today = new Date().toDateString()
+  const userLimit = await getFlag('ai.dailyLimit.user', USER_AI_LIMIT)
+  const limit = typeof userLimit === 'number' ? userLimit : USER_AI_LIMIT
+
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { aiMessagesDay: true, aiMessagesDate: true, role: true },
@@ -32,7 +52,7 @@ async function checkAiLimit(userId) {
   const isToday = user.aiMessagesDate &&
     new Date(user.aiMessagesDate).toDateString() === today
   const count = isToday ? user.aiMessagesDay : 0
-  if (count >= USER_AI_LIMIT) return { allowed: false, left: 0 }
+  if (count >= limit) return { allowed: false, left: 0 }
 
   await prisma.user.update({
     where: { id: userId },
@@ -41,7 +61,7 @@ async function checkAiLimit(userId) {
       aiMessagesDate: new Date(),
     },
   })
-  return { allowed: true, left: USER_AI_LIMIT - count - 1 }
+  return { allowed: true, left: limit - count - 1 }
 }
 
 // User session state
@@ -100,6 +120,7 @@ const MAIN_MENU = {
       [{ text: '📅 Буду готовить' },   { text: '🎲 Случайное блюдо' }],
       [{ text: '🌅 Завтрак' }, { text: '☀️ Обед' }],
       [{ text: '🌙 Ужин' },    { text: '🍎 Перекус' }],
+      [{ text: '🤖 ИИ-помощник' }],
       [{ text: '🌐 Открыть приложение' }],
     ],
     resize_keyboard: true,
@@ -752,9 +773,55 @@ bot.on('message', async (msg) => {
     })
   }
 
-  // AI chat — временно скрыт
-  // if (text === '🤖 Спросить ИИ') { ... }
+  if (text === '🤖 ИИ-помощник') {
+    const aiEnabled = await getFlag('telegram.commands.aiEnabled', false)
+    if (!aiEnabled) {
+      return bot.sendMessage(chatId, '🤖 ИИ-помощник временно недоступен в боте.\n\nВоспользуйся им в веб-приложении MealBot.', MAIN_MENU)
+    }
+    session.state = 'ai_chat'
+    session.data.aiHistory = []
+    return bot.sendMessage(chatId,
+      '🤖 *Режим ИИ-помощника*\n\nЗадай вопрос о блюдах — подберу что приготовить!\n\n_Напиши /exit чтобы выйти._',
+      { parse_mode: 'Markdown' }
+    )
+  }
 
+  if (text === '/exit' || text === 'exit') {
+    if (session.state === 'ai_chat') {
+      session.state = 'idle'
+      session.data.aiHistory = []
+      return bot.sendMessage(chatId, 'Вышел из режима ИИ.', MAIN_MENU)
+    }
+  }
+
+  if (session.state === 'ai_chat') {
+    const aiEnabled = await getFlag('telegram.commands.aiEnabled', false)
+    if (!aiEnabled) {
+      session.state = 'idle'
+      return bot.sendMessage(chatId, 'ИИ-помощник отключён.', MAIN_MENU)
+    }
+    const { allowed } = await checkAiLimit(user.id)
+    if (!allowed) {
+      session.state = 'idle'
+      return bot.sendMessage(chatId, '⚠️ Дневной лимит ИИ-сообщений исчерпан. Попробуй завтра.', MAIN_MENU)
+    }
+    try {
+      const history = session.data.aiHistory || []
+      const messages = [...history.slice(-8), { role: 'user', content: text }]
+      const resp = await anthropic.messages.create({
+        model: await getFlag('ai.model', 'claude-sonnet-4-6'),
+        max_tokens: 600,
+        system: 'Ты кулинарный ассистент MealBot в Telegram. Помогаешь выбрать блюда и ответить на вопросы о еде. Отвечай коротко, по-русски.',
+        messages,
+      })
+      const reply = resp.content[0].text
+      session.data.aiHistory = [...messages, { role: 'assistant', content: reply }]
+      return bot.sendMessage(chatId, reply)
+    } catch (e) {
+      console.error('[ai_chat]', e.message)
+      return bot.sendMessage(chatId, 'Ошибка ИИ. Попробуй ещё раз.')
+    }
+  }
 
   if (text === '🌐 Открыть приложение') {
     const token = await generateWebLoginToken(user.id)
@@ -785,8 +852,6 @@ bot.on('message', async (msg) => {
     return bot.sendMessage(chatId, `🔍 Не нашёл *«${text}»*. Попробуй другое написание.`, { parse_mode: 'Markdown' })
   }
 
-  // AI chat — временно скрыт
-  // if (session.state === 'ai_chat') { ... }
 
   // Команды холодильника: + продукт / - продукт
   if (text.startsWith('+') || text.startsWith('-')) {
@@ -844,8 +909,6 @@ bot.on('callback_query', async (query) => {
     return sendCategoryList(chatId, session)
   }
 
-  // Режим ИИ — временно скрыт
-  // if (data === 'ai_mode') { ... }
 
   // Отмена удаления продукта из холодильника
   if (data.startsWith('undo_remove_')) {

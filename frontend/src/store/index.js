@@ -48,4 +48,8 @@ export const useStore = create((set, get) => ({
   chatMessages: [],
   addChatMessage: (msg) => set(s => ({ chatMessages: [...s.chatMessages, msg] })),
   clearChatMessages: () => set({ chatMessages: [] }),
+
+  // Feature flags
+  flags: {},
+  setFlags: (flags) => set({ flags }),
 }))

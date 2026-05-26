@@ -2,9 +2,10 @@ const router = require('express').Router()
 const Anthropic = require('@anthropic-ai/sdk')
 const prisma = require('../lib/prisma')
 const { authMiddleware: auth } = require('../middleware/auth')
-const { checkAiLimit, USER_LIMIT, PRO_LIMIT } = require('../lib/aiLimit')
+const { checkAiLimit } = require('../lib/aiLimit')
 const { checkMessageRelevance } = require('../lib/messageFilter')
 const { logger } = require('../lib/logger')
+const { getFlags } = require('../lib/flags')
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -116,13 +117,22 @@ router.post('/', auth, async (req, res, next) => {
     const { message, history = [], role = 'USER', fridge = [] } = req.body
     if (!message?.trim()) return res.status(400).json({ error: 'Сообщение не может быть пустым' })
 
-    const relevance = checkMessageRelevance(message)
-    if (!relevance.allowed) {
-      logger.warn({ action: 'ai_request_blocked_by_filter', userId: req.userId, requestId: req.requestId }, 'ai_request_blocked_by_filter')
-      return res.status(400).json({ error: relevance.reason, offTopic: true })
+    const flags = await getFlags()
+
+    if (!flags['ai.enabled']) {
+      const msg = flags['ai.maintenanceMessage'] || 'ИИ-помощник временно недоступен'
+      return res.status(503).json({ error: msg, maintenance: true })
     }
 
-    const { allowed } = await checkAiLimit(req.userId)
+    if (flags['ai.filter.enabled']) {
+      const relevance = checkMessageRelevance(message)
+      if (!relevance.allowed) {
+        logger.warn({ action: 'ai_request_blocked_by_filter', userId: req.userId, requestId: req.requestId }, 'ai_request_blocked_by_filter')
+        return res.status(400).json({ error: relevance.reason, offTopic: true })
+      }
+    }
+
+    const { allowed } = await checkAiLimit(req.userId, flags)
     if (!allowed) {
       logger.warn({ action: 'ai_limit_exceeded', type: 'user', userId: req.userId, requestId: req.requestId }, 'ai_limit_exceeded')
       return res.status(429).json({ error: 'Дневной лимит ИИ-сообщений исчерпан', limitReached: true, messagesLeft: 0 })
@@ -149,7 +159,7 @@ router.post('/', auth, async (req, res, next) => {
     let aiResponse
     try {
       aiResponse = await anthropic.messages.create({
-        model: 'claude-sonnet-4-6',
+        model: flags['ai.model'] || 'claude-sonnet-4-6',
         max_tokens: 800,
         system: systemPrompt,
         messages,

@@ -25,9 +25,14 @@ const adminDishRoutes = require('./routes/admin/dishes')
 const adminGroupRoutes = require('./routes/admin/groups')
 const adminAnalyticsRoutes = require('./routes/admin/analytics')
 const adminAuditRoutes = require('./routes/admin/audit')
+const adminFlagsRoutes = require('./routes/admin/flags')
+const flagsRoutes = require('./routes/flags')
 
 // Планировщик уведомлений (запускается сразу при старте)
 require('./lib/scheduler')
+
+// Feature flags — создать дефолтные записи если нет
+require('./lib/flags').ensureDefaults()
 
 // Очистка при старте
 const prisma = require('./lib/prisma')
@@ -93,6 +98,8 @@ app.use('/api/admin/dishes', adminDishRoutes)
 app.use('/api/admin/groups', adminGroupRoutes)
 app.use('/api/admin/analytics', adminAnalyticsRoutes)
 app.use('/api/admin/audit', adminAuditRoutes)
+app.use('/api/admin/flags', adminFlagsRoutes)
+app.use('/api/flags', flagsRoutes)
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }))

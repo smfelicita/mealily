@@ -10,6 +10,7 @@ const NAV = [
   { to: '/admin/ai',          label: 'AI-статистика' },
   { to: '/admin/analytics',   label: 'Аналитика' },
   { to: '/admin/logs',        label: 'Логи' },
+  { to: '/admin/flags',       label: 'Флаги' },
 ]
 
 export default function AdminLayout() {

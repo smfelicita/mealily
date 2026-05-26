@@ -313,7 +313,7 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
 // ═══ Main ═════════════════════════════════════════════════════════
 export default function ChatPage() {
   const { t } = useTranslation('chat')
-  const { chatMessages, addChatMessage, clearChatMessages, token, user, fridge } = useStore()
+  const { chatMessages, addChatMessage, clearChatMessages, token, user, fridge, flags } = useStore()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
@@ -323,6 +323,8 @@ export default function ChatPage() {
   const bottomRef = useRef(null)
 
   const isGuest = !token
+  const aiEnabled = flags['ai.enabled'] !== false
+  const maintenanceMessage = flags['ai.maintenanceMessage'] || ''
 
   // Авто-скролл вниз
   useEffect(() => {
@@ -331,7 +333,7 @@ export default function ChatPage() {
 
   async function send(text) {
     const msg = (text || input).trim()
-    if (!msg || loading || isGuest || limitReached) return
+    if (!msg || loading || isGuest || limitReached || !aiEnabled) return
 
     setInput('')
     addChatMessage({ role: 'user', content: msg, id: Date.now() })
@@ -372,6 +374,13 @@ export default function ChatPage() {
         canClear={!isGuest && chatMessages.length > 0}
         onClear={clearChatMessages}
       />
+
+      {/* Maintenance banner */}
+      {!aiEnabled && !isGuest && (
+        <div className="mx-4 mt-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
+          {maintenanceMessage || 'ИИ-помощник временно недоступен'}
+        </div>
+      )}
 
       {/* Body — guest / welcome / messages */}
       <div className="flex-1 overflow-y-auto min-h-0 flex flex-col">

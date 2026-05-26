@@ -87,8 +87,18 @@ cd /var/www/mealbot/backend && npx prisma db push --accept-data-loss
 - [ ] **Наполнить алиасы** — экспортировать ингредиенты в CSV, добавить синонимы, импортировать SQL-ом
 - [ ] Merge duplicates — склейка дублей в один canonical (отдельная задача)
 
-### Этап B — Feature flags ⏸
-Заморожен до завершения всех этапов админки (C–H).
+### Этап B — Feature flags ✅
+- [x] `FeatureFlag` таблица в схеме (key PK, value, description, updatedAt)
+- [x] `backend/src/lib/flags.js` — in-memory cache (60s TTL), ensureDefaults(), parseValue()
+- [x] 10 флагов по умолчанию (ai.*, telegram.commands.*, notifications.*)
+- [x] `GET /api/flags` — публичный эндпоинт для фронтенда
+- [x] `GET/PATCH /api/admin/flags` — управление из админки
+- [x] `chat.js` проверяет ai.enabled, ai.filter.enabled, ai.model, ai.dailyLimit.user
+- [x] Telegram-бот: getFlag() хелпер с кешем, проверяет telegram.commands.aiEnabled
+- [x] Планировщик уведомлений проверяет notifications.* флаги
+- [x] Zustand store: flags + setFlags, загрузка в App.jsx
+- [x] ChatPage: banner при ai.enabled=false
+- [x] AdminFlagsPage — управление флагами, toggle для bool, поле для string/number
 
 ### Этап C — Users management ✅
 - [x] `isActive Boolean` в модели User — блокировка инвалидирует все сессии (`tokenVersion++`)

@@ -142,4 +142,7 @@ export const api = {
   addComment: (dishId, content) => request('/comments', { method: 'POST', body: { dishId, content } }),
   deleteComment: (id) => request(`/comments/${id}`, { method: 'DELETE' }),
   pinComment: (id) => request(`/comments/${id}/pin`, { method: 'PATCH' }),
+
+  // Feature flags
+  getFlags: () => fetch('/api/flags').then(r => r.json()).catch(() => ({})),
 }
