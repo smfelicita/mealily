@@ -58,9 +58,11 @@ export default function AdminFlagsPage() {
     await save(key, next)
   }
 
-  // Группируем флаги
+  const HIDDEN = new Set(['telegram.commands.aiEnabled'])
+
   const groups = {}
   for (const flag of flags) {
+    if (HIDDEN.has(flag.key)) continue
     const g = groupKey(flag.key)
     if (!groups[g]) groups[g] = []
     groups[g].push(flag)
