@@ -13,17 +13,10 @@
 //   - onAddToPlan: (dish) => void
 
 import { Clock, Heart, Plus, Check, Utensils, Sun, Moon, Cookie } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useStore } from '../../store'
 
 const SUPABASE_IMG = 'https://nwtqeytmmqmkwqafkgin.supabase.co/storage/v1/object/public/media/images'
-
-const MEAL_LABEL = {
-  BREAKFAST: 'Завтрак',
-  LUNCH:     'Обед',
-  DINNER:    'Ужин',
-  SNACK:     'Перекус',
-  ANYTIME:   'Любое',
-}
 
 function getImg(dish) {
   const cat = dish.categories?.[0] ?? dish.category
@@ -40,6 +33,7 @@ export default function DishCard({
   onAddToPlan,
   className = '',
 }) {
+  const { t } = useTranslation('common')
   const planDishIds   = useStore(s => s.planDishIds)
   const addPlanDishId = useStore(s => s.addPlanDishId)
   const isInPlan      = planDishIds.has(dish.id)
@@ -49,7 +43,8 @@ export default function DishCard({
     ? dish.ingredients.filter(i => !i.toTaste && !i.isBasic && !fridgeIngredientIds.has(i.id))
     : null
   const allInFridge = missing !== null && missing.length === 0
-  const mealLabel = MEAL_LABEL[dish.mealTime?.[0]] || MEAL_LABEL.ANYTIME
+  const mealKey = dish.mealTime?.[0] || 'ANYTIME'
+  const mealLabel = t(`mealTime.${mealKey}`, { defaultValue: '' })
 
   function handleCardClick() {
     onClick?.(dish)

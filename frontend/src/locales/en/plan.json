@@ -30,7 +30,8 @@
     "BREAKFAST": "Breakfast",
     "LUNCH": "Lunch",
     "DINNER": "Dinner",
-    "SNACK": "Snack"
+    "SNACK": "Snack",
+    "ANYTIME": "Anytime"
   },
   "empty": {
     "title": "Plan is empty",
