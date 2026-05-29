@@ -601,6 +601,7 @@ function formatDish(dish) {
     ingredients: dish.ingredients.map(di => ({
       id: di.ingredient.id,
       name: di.ingredient.nameRu,
+      nameEn: di.ingredient.nameEn ?? null,
       emoji: di.ingredient.emoji,
       amount: di.amount,
       amountValue: di.amountValue,

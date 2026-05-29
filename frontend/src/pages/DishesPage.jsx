@@ -19,14 +19,8 @@ import { PageHeader, useToast } from '../components/ui'
 import { useHintDismiss } from '../hooks/useHintDismiss'
 
 // ─── Константы / справочники ────────────────────────────────────
-// Метки берутся через t('dish:list.mealXxx')
-const MEAL_TIMES = [
-  { id: '',          labelKey: 'mealAll'       },
-  { id: 'BREAKFAST', labelKey: 'mealBreakfast' },
-  { id: 'LUNCH',     labelKey: 'mealLunch'     },
-  { id: 'DINNER',    labelKey: 'mealDinner'    },
-  { id: 'SNACK',     labelKey: 'mealSnack'     },
-]
+// Метки берутся через t('common:mealTimeShort.<VALUE>')
+const MEAL_TIME_IDS = ['', 'BREAKFAST', 'LUNCH', 'DINNER', 'SNACK']
 
 // Сложность — id совпадает с ключом common:difficulty.<id>
 const DIFFICULTIES = [
@@ -99,17 +93,18 @@ function SearchInput({ value, onChange }) {
 
 // ═══ MealTypeChips ═══════════════════════════════════════════════════
 function MealTypeChips({ active, onChange }) {
-  const { t } = useTranslation('dish')
+  const { t } = useTranslation('common')
   return (
     <div className="-mx-5 px-5 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
       <div className="flex gap-2" style={{ width: 'max-content' }}>
-        {MEAL_TIMES.map(mt => {
-          const on = mt.id === active
+        {MEAL_TIME_IDS.map(id => {
+          const on = id === active
+          const label = id ? t(`mealTimeShort.${id}`) : t('mealAll')
           return (
             <button
-              key={mt.id || 'all'}
+              key={id || 'all'}
               type="button"
-              onClick={() => onChange(mt.id)}
+              onClick={() => onChange(id)}
               className={[
                 'h-9 px-3.5 rounded-full text-sm2 font-bold whitespace-nowrap shrink-0 border',
                 on
@@ -117,7 +112,7 @@ function MealTypeChips({ active, onChange }) {
                   : 'bg-bg-2 border-border text-text-2',
               ].join(' ')}
             >
-              {t(`list.${mt.labelKey}`)}
+              {label}
             </button>
           )
         })}

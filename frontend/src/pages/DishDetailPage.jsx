@@ -13,6 +13,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import { api } from '../api'
+import { getIngredientName } from '../utils/ingredient'
 import { useStore } from '../store'
 import { Loader, Avatar, useToast } from '../components/ui'
 import AddToPlanModal from '../components/domain/AddToPlanModal'
@@ -162,7 +163,7 @@ function DishMetaStrip({ cookTime, difficulty, cuisine, mealTime }) {
 
 // ═══ Ingredients ══════════════════════════════════════════════════
 function IngredientsSection({ ingredients, fridgeIds, token }) {
-  const { t } = useTranslation('dish')
+  const { t, i18n } = useTranslation('dish')
   const [fridgeMode, setFridgeMode] = useState(false)
 
   if (!ingredients?.length) return null
@@ -173,7 +174,7 @@ function IngredientsSection({ ingredients, fridgeIds, token }) {
     const amountStr = i.toTaste
       ? t('detail.toTaste')
       : (i.amountValue && i.unit ? `${i.amountValue} ${i.unit}` : i.amount || '')
-    return { id: i.id, name: i.name, amount: amountStr, inFridge, basic, optional: i.optional }
+    return { id: i.id, name: getIngredientName(i, i18n.language), amount: amountStr, inFridge, basic, optional: i.optional }
   })
 
   const missingCount = items.filter(i => !i.inFridge && !i.basic).length

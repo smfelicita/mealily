@@ -19,23 +19,25 @@ export const UNIT_I18N_KEY = {
   'ч.л.':    'teaspoon',
 }
 
+// Метки через t('common:dishCategory.<value>')
 export const DISH_CATEGORIES = [
-  { value: 'SOUP',    label: 'Суп'      },
-  { value: 'SALAD',   label: 'Салат'    },
-  { value: 'MAIN',    label: 'Основное' },
-  { value: 'SIDE',    label: 'Гарнир'   },
-  { value: 'DESSERT', label: 'Десерт'   },
-  { value: 'DRINK',   label: 'Напиток'  },
-  { value: 'BAKERY',  label: 'Выпечка'  },
-  { value: 'SAUCE',   label: 'Соус'     },
+  { value: 'SOUP'    },
+  { value: 'SALAD'   },
+  { value: 'MAIN'    },
+  { value: 'SIDE'    },
+  { value: 'DESSERT' },
+  { value: 'DRINK'   },
+  { value: 'BAKERY'  },
+  { value: 'SAUCE'   },
 ]
 
+// Метки через t('common:mealTimeShort.<value>')
 export const MEAL_TIMES = [
-  { value: 'BREAKFAST', label: 'Утро'    },
-  { value: 'LUNCH',     label: 'Обед'    },
-  { value: 'DINNER',    label: 'Вечер'   },
-  { value: 'SNACK',     label: 'Перекус' },
-  { value: 'ANYTIME',   label: 'Любое'   },
+  { value: 'BREAKFAST' },
+  { value: 'LUNCH'     },
+  { value: 'DINNER'    },
+  { value: 'SNACK'     },
+  { value: 'ANYTIME'   },
 ]
 
 export const DIFFICULTIES = [
@@ -89,10 +91,11 @@ export const VISIBILITY_OPTIONS = [
   { value: 'ALL_GROUPS', label: 'Все мои группы', desc: 'Участники всех ваших групп'       },
 ]
 
+// Метки через t('plan:meal.<value>') — эмодзи уже в locale
 export const PLAN_MEAL_TYPES = [
-  { value: 'BREAKFAST', label: '🌅 Завтрак'      },
-  { value: 'LUNCH',     label: '☀️ Обед'          },
-  { value: 'DINNER',    label: '🌙 Ужин'          },
-  { value: 'SNACK',     label: '🍎 Перекус'       },
-  { value: 'ANYTIME',   label: '🍽 Когда угодно'  },
+  { value: 'BREAKFAST' },
+  { value: 'LUNCH'     },
+  { value: 'DINNER'    },
+  { value: 'SNACK'     },
+  { value: 'ANYTIME'   },
 ]

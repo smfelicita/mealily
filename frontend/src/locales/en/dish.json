@@ -2,11 +2,6 @@
   "list": {
     "pageTitle": "My dishes",
     "searchPlaceholder": "Search dishes, ingredients…",
-    "mealAll": "All",
-    "mealBreakfast": "Breakfast",
-    "mealLunch": "Lunch",
-    "mealDinner": "Dinner",
-    "mealSnack": "Snack",
     "fridge": "Fridge",
     "favorites": "Favourites",
     "sortAria": "Sort",

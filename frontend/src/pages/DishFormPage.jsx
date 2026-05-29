@@ -173,12 +173,12 @@ function Chip({ active, onClick, children }) {
   )
 }
 
-function ChipsField({ items, selected, onToggle }) {
+function ChipsField({ items, selected, onToggle, getLabel }) {
   return (
     <div className="flex flex-wrap gap-2">
       {items.map(it => (
         <Chip key={it.value} active={selected.includes(it.value)} onClick={() => onToggle(it.value)}>
-          {it.label}
+          {getLabel ? getLabel(it) : it.label}
         </Chip>
       ))}
     </div>
@@ -392,6 +392,7 @@ function VisibilityCards({ value, onChange, options }) {
 // ═══ Main page ═════════════════════════════════════════════════════
 export default function DishFormPage() {
   const { t } = useTranslation('dish')
+  const { t: tc } = useTranslation('common')
   const { id } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
@@ -656,6 +657,7 @@ export default function DishFormPage() {
             items={CATEGORIES}
             selected={form.categories}
             onToggle={v => toggleArray('categories', v)}
+            getLabel={it => tc(`dishCategory.${it.value}`)}
           />
           <ErrorLine>{errors.categories}</ErrorLine>
         </Section>
@@ -665,6 +667,7 @@ export default function DishFormPage() {
             items={MEAL_TIMES}
             selected={form.mealTime}
             onToggle={v => toggleArray('mealTime', v)}
+            getLabel={it => tc(`mealTimeShort.${it.value}`)}
           />
           <ErrorLine>{errors.mealTime}</ErrorLine>
         </Section>

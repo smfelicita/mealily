@@ -3,9 +3,11 @@
 // Логика: реальный API getIngredients (из props), createIngredient, поиск по nameRu.
 
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Search, X, Check, Plus } from 'lucide-react'
 import { api } from '../../api'
 import { ING_CATEGORIES } from '../../constants'
+import { getIngredientName } from '../../utils/ingredient'
 
 // Категории для chips (с пунктом «Все»)
 const CHIP_CATEGORIES = [{ value: 'all', label: 'Все' }, ...ING_CATEGORIES]
@@ -18,6 +20,9 @@ export default function DishIngredientPicker({
   onClose,
   show,
 }) {
+  const { i18n } = useTranslation()
+  const ingName = ing => getIngredientName(ing, i18n.language)
+
   const [query, setQuery]             = useState('')
   const [cat, setCat]                 = useState('all')
   const [showCustom, setShowCustom]   = useState(false)
@@ -31,7 +36,7 @@ export default function DishIngredientPicker({
     return allIngredients.filter(ing => {
       if (cat !== 'all' && ing.category !== cat) return false
       if (selectedIds.has(ing.id)) return false  // уже добавленные не показываем
-      if (q && !ing.nameRu.toLowerCase().includes(q)) return false
+      if (q && !ing.nameRu.toLowerCase().includes(q) && !(ing.nameEn?.toLowerCase().includes(q))) return false
       return true
     })
   }, [allIngredients, query, cat, selectedIds])
@@ -188,7 +193,7 @@ export default function DishIngredientPicker({
                   >
                     {ing.emoji && <span className="text-base shrink-0">{ing.emoji}</span>}
                     <span className="text-sm2 font-semibold flex-1 truncate text-text">
-                      {ing.nameRu}
+                      {ingName(ing)}
                     </span>
                     {!ing.isPublic && (
                       <span className="text-[10.5px] font-bold text-accent shrink-0">мой</span>

@@ -6,6 +6,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { getIngredientName } from '../utils/ingredient'
 import {
   Refrigerator, Search, Plus, X, Check, Sparkles, Trash2, Users, Send,
 } from 'lucide-react'
@@ -188,7 +189,8 @@ function AICookCTA({ onClick }) {
 
 // ═══ Product card ══════════════════════════════════════════════════
 function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
-  const { t } = useTranslation('fridge')
+  const { t, i18n } = useTranslation('fridge')
+  const displayName = getIngredientName({ name: item.name, nameEn: item.nameEn }, i18n.language)
   const [qty, setQty]   = useState(item.quantityValue != null ? String(item.quantityValue) : '')
   const [unit, setUnit] = useState(item.quantityUnit || UNITS[0])
 
@@ -210,9 +212,9 @@ function ProductCard({ item, editing, onEdit, onDelete, onSave, onCancel }) {
           type="button"
           onClick={onEdit}
           className="text-sm2 font-semibold flex-1 min-w-0 text-left truncate text-text"
-          title={item.name}
+          title={displayName}
         >
-          {item.name}
+          {displayName}
         </button>
         <button
           type="button"
@@ -315,7 +317,8 @@ function CategoryBlock({ cat, items, editingId, setEditingId, onDelete, onSave }
 
 // ═══ Picker modal ═══════════════════════════════════════════════════
 function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading }) {
-  const { t } = useTranslation(['fridge', 'common'])
+  const { t, i18n } = useTranslation(['fridge', 'common'])
+  const ingName = ing => getIngredientName(ing, i18n.language)
   const [selected, setSelected] = useState(() => new Set())
   const [query, setQuery]       = useState('')
 
@@ -334,7 +337,10 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
   const searchResults = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return null
-    return available.filter(ing => ing.nameRu.toLowerCase().includes(q))
+    return available.filter(ing =>
+      ing.nameRu.toLowerCase().includes(q) ||
+      (ing.nameEn && ing.nameEn.toLowerCase().includes(q))
+    )
   }, [available, query])
 
   const groupedAdd = useMemo(() => {
@@ -444,7 +450,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
                     ].join(' ')}
                   >
                     <span className="text-xl leading-none">{it.emoji || '📦'}</span>
-                    <span className="flex-1 text-[13.5px] font-semibold text-text">{it.nameRu}</span>
+                    <span className="flex-1 text-[13.5px] font-semibold text-text">{ingName(it)}</span>
                     <span className="text-2xs text-text-3">
                       {t(`common:ingCategory.${catKey}`, { defaultValue: '' })}
                     </span>
@@ -491,7 +497,7 @@ function PickerSheet({ open, onClose, allIngredients, fridgeIds, onAdd, loading 
                             ].join(' ')}
                           >
                             <span className="text-sm2 leading-none">{it.emoji || '📦'}</span>
-                            {it.nameRu}
+                            {ingName(it)}
                             {on && <Check size={11} strokeWidth={3} className="text-accent" />}
                           </button>
                         )

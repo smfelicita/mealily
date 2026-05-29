@@ -70,6 +70,7 @@ function formatItem(item) {
     id: item.id,
     ingredientId: item.ingredientId,
     name: item.ingredient.nameRu,
+    nameEn: item.ingredient.nameEn ?? null,
     emoji: item.ingredient.emoji,
     category: item.ingredient.category,
     isBasic: item.ingredient.isBasic || false,
@@ -124,10 +125,10 @@ router.post('/bulk', validate(fridgeBulk), async (req, res, next) => {
     const familyGroupId = await getFamilyGroupId(req.userId)
     const results = []
     for (const ingredientId of ingredientIds) {
-      const ingredient = await prisma.ingredient.findUnique({ where: { id: ingredientId }, select: { nameRu: true, defaultQuantity: true, defaultUnit: true } })
+      const ingredient = await prisma.ingredient.findUnique({ where: { id: ingredientId }, select: { nameRu: true, nameEn: true, defaultQuantity: true, defaultUnit: true } })
       if (!ingredient) continue
       const item = await upsertFridgeItem(req.userId, familyGroupId, ingredientId, null, undefined, undefined, ingredient.defaultQuantity, ingredient.defaultUnit)
-      results.push({ ingredientId, name: item.ingredient.nameRu })
+      results.push({ ingredientId, name: item.ingredient.nameRu, nameEn: ingredient.nameEn ?? null })
     }
     res.json({ added: results })
   } catch (err) { next(err) }

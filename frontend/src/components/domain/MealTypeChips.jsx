@@ -1,14 +1,14 @@
-const ALL_OPTION = { value: '', label: 'Все' }
+import { useTranslation } from 'react-i18next'
 
-const MEAL_TIMES = [
-  { value: 'breakfast', label: 'Завтрак' },
-  { value: 'lunch',     label: 'Обед'    },
-  { value: 'dinner',    label: 'Ужин'    },
-  { value: 'snack',     label: 'Перекус' },
-]
+// values — uppercase, соответствуют enum MealTime в БД
+const MEAL_TIME_VALUES = ['BREAKFAST', 'LUNCH', 'DINNER', 'SNACK']
 
 export default function MealTypeChips({ active, onChange, multi = false, showAll = false }) {
-  const options = showAll ? [ALL_OPTION, ...MEAL_TIMES] : MEAL_TIMES
+  const { t } = useTranslation('common')
+
+  const options = showAll
+    ? [{ value: '', label: t('mealAll') }, ...MEAL_TIME_VALUES.map(v => ({ value: v, label: t(`mealTimeShort.${v}`) }))]
+    : MEAL_TIME_VALUES.map(v => ({ value: v, label: t(`mealTimeShort.${v}`) }))
 
   function handleClick(value) {
     if (multi) {
