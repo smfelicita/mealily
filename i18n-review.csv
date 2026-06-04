@@ -1,0 +1,575 @@
+namespace,key,ru,en
+auth,brand.subtitle,Умный помощник для выбора блюд,AI-powered meal assistant
+auth,tab.phone,Телефон,Phone
+auth,verifyEmail.title,Подтверди email,Confirm your email
+auth,verifyEmail.descPart1,Код отправлен на,Code sent to
+auth,verifyEmail.descPart2,Если не нашли — проверь папку «Спам».,Check your Spam folder if you don't see it.
+auth,verifyEmail.codeLabel,Код из письма,Code from email
+auth,verifyEmail.confirm,Подтвердить,Confirm
+auth,phoneEnter.title,Вход по телефону,Sign in with phone
+auth,phoneEnter.phoneLabel,Номер телефона,Phone number
+auth,phoneEnter.phonePlaceholder,+7 999 000-00-00,+1 555 000-0000
+auth,phoneEnter.sendCode,Получить код,Send code
+auth,phoneCode.title,Введи код,Enter code
+auth,phoneCode.descPart1,Код отправлен на,Code sent to
+auth,phoneCode.smsLabel,Код из SMS,Code from SMS
+auth,phoneCode.nameLabel,Имя (опционально),Name (optional)
+auth,phoneCode.namePlaceholder,Как тебя зовут?,What's your name?
+auth,phoneCode.login,Войти,Sign in
+auth,phoneCode.changePhone,Изменить номер,Change number
+auth,login.title,Войти,Sign in
+auth,login.submit,Войти,Sign in
+auth,login.noAccount,Нет аккаунта?,No account?
+auth,login.switchToRegister,Зарегистрироваться,Register
+auth,register.title,Создать аккаунт,Create account
+auth,register.submit,Зарегистрироваться,Register
+auth,register.hasAccount,Уже есть аккаунт?,Already have an account?
+auth,register.switchToLogin,Войти,Sign in
+auth,fields.name,Имя,Name
+auth,fields.email,Email,Email
+auth,fields.password,Пароль,Password
+auth,fields.namePlaceholder,Как тебя зовут?,What's your name?
+auth,resend.notReceived,Не получили?,Didn't receive it?
+auth,resend.countdown,Повторно через {{n}} с,Resend in {{n}} s
+auth,resend.label,Отправить повторно,Resend
+auth,telegram.noToken,Токен не передан. Вернитесь в Telegram и запросите новую ссылку.,No token provided. Return to Telegram and request a new link.
+auth,telegram.errorTitle,Ошибка входа,Login error
+auth,telegram.errorDefault,Ссылка недействительна или истекла. Запросите новую в боте.,Link is invalid or expired. Request a new one in the bot.
+auth,telegram.openBot,Открыть бота в Telegram,Open bot in Telegram
+auth,telegram.loading,Вход через Telegram...,Signing in via Telegram...
+auth,telegram.loadingDesc,"Подождите, выполняется авторизация","Please wait, authorizing..."
+auth,divider,или,or
+auth,googleError,Ошибка Google авторизации,Google authentication error
+auth,skip,Продолжить без регистрации →,Continue without signing in →
+chat,suggestions,"[""Что приготовить на завтрак?"",""Хочу что-то лёгкое на обед"",""Быстрый ужин за 15 минут"",""Вегетарианский вариант"",""Что можно из яиц и молока?""]","[""What to cook for breakfast?"",""I want something light for lunch"",""Quick dinner in 15 minutes"",""Vegetarian option"",""What can I make with eggs and milk?""]"
+chat,topBar.title,ИИ-помощник,AI Assistant
+chat,topBar.clear,Очистить,Clear
+chat,welcome.title,ИИ-помощник,AI Assistant
+chat,welcome.desc,"Расскажи, что хочешь съесть — подберу варианты с учётом твоего холодильника",Tell me what you're in the mood for — I'll suggest options based on your fridge
+chat,guest.title,ИИ-помощник,AI Assistant
+chat,guest.desc,Подберу блюда с учётом твоего холодильника и предпочтений. Доступно после регистрации.,I'll find dishes based on your fridge and preferences. Available after registration.
+chat,guest.register,Зарегистрироваться бесплатно,Register for free
+chat,guest.login,Уже есть аккаунт? Войти,Already have an account? Sign in
+chat,input.placeholder,Спросить про блюда…,Ask about dishes…
+chat,input.disabledPlaceholder,"Войди, чтобы общаться",Sign in to chat
+chat,input.sendAria,Отправить,Send
+chat,limit.reached,Дневной лимит сообщений исчерпан. Возвращайся завтра.,Daily message limit reached. Come back tomorrow.
+chat,limit.reachedMsg,⚠️ Дневной лимит сообщений исчерпан. Возвращайся завтра.,⚠️ Daily message limit reached. Come back tomorrow.
+chat,error,⚠️ Ошибка: {{message}},⚠️ Error: {{message}}
+common,actions.save,Сохранить,Save
+common,actions.cancel,Отменить,Cancel
+common,actions.delete,Удалить,Delete
+common,actions.edit,Редактировать,Edit
+common,actions.close,Закрыть,Close
+common,actions.back,Назад,Back
+common,actions.next,Далее,Next
+common,actions.done,Готово,Done
+common,actions.add,Добавить,Add
+common,actions.remove,Убрать,Remove
+common,actions.continue,Продолжить,Continue
+common,actions.confirm,Подтвердить,Confirm
+common,actions.copy,Скопировать,Copy
+common,actions.share,Поделиться,Share
+common,actions.retry,Попробовать снова,Try again
+common,actions.skip,Пропустить,Skip
+common,actions.open,Открыть,Open
+common,units.min,мин,min
+common,units.kcal,ккал,kcal
+common,units.gram,г,g
+common,units.kg,кг,kg
+common,units.ml,мл,ml
+common,units.litre,л,l
+common,units.piece,шт,pcs
+common,units.garlicClove,зубчик,clove
+common,units.bunch,пучок,bunch
+common,units.pinch,щепотка,pinch
+common,units.tablespoon,ст.л.,tbsp
+common,units.teaspoon,ч.л.,tsp
+common,auth.loginCta,Войти,Sign in
+common,auth.registerCta,Создать аккаунт,Create account
+common,auth.alreadyHaveAccount,Уже есть аккаунт? Войти,Already have an account? Sign in
+common,auth.noAccount,Нет аккаунта? Регистрация,No account? Register
+common,empty.nothingFound,Ничего не найдено,Nothing found
+common,nav.home,Главная,Home
+common,nav.dishes,Блюда,Dishes
+common,nav.fridge,Холодильник,Fridge
+common,nav.plan,План,Plan
+common,nav.chat,Чат,Chat
+common,nav.profile,Профиль,Profile
+common,brand.name,MealBot,MealBot
+common,brand.subtitle,Моя кухня,My Kitchen
+common,header.loginButton,Войти,Sign in
+common,header.notifications,Уведомления,Notifications
+common,header.profile,Профиль,Profile
+common,profileMenu.user,Пользователь,User
+common,profileMenu.myGroups,Мои группы,My groups
+common,profileMenu.createGroup,Создать группу,Create group
+common,profileMenu.telegramBot,Telegram-бот,Telegram bot
+common,profileMenu.openBot,Открыть бота →,Open bot →
+common,profileMenu.profile,Профиль,Profile
+common,profileMenu.logout,Выйти,Sign out
+common,profileMenu.errorGeneric,Ошибка,Error
+common,backTitles.profile,Профиль,Profile
+common,backTitles.groups,Мои группы,My groups
+common,backTitles.groupNew,Новая группа,New group
+common,backTitles.group,Группа,Group
+common,backTitles.groupEdit,Редактирование группы,Edit group
+common,dishCategory.SOUP,Суп,Soup
+common,dishCategory.SALAD,Салат,Salad
+common,dishCategory.MAIN,Основное,Main course
+common,dishCategory.SIDE,Гарнир,Side dish
+common,dishCategory.DESSERT,Десерт,Dessert
+common,dishCategory.DRINK,Напиток,Drink
+common,dishCategory.BAKERY,Выпечка,Baked goods
+common,dishCategory.SAUCE,Соус,Sauce
+common,mealTime.BREAKFAST,Утро,Morning
+common,mealTime.LUNCH,Обед,Lunch
+common,mealTime.DINNER,Вечер,Evening
+common,mealTime.SNACK,Перекус,Snack
+common,mealTime.ANYTIME,Любое,Anytime
+common,mealTimeShort.BREAKFAST,Завтрак,Breakfast
+common,mealTimeShort.LUNCH,Обед,Lunch
+common,mealTimeShort.DINNER,Ужин,Dinner
+common,mealTimeShort.SNACK,Перекус,Snack
+common,mealTimeShort.ANYTIME,Любое,Anytime
+common,planMealType.BREAKFAST,🌅 Завтрак,🌅 Breakfast
+common,planMealType.LUNCH,☀️ Обед,☀️ Lunch
+common,planMealType.DINNER,🌙 Ужин,🌙 Dinner
+common,planMealType.SNACK,🍎 Перекус,🍎 Snack
+common,planMealType.ANYTIME,🍽 Когда угодно,🍽 Anytime
+common,difficulty.easy,Легко,Easy
+common,difficulty.medium,Средне,Medium
+common,difficulty.hard,Сложно,Hard
+common,ingCategory.dairy,Молочное,Dairy
+common,ingCategory.meat,Мясо,Meat
+common,ingCategory.fish,Рыба,Fish
+common,ingCategory.vegetable,Овощи,Vegetables
+common,ingCategory.fruit,Фрукты,Fruits
+common,ingCategory.grain,Злаки,Grains
+common,ingCategory.legume,Бобовые,Legumes
+common,ingCategory.egg,Яйца,Eggs
+common,ingCategory.bread,Хлеб,Bread
+common,ingCategory.oil,Масла,Oils
+common,ingCategory.sauce,Соусы,Sauces
+common,ingCategory.spice,Специи,Spices
+common,ingCategory.herb,Зелень,Herbs
+common,ingCategory.nut,Орехи,Nuts
+common,ingCategory.sweetener,Сладкое,Sweeteners
+common,ingCategory.canned,Консервы,Canned goods
+common,ingCategory.other,Другое,Other
+common,visibility.PRIVATE.label,Личный,Private
+common,visibility.PRIVATE.desc,Только вы,Only you
+common,visibility.FAMILY.label,Семья,Family
+common,visibility.FAMILY.desc,Только участники семейной группы,Family group members only
+common,visibility.ALL_GROUPS.label,Все мои группы,All my groups
+common,visibility.ALL_GROUPS.desc,Участники всех ваших групп,Members of all your groups
+common,cuisines.russian,Русская,Russian
+common,cuisines.italian,Итальянская,Italian
+common,cuisines.asian,Азиатская,Asian
+common,cuisines.mediterranean,Средиземноморская,Mediterranean
+common,cuisines.greek,Греческая,Greek
+common,cuisines.french,Французская,French
+common,cuisines.mexican,Мексиканская,Mexican
+common,cuisines.japanese,Японская,Japanese
+common,cuisines.indian,Индийская,Indian
+common,cuisines.european,Европейская,European
+common,cuisines.american,Американская,American
+dish,list.pageTitle,Мои блюда,My dishes
+dish,list.searchPlaceholder,"Искать блюда, ингредиенты…","Search dishes, ingredients…"
+dish,list.mealAll,Все,All
+dish,list.mealBreakfast,Завтрак,Breakfast
+dish,list.mealLunch,Обед,Lunch
+dish,list.mealDinner,Ужин,Dinner
+dish,list.mealSnack,Перекус,Snack
+dish,list.fridge,Холодильник,Fridge
+dish,list.favorites,Избранное,Favourites
+dish,list.sortAria,Сортировка,Sort
+dish,list.sortTitleSoon,Сортировка (скоро),Sort (coming soon)
+dish,list.filtersAria,Фильтры,Filters
+dish,list.bulkHint,Несколько блюд — добавь,Add multiple dishes —
+dish,list.bulkHintAccent,через запятую,separated by commas
+dish,list.addToFavoritesAria,Избранное,Favourites
+dish,list.addToPlanAria,Добавить в план,Add to plan
+dish,list.fab,Добавить блюдо,Add dish
+dish,list.minSuffix,мин,min
+dish,list.loadError,Не удалось загрузить блюда,Failed to load dishes
+dish,list.addToPlanSuccess,«{{name}}» добавлено на сегодня,«{{name}}» added for today
+dish,list.addToPlanError,Не удалось добавить,Failed to add
+dish,list.countDish_one,блюдо,dish
+dish,list.countDish_few,блюда,
+dish,list.countDish_many,блюд,
+dish,list.countLabelShow,Показать,Show
+dish,filters.title,Фильтры,Filters
+dish,filters.reset,Сбросить,Reset
+dish,filters.tags,Теги,Tags
+dish,filters.cuisine,Кухня,Cuisine
+dish,filters.difficulty,Сложность,Difficulty
+dish,filters.applyClose,Закрыть,Close
+dish,empty.ownTitle,Ваша кухня пока пуста,Your kitchen is empty
+dish,empty.ownBody,Добавьте первое блюдо — личное или для всей семьи,Add your first dish — personal or for the whole family
+dish,empty.ownButton,Добавить блюдо,Add dish
+dish,empty.guestTitle,Добавь свои блюда,Add your dishes
+dish,empty.guestBody,Зарегистрируйся — и MealBot каждый день будет подсказывать что приготовить,Register — and MealBot will suggest what to cook every day
+dish,empty.guestRegister,Создать свою кухню,Create your kitchen
+dish,empty.guestLogin,Уже есть аккаунт? Войти,Already have an account? Sign in
+dish,empty.filteredTitle,Ничего не найдено,Nothing found
+dish,empty.filteredBody,Попробуй изменить поиск или сбросить фильтры,Try changing your search or resetting filters
+dish,empty.filteredReset,Сбросить фильтры,Reset filters
+dish,popularTags.fast,быстро,quick
+dish,popularTags.filling,сытно,filling
+dish,popularTags.light,лёгкое,light
+dish,popularTags.lent,постно,vegan
+dish,popularTags.soup,суп,soup
+dish,popularTags.salad,салат,salad
+dish,popularTags.simple,просто,simple
+dish,popularTags.meat,мясо,meat
+dish,popularTags.glutenFree,без глютена,gluten-free
+dish,common.closeAria,Закрыть,Close
+dish,common.clearAria,Очистить,Clear
+dish,detail.photoAria,Фото {{n}},Photo {{n}}
+dish,detail.backAria,Назад,Back
+dish,detail.shareAria,Поделиться,Share
+dish,detail.favAddAria,В избранное,Add to favourites
+dish,detail.favRemoveAria,Убрать из избранного,Remove from favourites
+dish,detail.moreAria,Ещё,More
+dish,detail.authorPrefix,Рецепт от,Recipe by
+dish,detail.yourRecipe,· Ваш рецепт,· Your recipe
+dish,detail.metaTime,время,time
+dish,detail.metaMeal,приём,meal
+dish,detail.metaDifficulty,сложность,difficulty
+dish,detail.metaCuisine,кухня,cuisine
+dish,detail.ingredients,Ингредиенты,Ingredients
+dish,detail.missingCount,не хватает {{n}},missing {{n}}
+dish,detail.fromFridge,из моего,from my fridge
+dish,detail.inFridgeCount,В холодильнике есть {{have}} из {{total}},You have {{have}} of {{total}} in your fridge
+dish,detail.optional,· необязательно,· optional
+dish,detail.toTaste,по вкусу,to taste
+dish,detail.steps,Приготовление,Instructions
+dish,detail.stepsCount_one,{{count}} шаг,{{count}} step
+dish,detail.stepsCount_few,{{count}} шага,
+dish,detail.stepsCount_many,{{count}} шагов,
+dish,detail.nutrition,Пищевая ценность,Nutrition
+dish,detail.per100g,на 100 г,per 100 g
+dish,detail.nutritionCalories,калории,calories
+dish,detail.nutritionProtein,белки,protein
+dish,detail.nutritionFat,жиры,fat
+dish,detail.nutritionCarbs,углеводы,carbs
+dish,detail.tagsTitle,Категории и теги,Categories & tags
+dish,detail.similar,Попробуй также,You might also like
+dish,detail.toPlan,В план готовки,Add to meal plan
+dish,detail.linkCopied,Ссылка скопирована,Link copied
+dish,detail.deleteConfirm,Удалить «{{name}}»?,Delete «{{name}}»?
+dish,detail.addedToPlan,Добавлено в план,Added to plan
+dish,detail.loadError,Не удалось загрузить блюдо,Failed to load dish
+dish,comments.title,Комментарии,Comments
+dish,comments.placeholder,Написать комментарий…,Write a comment…
+dish,comments.sendAria,Отправить,Send
+dish,comments.pin,Закрепить,Pin
+dish,comments.unpin,Открепить,Unpin
+dish,comments.pinnedBadge,закреплено,pinned
+dish,comments.delete,Удалить,Delete
+dish,comments.unknownAuthor,Пользователь,User
+dish,comments.sendError,Не удалось отправить,Failed to send
+dish,actionsSheet.copyRecipe,Копировать рецепт,Copy recipe
+dish,actionsSheet.edit,Редактировать,Edit
+dish,actionsSheet.delete,Удалить,Delete
+dish,actionsSheet.cancel,Отмена,Cancel
+dish,form.headerNew,Новый рецепт,New recipe
+dish,form.headerEdit,Редактировать рецепт,Edit recipe
+dish,form.backAria,Назад,Back
+dish,form.save,Сохранить,Save
+dish,form.modeQuick,Быстро,Quick
+dish,form.modeExtended,Расширенно,Extended
+dish,form.groupBanner,Блюдо будет добавлено в группу «{{name}}»,Dish will be added to group «{{name}}»
+dish,form.copyBanner,Это копия рецепта «{{from}}». Адаптируйте под себя.,This is a copy of «{{from}}». Adapt it for yourself.
+dish,form.nameLabel,Название,Name
+dish,form.namePlaceholder,"Например, Курица с грибами",E.g. Chicken with mushrooms
+dish,form.nameError,Укажите название,Please enter a name
+dish,form.descLabel,Краткое описание,Short description
+dish,form.descPlaceholder,"В двух словах, чем особенное это блюдо…","In a few words, what makes this dish special…"
+dish,form.categoriesLabel,Категории,Categories
+dish,form.categoriesError,Выберите хотя бы одну категорию,Please select at least one category
+dish,form.mealTimeLabel,Когда есть,When to eat
+dish,form.mealTimeError,Выберите время приёма пищи,Please select a meal time
+dish,form.cookTimeLabel,Время готовки (минут),Cook time (minutes)
+dish,form.cookTimePlaceholder,30,30
+dish,form.tagsLabel,Теги (через запятую),Tags (comma-separated)
+dish,form.tagsPlaceholder,"быстро, сытно, мясо","quick, filling, meat"
+dish,form.photoLabel,Фото блюда,Dish photo
+dish,form.photoHint,до 10 штук,up to 10
+dish,form.photoUpload,Загрузить фото,Upload photo
+dish,form.photoAdd,Добавить ещё,Add more
+dish,form.photoLoading,Загружаем…,Uploading…
+dish,form.photoMainAria,Главное фото,Main photo
+dish,form.photoSetMainAria,Сделать главным,Set as main
+dish,form.photoRemoveAria,Удалить фото,Remove photo
+dish,form.photoSuccess_one,Фото загружено,Photo uploaded
+dish,form.photoSuccess_few,Загружено {{count}} фото,
+dish,form.photoSuccess_many,Загружено {{count}} фото,
+dish,form.videoLabel,Видео (необязательно),Video (optional)
+dish,form.videoUploaded,Видео загружено,Video uploaded
+dish,form.videoUpload,Загрузить видео,Upload video
+dish,form.videoLoading,Загружаем…,Uploading…
+dish,form.videoRemove,Удалить,Remove
+dish,form.videoSuccess,Видео загружено,Video uploaded
+dish,form.ingredientsLabel,Ингредиенты,Ingredients
+dish,form.ingredientsEmpty,Пока не выбрано,None selected
+dish,form.addIngredient,Добавить ингредиент,Add ingredient
+dish,form.ingredientRemoveAria,Удалить,Remove
+dish,form.toTasteAria,По вкусу,To taste
+dish,form.toTasteLabel,вкус,taste
+dish,form.toTasteValue,по вкусу,to taste
+dish,form.recipeLabel,Рецепт (шаги приготовления),Recipe (preparation steps)
+dish,form.recipePlaceholder,Опишите шаги приготовления…,Describe the preparation steps…
+dish,form.visibilityLabel,Доступ,Access
+dish,form.submitCreate,Создать блюдо,Create dish
+dish,form.submitEdit,Сохранить изменения,Save changes
+dish,form.savedSuccess,Рецепт сохранён,Recipe saved
+errors,generic,Что-то пошло не так,Something went wrong
+errors,network,Нет связи с сервером,No connection to server
+errors,unauthorized,Нужно войти в аккаунт,Please sign in
+errors,forbidden,Нет доступа,Access denied
+errors,notFound,Не найдено,Not found
+errors,validation.required,Обязательное поле,Required field
+errors,validation.email,Введите корректный email,Enter a valid email
+errors,validation.minLength,Минимум {{count}} символов,Minimum {{count}} characters
+errors,validation.maxLength,Максимум {{count}} символов,Maximum {{count}} characters
+fridge,title,Холодильник,Fridge
+fridge,guest.title,"Готовь из того, что есть дома",Cook from what you have at home
+fridge,guest.description,"Добавь продукты из холодильника — MealBot подберёт блюда, которые можно приготовить прямо сейчас.",Add ingredients from your fridge — MealBot will suggest dishes you can make right now.
+fridge,guest.register,Создать свою кухню,Create your kitchen
+fridge,guest.login,Уже есть аккаунт? Войти,Already have an account? Sign in
+fridge,telegram.title,Управляй холодильником в Telegram,Manage your fridge in Telegram
+fridge,telegram.subtitle,"Голосом или текстом, быстрее чем в приложении","By voice or text, faster than the app"
+fridge,telegram.connect,Подключить,Connect
+fridge,telegram.loading,...,...
+fridge,telegram.polling,Ожидание…,Waiting…
+fridge,telegram.errorLink,Не удалось получить ссылку,Failed to get link
+fridge,telegram.linkedToast,Telegram подключён!,Telegram connected!
+fridge,telegram.closeAria,Закрыть,Close
+fridge,family.title,Общий холодильник с семьёй,Shared fridge with family
+fridge,family.memberCount_one,{{count}} участник,{{count}} member
+fridge,family.memberCount_few,{{count}} участника,
+fridge,family.memberCount_many,{{count}} участников,
+fridge,metaStrip.total,всего,total
+fridge,metaStrip.basic,базовых,staples
+fridge,cookCta.button,Что можно приготовить?,What can I cook?
+fridge,cookCta.subtitle,ИИ подберёт блюдо по твоему холодильнику,AI will suggest a dish based on your fridge
+fridge,card.deleteAria,Удалить,Delete
+fridge,card.saveAria,Сохранить,Save
+fridge,card.cancelAria,Отмена,Cancel
+fridge,card.qtyPlaceholder,Кол-во,Qty
+fridge,card.basicBadge,базовый,staple
+fridge,empty.title,Холодильник пустой,Fridge is empty
+fridge,empty.description,"Добавь продукты — MealBot подберёт что приготовить из того, что есть",Add ingredients — MealBot will suggest what to cook from what you have
+fridge,empty.addButton,Добавить продукты,Add ingredients
+fridge,picker.title,Что у вас есть?,What do you have?
+fridge,picker.closeAria,Закрыть,Close
+fridge,picker.searchPlaceholder,Найти продукт…,Find ingredient…
+fridge,picker.clearAria,Очистить,Clear
+fridge,picker.searchResultsLabel,Результаты по «{{query}}»,Results for «{{query}}»
+fridge,picker.nothingFound,Ничего не найдено,Nothing found
+fridge,picker.allInFridge,Все продукты уже в холодильнике 🎉,All ingredients are already in your fridge 🎉
+fridge,picker.addingMany,Добавляем…,Adding…
+fridge,picker.addCount_one,Добавить {{count}} продукт,Add {{count}} ingredient
+fridge,picker.addCount_few,Добавить {{count}} продукта,
+fridge,picker.addCount_many,Добавить {{count}} продуктов,
+fridge,picker.doneEmpty,Готово,Done
+fridge,actions.fab,Добавить,Add
+fridge,actions.fabAria,Добавить продукты,Add ingredients
+fridge,actions.clearAll,Очистить всё,Clear all
+fridge,actions.clearAllConfirm,Очистить холодильник?,Clear fridge?
+fridge,actions.clearAllToast,Холодильник очищен,Fridge cleared
+fridge,toast.addedList,Добавлено: {{names}},Added: {{names}}
+fridge,toast.removed,{{name}} убран,{{name}} removed
+fridge,aiPrompt,Что можно приготовить из продуктов в моём холодильнике?,What can I cook from the ingredients in my fridge?
+groups,page.title,Мои группы,My Groups
+groups,page.createFab,Создать группу,Create group
+groups,sections.invites,Приглашения,Invitations
+groups,sections.myGroups,Мои группы,My groups
+groups,typeBadge.FAMILY,Семья,Family
+groups,typeBadge.REGULAR,Группа,Group
+groups,empty.title,У тебя пока нет групп,You have no groups yet
+groups,empty.desc,"Создай семейную группу, чтобы делить холодильник, или обычную — чтобы обмениваться рецептами с друзьями","Create a family group to share your fridge, or a regular group to share recipes with friends"
+groups,empty.create,Создать группу,Create group
+groups,guest.title,Готовьте вместе,Cook together
+groups,guest.desc,"Создайте семейную группу — общий холодильник, план и любимые блюда","Create a family group — shared fridge, meal plan and favourite dishes"
+groups,guest.register,Создать свою кухню,Create your kitchen
+groups,guest.login,Уже есть аккаунт? Войти,Already have an account? Sign in
+groups,invitePage.notFound,Приглашение не найдено,Invitation not found
+groups,invitePage.invalidTitle,Ссылка недействительна,Link is invalid
+groups,invitePage.toHome,На главную,Go to home
+groups,invitePage.familyBadge,Семейная группа · Общий холодильник,Family group · Shared fridge
+groups,invitePage.invitedBy,Вас пригласил {{name}},Invited by {{name}}
+groups,invitePage.loginRequired,Для вступления нужно войти или зарегистрироваться,You need to sign in or register to join
+groups,invitePage.joinButton,Вступить в группу,Join group
+groups,invitePage.loginAndJoin,Войти и вступить,Sign in and join
+groups,invite.accept,Принять,Accept
+groups,invite.declineAria,Отклонить,Decline
+groups,invite.from,от {{name}} · {{time}},from {{name}} · {{time}}
+groups,invite.acceptedSuccess,Вы вступили в «{{name}}»,You joined «{{name}}»
+groups,invite.declineConfirm,Отклонить приглашение в «{{name}}»?,Decline invitation to «{{name}}»?
+groups,invite.declinedSuccess,Приглашение отклонено,Invitation declined
+groups,relative.today,сегодня,today
+groups,relative.yesterday,вчера,yesterday
+groups,relative.daysAgo_one,{{count}} день назад,{{count}} day ago
+groups,relative.daysAgo_few,{{count}} дня назад,
+groups,relative.daysAgo_many,{{count}} дней назад,
+groups,relative.weeksAgo_one,{{count}} неделю назад,{{count}} week ago
+groups,relative.weeksAgo_few,{{count}} недели назад,
+groups,relative.weeksAgo_many,{{count}} недель назад,
+groups,relative.monthsAgo_one,{{count}} месяц назад,{{count}} month ago
+groups,relative.monthsAgo_few,{{count}} месяца назад,
+groups,relative.monthsAgo_many,{{count}} месяцев назад,
+groups,member_one,участник,member
+groups,member_few,участника,
+groups,member_many,участников,
+groups,group_one,группа,group
+groups,group_few,группы,
+groups,group_many,групп,
+groups,dishesLabel,блюд,dishes
+groups,detail.sinceDate,С {{date}},Since {{date}}
+groups,detail.familyFridge,Общий холодильник и план,Shared fridge and plan
+groups,detail.regularCatalog,Общий каталог блюд,Shared dish catalogue
+groups,detail.metricsMembers,Участников,Members
+groups,detail.metricsDishes,Блюд,Dishes
+groups,detail.membersTitle,Участники,Members
+groups,detail.inviteLink,Пригласить,Invite
+groups,detail.dishesTitle,Блюда группы,Group dishes
+groups,detail.addDish,Добавить,Add
+groups,detail.ownerRole,владелец,owner
+groups,detail.memberRole,участник,member
+groups,detail.joinedSince,с {{date}},since {{date}}
+groups,detail.thisIsYou,Это вы,That's you
+groups,detail.memberMenuAria,Меню участника,Member menu
+groups,detail.closeMenuAria,Закрыть меню,Close menu
+groups,detail.kickAction,Удалить из группы,Remove from group
+groups,detail.pendingStatus,ожидает,pending
+groups,detail.inviteSentAt,приглашение отправлено · {{time}},invitation sent · {{time}}
+groups,detail.revokeAria,Отозвать,Revoke
+groups,detail.inviteTitle,Пригласить в группу,Invite to group
+groups,detail.inviteFamilyOnly,Только владелец группы может отправлять приглашения,Only the group owner can send invitations
+groups,detail.inviteEmailHint,Отправьте email — приглашённый получит письмо со ссылкой,Send email — the invitee will receive a link
+groups,detail.joinCodeLabel,Код для вступления,Join code
+groups,detail.copyAria,Скопировать,Copy
+groups,detail.copied,Скопировано ✓,Copied ✓
+groups,detail.regenCode,Сгенерировать новый код,Generate new code
+groups,detail.emailInviteLabel,Email-приглашение,Email invitation
+groups,detail.sendBtn,Отправить,Send
+groups,detail.emailError,Введите корректный email,Please enter a valid email
+groups,detail.emailSendError,Ошибка отправки,Failed to send
+groups,detail.deleteGroup,Удалить группу навсегда,Delete group permanently
+groups,detail.leaveGroup,Выйти из группы,Leave group
+groups,detail.inviteSentSuccess,Приглашение отправлено на {{email}},Invitation sent to {{email}}
+groups,detail.revokeSuccess,Приглашение отозвано,Invitation revoked
+groups,detail.kickConfirm,Удалить {{name}} из группы?,Remove {{name}} from the group?
+groups,detail.kickSuccess,Участник удалён,Member removed
+groups,detail.leaveConfirm,Выйти из группы «{{name}}»?,Leave group «{{name}}»?
+groups,detail.deleteConfirm,Удалить группу «{{name}}» навсегда?,Delete group «{{name}}» permanently?
+groups,detail.codeCopied,Код скопирован,Code copied
+groups,detail.codeUpdated,Код обновлён,Code updated
+groups,form.photoLabel,Фото группы,Group photo
+groups,form.typeLabel,Тип группы,Group type
+groups,form.nameLabel,Название,Name
+groups,form.descLabel,Описание,Description
+groups,form.submitCreate,Создать группу,Create group
+groups,form.submitEdit,Сохранить изменения,Save changes
+groups,form.nameError,Укажите название,Please enter a name
+groups,form.namePlaceholderFamily,Наша семья,Our Family
+groups,form.namePlaceholderRegular,"Друзья, Команда…","Friends, Team…"
+groups,form.descPlaceholder,Расскажите о группе…,Describe the group…
+groups,form.uploadPhoto,Загрузить фото,Upload photo
+groups,form.changePhoto,Заменить фото,Change photo
+groups,form.removePhoto,Удалить,Remove
+groups,form.typeFamily,Семейная,Family
+groups,form.typeFamilyDesc,"Общий холодильник, план и блюда","Shared fridge, plan and dishes"
+groups,form.typeRegular,Обычная,Regular
+groups,form.typeRegularDesc,Делиться блюдами с друзьями по коду,Share dishes with friends via code
+home,titleLine1,Что приготовить,What to cook
+home,titleLine2,сегодня?,today?
+home,greeting,"Добрый день, {{name}} 👋","Good day, {{name}} 👋"
+home,mealChips.all,Все,All
+home,mealChips.breakfast,Завтрак,Breakfast
+home,mealChips.lunch,Обед,Lunch
+home,mealChips.dinner,Ужин,Dinner
+home,mealChips.snack,Перекус,Snack
+home,guestBanner.title,"Добавь свои блюда — и больше не думай, что готовить",Add your dishes — and never wonder what to cook again
+home,guestBanner.description,"Подборка по холодильнику, план на неделю, любимые рецепты.","Fridge-based suggestions, weekly plan, favourite recipes."
+home,guestBanner.registerText,Создать свою кухню,Create your kitchen
+home,guestBanner.loginText,Войти,Sign in
+home,emptyFridge.title,Заполни холодильник,Fill your fridge
+home,emptyFridge.body,"Покажем рецепты из того, что есть дома",We'll show recipes from what you have at home
+home,metrics.inPlan,В плане,In plan
+home,metrics.inFridge,В холодильнике,In fridge
+home,metrics.inFavorites,В избранном,Favourites
+home,fridgeSuggest.prefix,Из вашего холодильника можно приготовить,From your fridge you can make
+home,fridgeSuggest.suffix_one,блюдо,dish
+home,fridgeSuggest.suffix_few,блюда,
+home,fridgeSuggest.suffix_many,блюд,
+home,todayPinned.label,Сегодня в плане,Today's plan
+home,todayPinned.cookButton,Готовлю!,Cooking!
+home,todayPinned.cookTimeMin,{{n}} мин,{{n}} min
+home,quickActions.favorites,Избранное,Favourites
+home,quickActions.fridge,Холодильник,Fridge
+home,addOwnDish.guest,Создать свою кухню,Create your kitchen
+home,addOwnDish.user,Добавить своё блюдо,Add your own dish
+home,list.loading,Загружаем блюда…,Loading dishes…
+home,list.empty,Нет подходящих блюд,No matching dishes
+home,list.loadError,Не удалось загрузить блюда,Failed to load dishes
+home,addToPlan.success,«{{name}}» добавлено на сегодня,«{{name}}» added for today
+home,addToPlan.error,Не удалось добавить,Failed to add
+plan,page.title,План готовки,Meal Plan
+plan,page.fab,В план,Add to plan
+plan,page.fabAria,Добавить в план,Add to plan
+plan,filter.all,Все,All
+plan,filter.mine,Мои,Mine
+plan,filter.family,Семейные,Family
+plan,strip.today,Сегодня,Today
+plan,strip.week,Неделя,Week
+plan,strip.total,Всего,Total
+plan,today.heading,Сегодня · {{date}},Today · {{date}}
+plan,today.meals_one,{{count}} приём пищи запланирован,{{count}} meal planned
+plan,today.meals_few,{{count}} приёма пищи запланировано,
+plan,today.meals_many,{{count}} приёмов пищи запланировано,
+plan,plan.dishFallback,Блюдо,Dish
+plan,plan.family,🏠 Семейный,🏠 Family
+plan,plan.addedBy,Добавил(а): {{name}},Added by: {{name}}
+plan,plan.removeAria,Убрать из плана,Remove from plan
+plan,plan.noDate,Без даты,No date
+plan,meal.BREAKFAST,Завтрак,Breakfast
+plan,meal.LUNCH,Обед,Lunch
+plan,meal.DINNER,Ужин,Dinner
+plan,meal.SNACK,Перекус,Snack
+plan,empty.title,План пока пустой,Plan is empty
+plan,empty.body,Добавляй блюда в план прямо из карточки рецепта — кнопка «В план готовки»,Add dishes to your plan from a recipe card — tap «Add to plan»
+plan,empty.browseDishes,Посмотреть блюда,Browse dishes
+plan,filterEmpty,По выбранному фильтру ничего нет,Nothing matches the selected filter
+plan,guest.title,Планируй меню заранее,Plan your meals in advance
+plan,guest.desc,"Добавляй блюда на неделю вперёд — и больше не думай, что готовить каждый день",Add dishes for the week ahead — no more wondering what to cook each day
+plan,guest.register,Создать свою кухню,Create your kitchen
+plan,guest.login,Уже есть аккаунт? Войти,Already have an account? Sign in
+plan,dish_one,блюдо,dish
+plan,dish_few,блюда,
+plan,dish_many,блюд,
+plan,day_one,день,day
+plan,day_few,дня,
+plan,day_many,дней,
+profile,hero.noName,Без имени,No name
+profile,hero.joinedAt,С нами с {{date}},Member since {{date}}
+profile,hero.badge.pro,Pro,Pro
+profile,hero.badge.free,Free,Free
+profile,sections.connections,Подключения,Connections
+profile,sections.settings,Настройки,Settings
+profile,sections.account,Аккаунт,Account
+profile,telegram.title,Telegram-бот,Telegram bot
+profile,telegram.descConnected,Подключён,Connected
+profile,telegram.descDisconnected,Управляй приложением прямо в Telegram,Manage the app directly in Telegram
+profile,telegram.statusConnected,Подключено,Connected
+profile,telegram.openBot,Открыть бота →,Open bot →
+profile,telegram.connectButton,Подключить,Connect
+profile,telegram.errorLink,Не удалось получить ссылку,Failed to get link
+profile,language.row,Язык интерфейса,Interface language
+profile,language.ru,Русский,Русский
+profile,language.en,English,English
+profile,language.hint,English перевод появится позже — пока подключена только инфраструктура.,English translation is available.
+profile,logout,Выйти из аккаунта,Sign out
