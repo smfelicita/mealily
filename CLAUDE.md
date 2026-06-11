@@ -80,10 +80,13 @@ scripts/          — export-i18n-csv.js, import-i18n-csv.js
 - ИИ-чат: недоступен, сразу CTA регистрации
 - AuthPage принимает `?mode=register`
 
-## Текущий статус (май 2026)
+## Текущий статус (июнь 2026)
 - Редизайн Phase A: завершён. Все страницы на Tailwind-only, slim-main стратегия.
-- i18n: 14/14 страниц на t(), 10 namespace, ru+en locale заполнены.
-  Переключатель языка временно скрыт в ProfilePage (ждёт перевода ингредиентов из БД).
+- i18n: завершён. 14/14 страниц на t(), 10 namespace, ru+en заполнены,
+  ингредиенты переведены (nameEn, 306 шт.), переключатель языка раскрыт в ProfilePage.
+- Безопасность ИИ-чата (июнь 2026): роль PRO берётся только из JWT (req.userRole),
+  не из тела запроса. В telegram-боте удалён мёртвый handleAiChat (утечка приватных
+  блюд + хардкод opus), живой ai_chat пишет в AiUsageLog.
 - Админка: этапы A, C, D, E, F, G, H реализованы. Этап B заморожен.
   Файлы: `frontend/src/admin/`, `backend/src/routes/admin/`, `backend/src/middleware/adminAuth.js`.
   На сервере нужен `prisma db push` (AiUsageLog + AuditLog + isActive) и `ADMIN_JWT_SECRET` в `.env`.

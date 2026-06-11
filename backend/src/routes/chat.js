@@ -114,7 +114,7 @@ ${rules.map((r, i) => `${i + 1}. ${r}`).join('\n')}`
 // POST /api/chat
 router.post('/', auth, async (req, res, next) => {
   try {
-    const { message, history = [], role = 'USER', fridge = [] } = req.body
+    const { message, history = [], fridge = [] } = req.body
     if (!message?.trim()) return res.status(400).json({ error: 'Сообщение не может быть пустым' })
 
     const flags = await getFlags()
@@ -145,7 +145,8 @@ router.post('/', auth, async (req, res, next) => {
       .map(d => `[DISH:${d.id}] ${d.name} (${d.mealTime.join('/')}, теги: ${d.tags.join(', ')})`)
       .join('\n')
 
-    const isPro = role === 'PRO' || role === 'ADMIN'
+    // Роль только из JWT (req.userRole) — клиенту не доверяем
+    const isPro = req.userRole === 'PRO' || req.userRole === 'ADMIN'
     const fridgeList = fridge.map(f => f.name).filter(Boolean).join(', ')
     const systemPrompt = buildSystemPrompt(dishSummary, fridgeList, isPro)
     const recentHistory = history.slice(-10).map(m => ({

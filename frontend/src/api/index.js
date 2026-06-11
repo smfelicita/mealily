@@ -120,8 +120,8 @@ export const api = {
   getGroupInvites: (groupId) => request(`/groups/${groupId}/invites`),
 
   // Chat
-  sendMessage: (message, history = [], role = 'USER', fridge = []) =>
-    request('/chat', { method: 'POST', body: { message, history, role, fridge } }),
+  sendMessage: (message, history = [], fridge = []) =>
+    request('/chat', { method: 'POST', body: { message, history, fridge } }),
   clearChat: () => request('/chat', { method: 'DELETE' }),
 
   // Meal plans

@@ -7,22 +7,6 @@
 
 ## 🔥 Активные задачи
 
-### i18n — перевод ингредиентов (EN)
-Переключатель языка скрыт до готовности этой задачи.
-
-1. Добавить `nameEn String?` в модель `Ingredient` (`backend/prisma/schema.prisma`)
-2. `prisma db push` (DIRECT_URL, порт 5432)
-3. Экспортировать `id, name` в CSV → заполнить `nameEn` вручную → импортировать SQL-ом
-4. В `/api/ingredients` и `/api/fridge` добавить `nameEn` в ответ
-5. На фронте: `i18n.language === 'en' ? ingredient.nameEn || ingredient.name : ingredient.name` в:
-   - `FridgePage`, `DishDetailPage`, `DishIngredientPicker`
-6. Раскрыть переключатель языка в `ProfilePage.jsx` (сейчас закомментирован)
-
-### i18n — приёмы пищи
-Ключи `common.mealTime.*` переведены в locale-файлах. Нужно убедиться что компоненты
-используют `t('common:mealTime.BREAKFAST')` а не захардкоженный текст.
-Проверить: `HomePage`, `DishesPage`, `MealPlanPage`, `DishCard`.
-
 ### Админка — наполнение алиасов (этап A)
 - [ ] Экспортировать ингредиенты в CSV, добавить синонимы, импортировать SQL-ом
 - [ ] Merge duplicates — склейка дублей в один canonical

@@ -339,7 +339,7 @@ export default function ChatPage() {
     addChatMessage({ role: 'user', content: msg, id: Date.now() })
     setLoading(true)
     try {
-      const res = await api.sendMessage(msg, chatMessages, user?.role, fridge)
+      const res = await api.sendMessage(msg, chatMessages, fridge)
       addChatMessage({
         role: 'assistant',
         content: res.message,

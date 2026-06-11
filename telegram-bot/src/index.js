@@ -618,48 +618,6 @@ async function sendIngredientPage(chatId, session) {
   )
 }
 
-// ─── AI chat ───────────────────────────────────────────────────────────────
-async function handleAiChat(chatId, userId, userMessage) {
-  const history = await prisma.chatMessage.findMany({
-    where: { userId, platform: 'telegram' },
-    orderBy: { createdAt: 'desc' },
-    take: 8,
-  })
-  history.reverse()
-
-  const fridge = await prisma.fridgeItem.findMany({
-    where: { userId },
-    include: { ingredient: true },
-  })
-  const fridgeList = fridge.map(f => f.ingredient.nameRu).join(', ')
-
-  const dishes = await prisma.dish.findMany({ take: 100 })
-  const dishSummary = dishes.map(d => `- ${d.name} (${d.mealTime.join('/')})`).join('\n')
-
-  const systemPrompt = `Ты дружелюбный кулинарный помощник MealBot в Telegram. Отвечай кратко (до 200 слов), используй эмодзи.
-${fridgeList ? `В холодильнике: ${fridgeList}` : 'Холодильник не заполнен.'}
-Доступные блюда:\n${dishSummary}`
-
-  const aiRes = await anthropic.messages.create({
-    model: 'claude-opus-4-5',
-    max_tokens: 500,
-    system: systemPrompt,
-    messages: [
-      ...history.map(m => ({ role: m.role, content: m.content })),
-      { role: 'user', content: userMessage },
-    ],
-  })
-
-  const reply = aiRes.content[0].text
-  await prisma.chatMessage.createMany({
-    data: [
-      { userId, role: 'user', content: userMessage, platform: 'telegram' },
-      { userId, role: 'assistant', content: reply, platform: 'telegram' },
-    ],
-  })
-  return reply
-}
-
 // ─── Fridge text commands: + добавить / - убрать ──────────────────────────
 async function handleFridgeCommand(chatId, userId, text) {
   const addMatch = text.match(/^\+\s*(.+)/)
@@ -805,20 +763,33 @@ bot.on('message', async (msg) => {
       session.state = 'idle'
       return bot.sendMessage(chatId, '⚠️ Дневной лимит ИИ-сообщений исчерпан. Попробуй завтра.', MAIN_MENU)
     }
+    const aiModel = await getFlag('ai.model', 'claude-sonnet-4-6')
     try {
       const history = session.data.aiHistory || []
       const messages = [...history.slice(-8), { role: 'user', content: text }]
       const resp = await anthropic.messages.create({
-        model: await getFlag('ai.model', 'claude-sonnet-4-6'),
+        model: aiModel,
         max_tokens: 600,
         system: 'Ты кулинарный ассистент MealBot в Telegram. Помогаешь выбрать блюда и ответить на вопросы о еде. Отвечай коротко, по-русски.',
         messages,
       })
       const reply = resp.content[0].text
       session.data.aiHistory = [...messages, { role: 'assistant', content: reply }]
+
+      // Учёт расходов для админ-аналитики (та же формула, что в backend/src/routes/chat.js)
+      const inputTokens = resp.usage?.input_tokens || 0
+      const outputTokens = resp.usage?.output_tokens || 0
+      const cost = (inputTokens / 1_000_000) * 3 + (outputTokens / 1_000_000) * 15
+      prisma.aiUsageLog.create({
+        data: { userId: user.id, model: resp.model, inputTokens, outputTokens, cost, status: 'success' },
+      }).catch(() => {})
+
       return bot.sendMessage(chatId, reply)
     } catch (e) {
       console.error('[ai_chat]', e.message)
+      prisma.aiUsageLog.create({
+        data: { userId: user.id, model: aiModel, inputTokens: 0, outputTokens: 0, cost: 0, status: 'error', errorMessage: e.message },
+      }).catch(() => {})
       return bot.sendMessage(chatId, 'Ошибка ИИ. Попробуй ещё раз.')
     }
   }
