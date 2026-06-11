@@ -1,4 +1,8 @@
+// Feature-флаги backend. Кэш — общий код из shared/flags.js (един с telegram-ботом).
+// Здесь остаются только дефолты и ensureDefaults (создание записей при старте).
+
 const prisma = require('./prisma')
+const { createFlagsCache } = require('../../../shared/flags')
 
 // Дефолтные значения флагов (используются при первом запуске)
 const DEFAULTS = {
@@ -14,31 +18,7 @@ const DEFAULTS = {
   'notifications.emptyFridgeEnabled':    { value: 'true',              description: 'Напоминания о пустом холодильнике' },
 }
 
-let _cache = null
-let _cacheAt = 0
-const TTL = 60_000
-
-function parseValue(v) {
-  if (v === 'true') return true
-  if (v === 'false') return false
-  const n = Number(v)
-  if (v !== '' && !isNaN(n)) return n
-  return v
-}
-
-async function getFlags() {
-  if (_cache && Date.now() - _cacheAt < TTL) return _cache
-  const rows = await prisma.featureFlag.findMany()
-  const flags = {}
-  for (const row of rows) flags[row.key] = parseValue(row.value)
-  _cache = flags
-  _cacheAt = Date.now()
-  return flags
-}
-
-function invalidateCache() {
-  _cache = null
-}
+const { getFlags, getFlag, invalidateCache } = createFlagsCache(prisma)
 
 // Запускается при старте сервера — создаёт записи для всех флагов если их нет
 async function ensureDefaults() {
@@ -51,4 +31,4 @@ async function ensureDefaults() {
   }
 }
 
-module.exports = { getFlags, invalidateCache, ensureDefaults, DEFAULTS }
+module.exports = { getFlags, getFlag, invalidateCache, ensureDefaults, DEFAULTS }

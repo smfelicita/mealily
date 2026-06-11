@@ -27,7 +27,9 @@ frontend/         — React + Vite + PWA
     api/index.js  — все API-вызовы (только здесь, не в компонентах)
     store/index.js — Zustand (user, token, fridge, chatMessages, planDishIds)
     locales/      — ru/*.json и en/*.json (10 namespace)
-telegram/         — Telegram-бот
+telegram-bot/     — Telegram-бот
+shared/           — ЕДИНАЯ логика backend+бот: aiLimit, flags (кэш), fridge (базовые
+                    продукты). Prisma передаётся аргументом. Править здесь, не в копиях!
 context/          — документация проекта
 scripts/          — export-i18n-csv.js, import-i18n-csv.js
 ```

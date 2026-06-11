@@ -1,43 +1,9 @@
+// Обёртка над shared/aiLimit.js с прокинутым backend-prisma.
+// Логика лимитов ЕДИНАЯ для backend и telegram-бота — править в shared/.
+
 const prisma = require('./prisma')
+const shared = require('../../../shared/aiLimit')
 
-const USER_LIMIT = 10
-const PRO_LIMIT  = 100
+const checkAiLimit = (userId, flags) => shared.checkAiLimit(prisma, userId, flags)
 
-/**
- * Проверяет и увеличивает счётчик ИИ-сообщений для авторизованного пользователя.
- * @param {string} userId
- * @param {object} [flags] — флаги из lib/flags (опционально, для динамического лимита)
- * @returns {{ allowed: boolean, left: number }}
- */
-async function checkAiLimit(userId, flags) {
-  const today = new Date().toDateString()
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { aiMessagesDay: true, aiMessagesDate: true, role: true },
-  })
-
-  if (!user) return { allowed: false, left: 0 }
-  if (user.role === 'ADMIN') return { allowed: true, left: 999 }
-
-  const userLimitFromFlag = flags?.['ai.dailyLimit.user']
-  const limit = user.role === 'PRO' ? PRO_LIMIT : (typeof userLimitFromFlag === 'number' ? userLimitFromFlag : USER_LIMIT)
-
-  const isToday = user.aiMessagesDate &&
-    new Date(user.aiMessagesDate).toDateString() === today
-  const count = isToday ? user.aiMessagesDay : 0
-
-  if (count >= limit) return { allowed: false, left: 0 }
-
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      aiMessagesDay:  isToday ? { increment: 1 } : 1,
-      aiMessagesDate: new Date(),
-    },
-  })
-
-  return { allowed: true, left: limit - count - 1 }
-}
-
-module.exports = { checkAiLimit, USER_LIMIT, PRO_LIMIT }
+module.exports = { checkAiLimit, USER_LIMIT: shared.USER_LIMIT, PRO_LIMIT: shared.PRO_LIMIT }

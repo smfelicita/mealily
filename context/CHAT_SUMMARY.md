@@ -102,8 +102,14 @@ cd ../frontend && npm run build
 - **Чистка**: удалены неиспользуемые `hooks/useToast.js(x)` (настоящий useToast — в
   `components/ui/Toast.jsx`), мусорные `vite.config.js.timestamp-*.mjs`, `railway.json`
   (рудимент Railway, деплой на VPS).
-- Из анализа, осталось в бэклоге (см. TASKS.md): дублирование логики бот/бэкенд,
-  integration-тесты, in-memory кэши при нескольких PM2-инстансах, SMS-заглушка логирует коды.
+- Из анализа, осталось в бэклоге (см. TASKS.md): integration-тесты,
+  in-memory кэши при нескольких PM2-инстансах, SMS-заглушка логирует коды.
+- **Дедупликация бот/бэкенд**: общая логика вынесена в `shared/` (aiLimit.js,
+  flags.js, fridge.js — prisma передаётся аргументом, внешних зависимостей нет).
+  backend/src/lib/{aiLimit,flags,fridge}.js — тонкие обёртки, API не изменился.
+  Бот подключает shared напрямую. Попутно исправлено: PRO в боте получал лимит 10
+  вместо 100 (бот не знал про PRO). Тесты shared-логики на мок-prisma:
+  backend/tests/{aiLimit,flags}.test.js (всего теперь 51 тест).
 - **Unit-тесты (Vitest)**: `backend/tests/` — 37 тестов на phone, messageFilter,
   nutrition, chatHelpers. Запуск: `cd backend && npm test`. Для тестируемости
   normalizePhone вынесен в `src/utils/phone.js`, хелперы чата — в `src/lib/chatHelpers.js`.

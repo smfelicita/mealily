@@ -18,51 +18,15 @@ async function cleanupExpiredTokens() {
 }
 cleanupExpiredTokens().catch(console.error)
 
-// ─── Feature flags (читаем из БД напрямую, TTL 60с) ──────────────────────────
-let _flagCache = null
-let _flagCacheAt = 0
+// ─── Общая логика с backend (shared/) — править там, не здесь ─────────────────
+const { createFlagsCache } = require('../../shared/flags')
+const { checkAiLimit: sharedCheckAiLimit } = require('../../shared/aiLimit')
+const { addDefaultFridgeItems } = require('../../shared/fridge')
 
-async function getFlag(key, fallback = null) {
-  if (!_flagCache || Date.now() - _flagCacheAt > 60_000) {
-    const rows = await prisma.featureFlag.findMany().catch(() => [])
-    _flagCache = {}
-    for (const r of rows) {
-      const v = r.value
-      _flagCache[r.key] = v === 'true' ? true : v === 'false' ? false : (isNaN(Number(v)) || v === '' ? v : Number(v))
-    }
-    _flagCacheAt = Date.now()
-  }
-  return key in _flagCache ? _flagCache[key] : fallback
-}
+const { getFlags, getFlag } = createFlagsCache(prisma)
 
-const USER_AI_LIMIT = 10
-
-async function checkAiLimit(userId) {
-  const today = new Date().toDateString()
-  const userLimit = await getFlag('ai.dailyLimit.user', USER_AI_LIMIT)
-  const limit = typeof userLimit === 'number' ? userLimit : USER_AI_LIMIT
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { aiMessagesDay: true, aiMessagesDate: true, role: true },
-  })
-  if (!user) return { allowed: false, left: 0 }
-  if (user.role === 'ADMIN') return { allowed: true, left: 999 }
-
-  const isToday = user.aiMessagesDate &&
-    new Date(user.aiMessagesDate).toDateString() === today
-  const count = isToday ? user.aiMessagesDay : 0
-  if (count >= limit) return { allowed: false, left: 0 }
-
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      aiMessagesDay: isToday ? { increment: 1 } : 1,
-      aiMessagesDate: new Date(),
-    },
-  })
-  return { allowed: true, left: limit - count - 1 }
-}
+// Лимит ИИ-сообщений: единая логика (USER 10/день из флага, PRO 100, ADMIN без лимита)
+const checkAiLimit = async (userId) => sharedCheckAiLimit(prisma, userId, await getFlags())
 
 // User session state
 const sessions = {}
@@ -83,14 +47,8 @@ async function getUser(tgUser) {
         name: tgUser.first_name,
       },
     })
-    // Добавляем базовые продукты новому пользователю
-    const basics = await prisma.ingredient.findMany({ where: { isBasic: true }, select: { id: true, defaultQuantity: true, defaultUnit: true } })
-    if (basics.length) {
-      await prisma.fridgeItem.createMany({
-        data: basics.map(ing => ({ userId: user.id, ingredientId: ing.id, groupId: null, quantityValue: ing.defaultQuantity ?? null, quantityUnit: ing.defaultUnit ?? null })),
-        skipDuplicates: true,
-      })
-    }
+    // Добавляем базовые продукты новому пользователю (единая логика с backend)
+    await addDefaultFridgeItems(prisma, user.id)
   }
   return user
 }
