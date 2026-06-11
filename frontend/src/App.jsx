@@ -18,6 +18,8 @@ import MealPlanPage from './pages/MealPlanPage'
 import TelegramAuthPage from './pages/TelegramAuthPage'
 import ProfilePage from './pages/ProfilePage'
 import InvitePage from './pages/InvitePage'
+import PrivacyPage from './pages/legal/PrivacyPage'
+import TermsPage from './pages/legal/TermsPage'
 
 const AdminLayout = lazy(() => import('./admin/AdminLayout'))
 const AdminLoginPage = lazy(() => import('./admin/AdminLoginPage'))
@@ -110,6 +112,8 @@ export default function App() {
 
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/auth/tg" element={<TelegramAuthPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
         <Route path="/invite/:token" element={<InvitePage />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />

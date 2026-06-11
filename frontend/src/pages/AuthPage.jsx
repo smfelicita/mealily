@@ -5,10 +5,10 @@
 // Визуал — в стиле других редизайн-страниц: pill-инпуты, lucide-иконки, accent-кнопки.
 
 import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 import { ChefHat, Mail, Phone, AlertCircle } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 
 import { api } from '../api'
 import { useStore } from '../store'
@@ -73,6 +73,44 @@ function ResendLine({ countdown, onResend, loading }) {
   )
 }
 
+// ─── Согласие с документами (152-ФЗ) ─────────────────────────────
+function ConsentCheckbox({ checked, onChange }) {
+  const { t } = useTranslation('auth')
+  return (
+    <label className="flex items-start gap-2.5 cursor-pointer select-none">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={e => onChange(e.target.checked)}
+        required
+        className="mt-0.5 w-4 h-4 shrink-0 accent-accent cursor-pointer"
+      />
+      <span className="text-sm2 text-text-2 leading-snug" style={{ textWrap: 'pretty' }}>
+        {t('consent.prefix')}{' '}
+        <Link to="/terms" className="text-accent font-semibold" target="_blank">{t('consent.terms')}</Link>{' '}
+        {t('consent.and')}{' '}
+        <Link to="/privacy" className="text-accent font-semibold" target="_blank">{t('consent.privacy')}</Link>
+      </span>
+    </label>
+  )
+}
+
+// Короткая строка для входов без формы (Google, телефон)
+function ConsentNote() {
+  return (
+    <p className="text-center text-xs text-text-3 leading-snug mt-3" style={{ textWrap: 'pretty' }}>
+      <Trans
+        i18nKey="consent.continueNote"
+        ns="auth"
+        components={{
+          terms:   <Link to="/terms"   className="text-accent" target="_blank" />,
+          privacy: <Link to="/privacy" className="text-accent" target="_blank" />,
+        }}
+      />
+    </p>
+  )
+}
+
 // ─── Tab switcher (email | phone) ────────────────────────────────
 function TabSwitcher({ tab, onChange }) {
   const { t } = useTranslation('auth')
@@ -114,6 +152,7 @@ export default function AuthPage() {
   const [pendingEmail, setPendingEmail] = useState('')
   const [pendingPhone, setPendingPhone] = useState('')
   const [error, setError]     = useState('')
+  const [agree, setAgree]     = useState(false)
   const [loading, setLoading] = useState(false)
   const [resendCountdown, setResendCountdown] = useState(0)
   const { setAuth } = useStore()
@@ -278,6 +317,7 @@ export default function AuthPage() {
                 {!loading && t('phoneEnter.sendCode')}
               </Button>
             </form>
+            <ConsentNote />
           </>
         )}
 
@@ -374,8 +414,16 @@ export default function AuthPage() {
                   onChange={upd('password')}
                 />
               </div>
+              {step === 'register' && (
+                <ConsentCheckbox checked={agree} onChange={setAgree} />
+              )}
               <ErrorMsg msg={error} />
-              <Button type="submit" className="w-full" loading={loading}>
+              <Button
+                type="submit"
+                className="w-full"
+                loading={loading}
+                disabled={step === 'register' && !agree}
+              >
                 {!loading && (step === 'login' ? t('login.submit') : t('register.submit'))}
               </Button>
             </form>
@@ -409,6 +457,7 @@ export default function AuthPage() {
                     locale="ru"
                   />
                 </div>
+                <ConsentNote />
               </>
             )}
           </>
