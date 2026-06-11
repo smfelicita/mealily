@@ -17,6 +17,11 @@
 
 ### Качество
 - [ ] Integration-тесты: auth flow, invite flow, fridge migration, access control
+- [ ] Unit-тесты чистой логики: normalizePhone, messageFilter, nutrition, getRelevantDishes
+- [ ] Дублирование логики бот/бэкенд (checkAiLimit, кэш флагов, базовые продукты) —
+      вынести в shared/ или перевести бота на API
+- [ ] In-memory кэши (dishCache в chat.js, флаги) — рассинхрон при нескольких PM2-инстансах
+- [ ] SMS: подключить реального провайдера, убрать код из логов (сейчас заглушка console.log)
 
 ### Фичи
 - [ ] Список покупок: автогенерация из выбранных блюд на неделю
