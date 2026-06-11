@@ -179,18 +179,30 @@ router.get('/', optionalAuth, async (req, res, next) => {
       })
       const fridgeIngredientIds = fridgeItems.map(f => f.ingredientId)
 
-      const allDishes = await prisma.dish.findMany({
+      // Фильтрация на стороне БД: блюдо подходит, если нет ни одного
+      // обязательного ингредиента (не optional, не toTaste, не специя),
+      // которого нет в холодильнике. notIn: [] матчит всё — при пустом
+      // холодильнике останутся только блюда без обязательных ингредиентов
+      // (та же семантика, что была у JS-фильтра).
+      const dishes = await prisma.dish.findMany({
+        where: {
+          ...baseWhere,
+          ingredients: {
+            none: {
+              optional: false,
+              toTaste: false,
+              ingredient: {
+                ignoreInFridgeFilter: false,
+                id: { notIn: fridgeIngredientIds },
+              },
+            },
+          },
+        },
         include: { ingredients: { include: { ingredient: true } } },
-        where: baseWhere,
         orderBy: { name: 'asc' },
       })
 
-      const filtered = allDishes.filter(dish => {
-        const required = dish.ingredients.filter(di => !di.optional && !di.toTaste && !di.ingredient.ignoreInFridgeFilter).map(di => di.ingredientId)
-        return required.every(id => fridgeIngredientIds.includes(id))
-      })
-
-      return res.json(formatDishes(filtered))
+      return res.json(formatDishes(dishes))
     }
 
     const ingredientIds = ingredients ? ingredients.split(',').filter(Boolean) : null
@@ -484,24 +496,26 @@ router.get('/:id/recommendations', optionalAuth, async (req, res, next) => {
     }
 
     const dishIngIds = dish.ingredients.filter(di => !di.toTaste).map(di => di.ingredientId)
+    const dishIngIdSet = new Set(dishIngIds)
 
     const visibilityFilter = await buildVisibilityFilter(req.userId)
 
-    // Все видимые блюда (кроме текущего) с ингредиентами
-    const allDishes = await prisma.dish.findMany({
-      where: { ...visibilityFilter, id: { not: id } },
-      include: {
-        ingredients: {
-          include: { ingredient: { select: { id: true, nameRu: true, emoji: true } } },
-        },
-      },
-    })
+    // Похожие: кандидаты сужаются на стороне БД до блюд с >= 1 общим
+    // ингредиентом, точный порог (>= 2) и сортировка — в JS на малом наборе
+    const similarCandidates = dishIngIds.length
+      ? await prisma.dish.findMany({
+          where: {
+            ...visibilityFilter,
+            id: { not: id },
+            ingredients: { some: { toTaste: false, ingredientId: { in: dishIngIds } } },
+          },
+          include: { ingredients: { include: { ingredient: true } } },
+        })
+      : []
 
-    // Похожие: >= 2 общих ингредиента
-    const similar = allDishes
+    const similar = similarCandidates
       .map(d => {
-        const dIngIds = d.ingredients.filter(di => !di.toTaste).map(di => di.ingredientId)
-        const overlap = dIngIds.filter(iid => dishIngIds.includes(iid)).length
+        const overlap = d.ingredients.filter(di => !di.toTaste && dishIngIdSet.has(di.ingredientId)).length
         return { d, overlap }
       })
       .filter(({ overlap }) => overlap >= 2)
@@ -523,29 +537,64 @@ router.get('/:id/recommendations', optionalAuth, async (req, res, next) => {
       : { userId: req.userId, groupId: null }
     const fridgeItems = await prisma.fridgeItem.findMany({ where: fridgeWhere, select: { ingredientId: true } })
     const fridgeIds = fridgeItems.map(f => f.ingredientId)
+    const fridgeIdSet = new Set(fridgeIds)
 
-    // Из холодильника: все обязательные ингредиенты есть (специи игнорируем)
-    const fromFridge = allDishes
-      .filter(d => {
-        const required = d.ingredients.filter(di => !di.toTaste && !di.optional && !di.ingredient.ignoreInFridgeFilter).map(di => di.ingredientId)
-        return required.length > 0 && required.every(iid => fridgeIds.includes(iid))
-      })
-      .slice(0, 6)
-      .map(d => formatDish(d))
+    // Из холодильника: есть >= 1 обязательный ингредиент и ни одного
+    // обязательного вне холодильника — целиком на стороне БД
+    const fromFridgeDishes = await prisma.dish.findMany({
+      where: {
+        ...visibilityFilter,
+        id: { not: id },
+        ingredients: {
+          some: { optional: false, toTaste: false, ingredient: { ignoreInFridgeFilter: false } },
+          none: {
+            optional: false,
+            toTaste: false,
+            ingredient: { ignoreInFridgeFilter: false, id: { notIn: fridgeIds } },
+          },
+        },
+      },
+      include: { ingredients: { include: { ingredient: true } } },
+      take: 6,
+    })
+    const fromFridge = formatDishes(fromFridgeDishes)
 
-    // nearMatch: 1–3 недостающих обязательных ингредиента (специи игнорируем)
-    const nearMatch = allDishes
-      .map(d => {
-        const required = d.ingredients.filter(di => !di.toTaste && !di.optional && !di.ingredient.ignoreInFridgeFilter)
-        const missing = required.filter(di => !fridgeIds.includes(di.ingredientId))
-        return {
-          dish: formatDish(d),
-          missing: missing.map(di => ({ name: di.ingredient.nameRu, emoji: di.ingredient.emoji })),
-        }
-      })
+    // nearMatch: 1–3 недостающих обязательных ингредиента. Первый запрос —
+    // только id + обязательные ингредиенты (лёгкие строки), полные блюда
+    // догружаются вторым запросом по 6 отобранным id
+    const nearCandidates = await prisma.dish.findMany({
+      where: { ...visibilityFilter, id: { not: id } },
+      select: {
+        id: true,
+        ingredients: {
+          where: { optional: false, toTaste: false, ingredient: { ignoreInFridgeFilter: false } },
+          select: {
+            ingredientId: true,
+            ingredient: { select: { nameRu: true, emoji: true } },
+          },
+        },
+      },
+    })
+
+    const nearPicked = nearCandidates
+      .map(d => ({ id: d.id, missing: d.ingredients.filter(di => !fridgeIdSet.has(di.ingredientId)) }))
       .filter(({ missing }) => missing.length >= 1 && missing.length <= 3)
       .sort((a, b) => a.missing.length - b.missing.length)
       .slice(0, 6)
+
+    const nearDishes = nearPicked.length
+      ? await prisma.dish.findMany({
+          where: { id: { in: nearPicked.map(p => p.id) } },
+          include: { ingredients: { include: { ingredient: true } } },
+        })
+      : []
+    const nearDishMap = new Map(nearDishes.map(d => [d.id, d]))
+    const nearMatch = nearPicked
+      .filter(p => nearDishMap.has(p.id))
+      .map(p => ({
+        dish: formatDish(nearDishMap.get(p.id)),
+        missing: p.missing.map(di => ({ name: di.ingredient.nameRu, emoji: di.ingredient.emoji })),
+      }))
 
     res.json({ similar, fromFridge, nearMatch })
   } catch (err) {
