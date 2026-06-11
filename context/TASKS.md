@@ -17,7 +17,8 @@
 
 ### Качество
 - [ ] Integration-тесты: auth flow, invite flow, fridge migration, access control
-- [ ] Unit-тесты чистой логики: normalizePhone, messageFilter, nutrition, getRelevantDishes
+- [x] Unit-тесты чистой логики: phone, messageFilter, nutrition, chatHelpers —
+      `backend/tests/`, запуск `cd backend && npm test` (Vitest, 37 тестов)
 - [ ] Дублирование логики бот/бэкенд (checkAiLimit, кэш флагов, базовые продукты) —
       вынести в shared/ или перевести бота на API
 - [ ] In-memory кэши (dishCache в chat.js, флаги) — рассинхрон при нескольких PM2-инстансах

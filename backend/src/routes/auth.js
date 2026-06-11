@@ -9,6 +9,7 @@ const { addDefaultFridgeItems } = require('../lib/fridge')
 const { logger, maskEmail } = require('../lib/logger')
 const validate = require('../middleware/validate')
 const { authRegister, authLogin } = require('../lib/schemas')
+const { normalizePhone } = require('../utils/phone')
 
 // Строгий rate limit для verify-эндпоинтов: 5 попыток за 15 минут по target (email/phone)
 const verifyLimiter = rateLimit({
@@ -86,14 +87,6 @@ async function findValidCode(type, target, code) {
     where: { type, target, code, usedAt: null, expiresAt: { gt: new Date() } },
     orderBy: { createdAt: 'desc' },
   })
-}
-
-function normalizePhone(raw) {
-  const digits = raw.replace(/\D/g, '')
-  if (digits.startsWith('8') && digits.length === 11) return '+7' + digits.slice(1)
-  if (digits.startsWith('7') && digits.length === 11) return '+' + digits
-  if (digits.length === 10) return '+7' + digits
-  return '+' + digits
 }
 
 // POST /api/auth/register

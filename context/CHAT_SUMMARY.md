@@ -103,7 +103,14 @@ cd ../frontend && npm run build
   `components/ui/Toast.jsx`), мусорные `vite.config.js.timestamp-*.mjs`, `railway.json`
   (рудимент Railway, деплой на VPS).
 - Из анализа, осталось в бэклоге (см. TASKS.md): дублирование логики бот/бэкенд,
-  тесты, in-memory кэши при нескольких PM2-инстансах, SMS-заглушка логирует коды.
+  integration-тесты, in-memory кэши при нескольких PM2-инстансах, SMS-заглушка логирует коды.
+- **Unit-тесты (Vitest)**: `backend/tests/` — 37 тестов на phone, messageFilter,
+  nutrition, chatHelpers. Запуск: `cd backend && npm test`. Для тестируемости
+  normalizePhone вынесен в `src/utils/phone.js`, хелперы чата — в `src/lib/chatHelpers.js`.
+- **Найден и исправлен баг фильтра сообщений**: `\b` в JS-регулярках не работает
+  с кириллицей — OFF_TOPIC-фильтр ИИ-чата никогда ничего не блокировал.
+  messageFilter.js переписан на ручные границы слов (lookbehind + префиксы основ,
+  точные границы для коротких основ: рак/суд/иск/суп и т.д.).
 
 ## Последние изменения (май 2026) — i18n и документация
 
