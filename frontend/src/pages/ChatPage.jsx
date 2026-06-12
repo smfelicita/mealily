@@ -264,14 +264,17 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
     }
   }
 
+  // Подложка тянется на всю ширину, контент — в центральной колонке (как у ChatGPT)
   if (locked) {
     return (
-      <div className="shrink-0 px-3 py-3 border-t border-border bg-bg-2">
-        <div className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-bg-3 border border-border">
-          <Lock size={15} strokeWidth={2} className="text-text-3 shrink-0" />
-          <span className="text-sm2 text-text-2 leading-snug" style={{ textWrap: 'pretty' }}>
-            {t('limit.reached')}
-          </span>
+      <div className="shrink-0 border-t border-border bg-bg-2">
+        <div className="w-full max-w-[750px] mx-auto px-3 py-3">
+          <div className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-bg-3 border border-border">
+            <Lock size={15} strokeWidth={2} className="text-text-3 shrink-0" />
+            <span className="text-sm2 text-text-2 leading-snug" style={{ textWrap: 'pretty' }}>
+              {t('limit.reached')}
+            </span>
+          </div>
         </div>
       </div>
     )
@@ -280,7 +283,8 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
   const canSend = !disabled && !loading && value.trim().length > 0
 
   return (
-    <div className="shrink-0 px-3 py-2.5 border-t border-border bg-bg-2 flex items-end gap-2">
+    <div className="shrink-0 border-t border-border bg-bg-2">
+      <div className="w-full max-w-[750px] mx-auto px-3 py-2.5 flex items-end gap-2">
       <input
         value={value}
         onChange={e => onChange(e.target.value)}
@@ -306,6 +310,7 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
           ? <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
           : <ArrowUp size={18} strokeWidth={2.4} />}
       </button>
+      </div>
     </div>
   )
 }
@@ -369,7 +374,7 @@ export default function ChatPage() {
   const showWelcome = !isGuest && chatMessages.length === 0
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-64px)] bg-bg max-w-app mx-auto">
+    <div className="flex flex-col h-[calc(100dvh-64px)] bg-bg">
       <MiniTopBar
         canClear={!isGuest && chatMessages.length > 0}
         onClear={clearChatMessages}
@@ -377,8 +382,10 @@ export default function ChatPage() {
 
       {/* Maintenance banner */}
       {!aiEnabled && !isGuest && (
-        <div className="mx-4 mt-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
-          {maintenanceMessage || 'ИИ-помощник временно недоступен'}
+        <div className="w-full max-w-[750px] mx-auto px-4">
+          <div className="mt-3 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
+            {maintenanceMessage || 'ИИ-помощник временно недоступен'}
+          </div>
         </div>
       )}
 
@@ -390,11 +397,11 @@ export default function ChatPage() {
             onLogin={() => navigate('/auth')}
           />
         ) : showWelcome ? (
-          <div className="flex-1 px-5 py-5 fade-in">
+          <div className="flex-1 w-full max-w-[750px] mx-auto px-5 py-5 fade-in">
             <EmptyWelcome onSuggest={send} />
           </div>
         ) : (
-          <div className="px-4 py-3 flex flex-col gap-3 fade-in">
+          <div className="w-full max-w-[750px] mx-auto px-4 py-3 flex flex-col gap-3 fade-in">
             {chatMessages.map(msg =>
               msg.role === 'user'
                 ? <UserBubble key={msg.id}>{msg.content}</UserBubble>
