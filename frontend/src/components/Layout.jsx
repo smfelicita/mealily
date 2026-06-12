@@ -345,7 +345,7 @@ export default function Layout() {
   const tabs = token ? TABS : TABS.filter(t => t.to === '/' || t.to === '/dishes')
 
   return (
-    <div className="flex flex-col min-h-dvh bg-bg max-w-app mx-auto">
+    <div className="flex flex-col min-h-dvh bg-bg max-w-app mx-auto md:border-x md:border-border">
 
       {headerInfo.mode !== 'none' && (
         <Header
