@@ -1,48 +1,8 @@
-// Чистые функции ИИ-чата: подбор релевантных блюд, извлечение маркеров
-// [DISH:id] из ответа, сборка системного промпта.
-// Вынесено из routes/chat.js, чтобы логику можно было покрыть unit-тестами
-// (сам chat.js при require создаёт Anthropic-клиент и тянет prisma).
+// Чистые функции ИИ-чата: извлечение маркеров [DISH:id] из ответа,
+// сборка системного промпта. Подбор релевантных блюд — ЕДИНЫЙ с ботом,
+// живёт в shared/dishRelevance.js и реэкспортируется отсюда.
 
-// Ключевые слова для определения времени приёма пищи в сообщении
-const MEAL_KEYWORDS = {
-  BREAKFAST: ['завтрак', 'утро', 'утром', 'утренн'],
-  LUNCH:     ['обед', 'полдень'],
-  DINNER:    ['ужин', 'вечер', 'вечером'],
-  SNACK:     ['перекус', 'перекусить', 'быстро', 'быстрый'],
-}
-
-// Топ-10 релевантных блюд по ключевым словам сообщения
-function getRelevantDishes(dishes, message) {
-  const msg = message.toLowerCase()
-
-  const scored = dishes.map(dish => {
-    let score = 0
-
-    // Совпадение по названию (слова длиннее 3 букв)
-    dish.name.toLowerCase().split(' ').forEach(w => {
-      if (w.length > 3 && msg.includes(w)) score += 3
-    })
-
-    // Совпадение по тегам
-    dish.tags.forEach(tag => {
-      if (msg.includes(tag.toLowerCase())) score += 2
-    })
-
-    // Совпадение по времени приёма пищи
-    dish.mealTime.forEach(mt => {
-      const keywords = MEAL_KEYWORDS[mt] || []
-      if (keywords.some(kw => msg.includes(kw))) score += 2
-    })
-
-    return { dish, score }
-  })
-
-  // Сортируем по релевантности, берём топ-10
-  return scored
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 10)
-    .map(s => s.dish)
-}
+const { MEAL_KEYWORDS, getRelevantDishes } = require('../../../shared/dishRelevance')
 
 // Извлекает упомянутые блюда по маркерам [DISH:id], без дублей
 function extractMentionedDishes(text, dishMap) {

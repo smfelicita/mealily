@@ -22,6 +22,9 @@ cleanupExpiredTokens().catch(console.error)
 const { createFlagsCache } = require('../../shared/flags')
 const { checkAiLimit: sharedCheckAiLimit } = require('../../shared/aiLimit')
 const { addDefaultFridgeItems } = require('../../shared/fridge')
+const { buildVisibilityFilter, checkDishAccess } = require('../../shared/dishVisibility')
+const { getRelevantDishes } = require('../../shared/dishRelevance')
+const { costFor } = require('../../shared/aiPricing')
 
 const { getFlags, getFlag } = createFlagsCache(prisma)
 
@@ -282,8 +285,9 @@ async function sendDishSuggestions(chatId, userId, mealTime, fridgeMode = false)
     })
     const fridgeIds = fridgeItems.map(f => f.ingredientId)
 
+    // Только видимые пользователю блюда (PUBLIC + свои + групповые)
     const all = await prisma.dish.findMany({
-      where: { mealTime: { has: mealTime } },
+      where: { ...(await buildVisibilityFilter(prisma, userId)), mealTime: { has: mealTime } },
       include: { ingredients: { include: { ingredient: true } } },
     })
     dishes = all.filter(d => {
@@ -292,7 +296,7 @@ async function sendDishSuggestions(chatId, userId, mealTime, fridgeMode = false)
     }).slice(0, 5)
   } else {
     dishes = await prisma.dish.findMany({
-      where: { mealTime: { has: mealTime } },
+      where: { ...(await buildVisibilityFilter(prisma, userId)), mealTime: { has: mealTime } },
       include: { ingredients: { include: { ingredient: true } } },
       take: 5,
     })
@@ -681,7 +685,12 @@ bot.on('message', async (msg) => {
   if (text === '📅 Буду готовить') return showMealPlan(chatId, user.id)
 
   if (text === '🎲 Случайное блюдо') {
-    const dishes = await prisma.dish.findMany({ include: { ingredients: { include: { ingredient: true } } } })
+    // Только видимые пользователю блюда (PUBLIC + свои + групповые)
+    const dishes = await prisma.dish.findMany({
+      where: await buildVisibilityFilter(prisma, user.id),
+      include: { ingredients: { include: { ingredient: true } } },
+    })
+    if (!dishes.length) return bot.sendMessage(chatId, 'В базе пока нет блюд.')
     const dish = dishes[Math.floor(Math.random() * dishes.length)]
     return bot.sendMessage(chatId, formatDish(dish), {
       parse_mode: 'Markdown',
@@ -697,7 +706,7 @@ bot.on('message', async (msg) => {
     session.state = 'ai_chat'
     session.data.aiHistory = []
     return bot.sendMessage(chatId,
-      '🤖 *Режим ИИ-помощника*\n\nЗадай вопрос о блюдах — подберу что приготовить!\n\n_Напиши /exit чтобы выйти._',
+      '🤖 *Режим ИИ-помощника*\n\nЗадай вопрос о блюдах — подберу что приготовить с учётом твоего холодильника!\n\n_Напиши /exit чтобы выйти._',
       { parse_mode: 'Markdown' }
     )
   }
@@ -721,25 +730,53 @@ bot.on('message', async (msg) => {
       session.state = 'idle'
       return bot.sendMessage(chatId, '⚠️ Дневной лимит ИИ-сообщений исчерпан. Попробуй завтра.', MAIN_MENU)
     }
-    const aiModel = await getFlag('ai.model', 'claude-sonnet-4-6')
+    // Модель бота — отдельный флаг (по умолчанию Haiku: дешевле, для бота достаточно)
+    const aiModel = await getFlag('telegram.aiModel', 'claude-haiku-4-5')
     try {
       const history = session.data.aiHistory || []
       const messages = [...history.slice(-8), { role: 'user', content: text }]
+
+      // Контекст: холодильник (семейный, если есть, иначе личный)
+      const familyMembership = await prisma.groupMember.findFirst({
+        where: { userId: user.id, group: { type: 'FAMILY' } },
+        select: { groupId: true },
+      })
+      const fridgeWhere = familyMembership
+        ? { groupId: familyMembership.groupId }
+        : { userId: user.id, groupId: null }
+      const fridgeItems = await prisma.fridgeItem.findMany({
+        where: fridgeWhere,
+        include: { ingredient: { select: { nameRu: true } } },
+      })
+      const fridgeList = fridgeItems.map(f => f.ingredient.nameRu).join(', ')
+
+      // Контекст: топ-10 релевантных блюд из видимых пользователю
+      const visibleDishes = await prisma.dish.findMany({
+        where: await buildVisibilityFilter(prisma, user.id),
+        select: { name: true, mealTime: true, tags: true },
+        take: 300,
+      })
+      const relevant = getRelevantDishes(visibleDishes, text)
+      const dishSummary = relevant.map(d => `• ${d.name} (${d.mealTime.join('/')})`).join('\n')
+
+      const systemPrompt = `Ты — дружелюбный кулинарный ассистент MealBot в Telegram. Помогаешь выбрать, что приготовить. Отвечай коротко (до 150 слов), по-русски, можно эмодзи.
+${fridgeList ? `В холодильнике пользователя: ${fridgeList}` : 'Холодильник пользователя пуст или не заполнен.'}
+${dishSummary ? `Подходящие блюда из базы MealBot:\n${dishSummary}\nПредпочитай блюда из этого списка — особенно те, что готовятся из продуктов холодильника.` : ''}`
+
       const resp = await anthropic.messages.create({
         model: aiModel,
         max_tokens: 600,
-        system: 'Ты кулинарный ассистент MealBot в Telegram. Помогаешь выбрать блюда и ответить на вопросы о еде. Отвечай коротко, по-русски.',
+        system: systemPrompt,
         messages,
       })
       const reply = resp.content[0].text
       session.data.aiHistory = [...messages, { role: 'assistant', content: reply }]
 
-      // Учёт расходов для админ-аналитики (та же формула, что в backend/src/routes/chat.js)
+      // Учёт расходов для админ-аналитики (цены по модели — shared/aiPricing)
       const inputTokens = resp.usage?.input_tokens || 0
       const outputTokens = resp.usage?.output_tokens || 0
-      const cost = (inputTokens / 1_000_000) * 3 + (outputTokens / 1_000_000) * 15
       prisma.aiUsageLog.create({
-        data: { userId: user.id, model: resp.model, inputTokens, outputTokens, cost, status: 'success' },
+        data: { userId: user.id, model: resp.model, inputTokens, outputTokens, cost: costFor(resp.model, inputTokens, outputTokens), status: 'success' },
       }).catch(() => {})
 
       return bot.sendMessage(chatId, reply)
@@ -858,7 +895,10 @@ bot.on('callback_query', async (query) => {
       where: { id: dishId },
       include: { ingredients: { include: { ingredient: true } } },
     })
-    if (!dish) return
+    // Проверка видимости — кнопка могла прийти из старого сообщения
+    if (!dish || !(await checkDishAccess(prisma, dish, user.id))) {
+      return bot.sendMessage(chatId, 'Блюдо не найдено или недоступно.')
+    }
 
     const ings = dish.ingredients.map(di => `${di.ingredient.emoji || '•'} ${di.ingredient.nameRu}${di.amount ? ` — ${di.amount}` : ''}`).join('\n')
     let text = `📋 *${dish.name}*\n\n*Ингредиенты:*\n${ings}\n`

@@ -29,7 +29,9 @@ frontend/         — React + Vite + PWA
     locales/      — ru/*.json и en/*.json (10 namespace)
 telegram-bot/     — Telegram-бот
 shared/           — ЕДИНАЯ логика backend+бот: aiLimit, flags (кэш), fridge (базовые
-                    продукты). Prisma передаётся аргументом. Править здесь, не в копиях!
+                    продукты), dishVisibility (видимость блюд!), dishRelevance (подбор
+                    для ИИ), aiPricing (цены моделей). Prisma передаётся аргументом.
+                    Править здесь, не в копиях!
 context/          — документация проекта
 scripts/          — export-i18n-csv.js, import-i18n-csv.js
 ```

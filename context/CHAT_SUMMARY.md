@@ -85,6 +85,21 @@ cd ../frontend && npm run build
 
 ---
 
+## Последние изменения (июнь 2026) — умный бот на Haiku + утечки видимости
+
+- **Умный бот**: ИИ-режим Telegram-бота получает контекст — холодильник (семейный
+  или личный) + топ-10 релевантных блюд (через shared/dishRelevance). Модель бота —
+  отдельный флаг `telegram.aiModel`, дефолт `claude-haiku-4-5` (в 3 раза дешевле Sonnet).
+  На сервере после деплоя выполнить ensureDefaults (рестарт бэкенда создаст флаг).
+- **Закрыты утечки видимости в боте**: «Случайное блюдо», подборки по mealTime и
+  кнопка «Рецепт» показывали ЧУЖИЕ ПРИВАТНЫЕ блюда (findMany без фильтра).
+  Теперь — shared/dishVisibility (buildVisibilityFilter/checkDishAccess), единый
+  с backend/routes/dishes.js.
+- **shared/ пополнился**: dishVisibility, dishRelevance, aiPricing (цены моделей,
+  расчёт cost для AiUsageLog по фактической модели — раньше бот считал всё по ценам Sonnet).
+- **Счётчик лимита в веб-чате**: «Осталось N из M сообщений сегодня» под полем ввода.
+- Тестов: 56 (aiPricing добавлен).
+
 ## Последние изменения (июнь 2026) — 152-ФЗ: документы и согласие
 
 - **Страницы `/privacy` и `/terms`**: `frontend/src/pages/legal/` (PrivacyPage, TermsPage,

@@ -14,6 +14,7 @@ const DEFAULTS = {
   'ai.model':                            { value: 'claude-sonnet-4-6', description: 'Модель Claude для ИИ-чата' },
   'ai.maintenanceMessage':               { value: '',                  description: 'Сообщение при отключённом ИИ (пусто = нет)' },
   'telegram.commands.aiEnabled':         { value: 'false',             description: 'ИИ-чат в Telegram-боте' },
+  'telegram.aiModel':                    { value: 'claude-haiku-4-5',  description: 'Модель Claude для Telegram-бота (дешевле веба)' },
   'notifications.dailySuggestionEnabled':{ value: 'true',              description: 'Ежедневные предложения блюд в 16:00' },
   'notifications.emptyFridgeEnabled':    { value: 'true',              description: 'Напоминания о пустом холодильнике' },
 }

@@ -6,92 +6,22 @@ const validate = require('../middleware/validate')
 const { dishCreate, dishUpdate, dishBulk } = require('../lib/schemas')
 const { logger } = require('../lib/logger')
 
-// Вспомогательная — список groupId где user является участником
-async function getMemberGroupIds(userId) {
-  if (!userId) return []
-  const memberships = await prisma.groupMember.findMany({
-    where: { userId },
-    select: { groupId: true },
-  })
-  return memberships.map(m => m.groupId)
-}
-
-// Вспомогательная — список FAMILY groupId пользователя
-async function getFamilyGroupIds(userId) {
-  if (!userId) return []
-  const groups = await prisma.groupMember.findMany({
-    where: { userId, group: { type: 'FAMILY' } },
-    select: { groupId: true },
-  })
-  return groups.map(g => g.groupId)
-}
+// Логика видимости — ЕДИНАЯ с telegram-ботом, живёт в shared/dishVisibility.js.
+// Здесь — тонкие обёртки с прокинутым prisma, чтобы не менять сигнатуры в роутах.
+const sharedVisibility = require('../../../shared/dishVisibility')
+const getFamilyGroupIds     = (userId)       => sharedVisibility.getFamilyGroupIds(prisma, userId)
+const buildVisibilityFilter = (userId)       => sharedVisibility.buildVisibilityFilter(prisma, userId)
+const checkDishAccess       = (dish, userId) => sharedVisibility.checkDishAccess(prisma, dish, userId)
 
 // Фильтр "Моя кухня": только личные и семейные блюда
 async function buildMyKitchenFilter(userId) {
-  const memberships = await prisma.groupMember.findMany({
-    where: { userId, group: { type: 'FAMILY' } },
-    select: { groupId: true },
-  })
-  const familyGroupIds = memberships.map(m => m.groupId)
+  const familyGroupIds = await getFamilyGroupIds(userId)
   return {
     OR: [
       { authorId: userId },
       ...(familyGroupIds.length ? [{ visibility: 'FAMILY', groupId: { in: familyGroupIds } }] : []),
     ],
   }
-}
-
-// Строит фильтр видимости с учётом групп и DishVisibility
-async function buildVisibilityFilter(userId) {
-  if (!userId) return { OR: [{ visibility: 'PUBLIC', status: 'APPROVED' }] }
-
-  // Один запрос: всё членство с типом группы
-  const memberships = await prisma.groupMember.findMany({
-    where: { userId },
-    select: { groupId: true, group: { select: { type: true } } },
-  })
-
-  const familyGroupIds = memberships.filter(m => m.group.type === 'FAMILY').map(m => m.groupId)
-  const allGroupIds    = memberships.map(m => m.groupId)
-
-  // Co-members для ALL_GROUPS — один запрос
-  let allGroupsCondition = []
-  if (allGroupIds.length) {
-    const coMemberIds = await prisma.groupMember.findMany({
-      where: { groupId: { in: allGroupIds }, userId: { not: userId } },
-      select: { userId: true },
-      distinct: ['userId'],
-    })
-    if (coMemberIds.length) {
-      allGroupsCondition = [{ visibility: 'ALL_GROUPS', authorId: { in: coMemberIds.map(m => m.userId) } }]
-    }
-  }
-
-  return {
-    OR: [
-      { visibility: 'PUBLIC', status: 'APPROVED' },
-      { authorId: userId },
-      ...(familyGroupIds.length ? [{ visibility: 'FAMILY', groupId: { in: familyGroupIds } }] : []),
-      ...allGroupsCondition,
-    ],
-  }
-}
-
-// Проверка доступа к блюду по visibility — возвращает true если доступ разрешён
-async function checkDishAccess(dish, userId) {
-  if (dish.visibility === 'PUBLIC' && dish.status === 'APPROVED') return true
-  if (dish.authorId === userId) return true
-  const groupIds = await getMemberGroupIds(userId)
-  if (dish.visibility === 'FAMILY' && dish.groupId) {
-    return groupIds.includes(dish.groupId)
-  }
-  if (dish.visibility === 'ALL_GROUPS') {
-    const sharedGroup = await prisma.groupMember.findFirst({
-      where: { groupId: { in: groupIds }, userId: dish.authorId },
-    })
-    return Boolean(sharedGroup)
-  }
-  return false
 }
 
 // Полнотекстовый + нечёткий поиск через pg_trgm (raw SQL)

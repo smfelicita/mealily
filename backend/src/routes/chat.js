@@ -7,6 +7,7 @@ const { checkMessageRelevance } = require('../lib/messageFilter')
 const { logger } = require('../lib/logger')
 const { getFlags } = require('../lib/flags')
 const { getRelevantDishes, extractMentionedDishes, buildSystemPrompt } = require('../lib/chatHelpers')
+const { costFor } = require('../../../shared/aiPricing')
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -93,7 +94,7 @@ router.post('/', auth, async (req, res, next) => {
 
     const inputTokens = aiResponse.usage.input_tokens
     const outputTokens = aiResponse.usage.output_tokens
-    const cost = (inputTokens / 1_000_000) * 3 + (outputTokens / 1_000_000) * 15
+    const cost = costFor(aiResponse.model, inputTokens, outputTokens)
 
     logger.info({
       action: 'ai_request_completed',
