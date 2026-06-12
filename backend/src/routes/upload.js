@@ -2,7 +2,7 @@ const router = require('express').Router()
 const multer = require('multer')
 const path = require('path')
 const { authMiddleware } = require('../middleware/auth')
-const getSupabase = require('../lib/supabase')
+const { saveFile } = require('../lib/storage')
 
 const ALLOWED = {
   image: {
@@ -56,19 +56,10 @@ router.post('/:type', authMiddleware, upload.single('file'), async (req, res) =>
     const ext = path.extname(req.file.originalname).toLowerCase()
     const fileName = `${type}s/${req.userId}_${Date.now()}${ext}`
 
-    const supabase = getSupabase()
-    const { error } = await supabase.storage
-      .from('media')
-      .upload(fileName, req.file.buffer, {
-        contentType: req.file.mimetype,
-        upsert: false,
-      })
+    // Драйвер выбирается через STORAGE_DRIVER в .env (supabase | local)
+    const url = await saveFile(fileName, req.file.buffer, req.file.mimetype)
 
-    if (error) throw error
-
-    const { data } = supabase.storage.from('media').getPublicUrl(fileName)
-
-    res.json({ url: data.publicUrl })
+    res.json({ url })
   } catch (err) {
     console.error('Upload error:', err)
     res.status(500).json({ error: err.message || 'Ошибка загрузки файла' })
