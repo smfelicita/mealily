@@ -54,12 +54,6 @@
   --text-2xl2:           22px;
   --text-3xl2:           26px;
 
-  /* Ширина приложения (slim-main, см. design-system.md).
-     Используется классами max-w-app в Layout, ChatPage, DishDetailPage —
-     без этого токена Tailwind v4 молча игнорирует класс, и на десктопе
-     приложение растягивается на всю ширину. */
-  --container-app:       430px;
-
   /* Тени */
   --shadow-card:         0 2px 16px rgba(0,0,0,0.08);
   --shadow-sm:           0 1px 6px rgba(0,0,0,0.06);
