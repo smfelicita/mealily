@@ -11,7 +11,7 @@ const PRO_LIMIT  = 100
  * @param {object} prisma — PrismaClient вызывающего процесса
  * @param {string} userId
  * @param {object} [flags] — объект флагов (для динамического лимита ai.dailyLimit.user)
- * @returns {Promise<{ allowed: boolean, left: number }>}
+ * @returns {Promise<{ allowed: boolean, left: number, limit: number }>}
  */
 async function checkAiLimit(prisma, userId, flags) {
   const today = new Date().toDateString()
@@ -21,8 +21,8 @@ async function checkAiLimit(prisma, userId, flags) {
     select: { aiMessagesDay: true, aiMessagesDate: true, role: true },
   })
 
-  if (!user) return { allowed: false, left: 0 }
-  if (user.role === 'ADMIN') return { allowed: true, left: 999 }
+  if (!user) return { allowed: false, left: 0, limit: 0 }
+  if (user.role === 'ADMIN') return { allowed: true, left: 999, limit: 999 }
 
   const userLimitFromFlag = flags?.['ai.dailyLimit.user']
   const limit = user.role === 'PRO' ? PRO_LIMIT : (typeof userLimitFromFlag === 'number' ? userLimitFromFlag : USER_LIMIT)
@@ -31,7 +31,7 @@ async function checkAiLimit(prisma, userId, flags) {
     new Date(user.aiMessagesDate).toDateString() === today
   const count = isToday ? user.aiMessagesDay : 0
 
-  if (count >= limit) return { allowed: false, left: 0 }
+  if (count >= limit) return { allowed: false, left: 0, limit }
 
   await prisma.user.update({
     where: { id: userId },
@@ -41,7 +41,7 @@ async function checkAiLimit(prisma, userId, flags) {
     },
   })
 
-  return { allowed: true, left: limit - count - 1 }
+  return { allowed: true, left: limit - count - 1, limit }
 }
 
 module.exports = { checkAiLimit, USER_LIMIT, PRO_LIMIT }

@@ -254,7 +254,7 @@ function GuestBlock({ onRegister, onLogin }) {
 }
 
 // ═══ Input bar ════════════════════════════════════════════════════
-function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
+function InputBar({ value, onChange, onSend, disabled, loading, locked, limitInfo }) {
   const { t } = useTranslation('chat')
 
   function onKey(e) {
@@ -311,6 +311,17 @@ function InputBar({ value, onChange, onSend, disabled, loading, locked }) {
           : <ArrowUp size={18} strokeWidth={2.4} />}
       </button>
       </div>
+      {/* Счётчик дневного лимита — появляется после первого ответа */}
+      {limitInfo && (
+        <p
+          className={[
+            'w-full max-w-[750px] mx-auto px-3 pb-1.5 -mt-0.5 text-center text-2xs tabular-nums',
+            limitInfo.left <= 2 ? 'text-accent font-bold' : 'text-text-3',
+          ].join(' ')}
+        >
+          {t('limit.counter', { left: limitInfo.left, limit: limitInfo.limit })}
+        </p>
+      )}
     </div>
   )
 }
@@ -325,6 +336,7 @@ export default function ChatPage() {
   const [input, setInput]           = useState(() => searchParams.get('prompt') || '')
   const [loading, setLoading]       = useState(false)
   const [limitReached, setLimitReached] = useState(false)
+  const [limitInfo, setLimitInfo]   = useState(null) // { left, limit } — приходит с каждым ответом
   const bottomRef = useRef(null)
 
   const isGuest = !token
@@ -351,6 +363,11 @@ export default function ChatPage() {
         dishes: res.dishes || [],
         id: Date.now() + 1,
       })
+      // 999 = безлимит (ADMIN) — счётчик не показываем
+      if (res.messagesLeft != null && res.dailyLimit && res.dailyLimit < 999) {
+        setLimitInfo({ left: res.messagesLeft, limit: res.dailyLimit })
+        if (res.messagesLeft === 0) setLimitReached(true)
+      }
     } catch (e) {
       if (e.data?.limitReached || /лимит/i.test(e.message)) {
         setLimitReached(true)
@@ -424,6 +441,7 @@ export default function ChatPage() {
         disabled={isGuest}
         loading={loading}
         locked={limitReached}
+        limitInfo={limitReached ? null : limitInfo}
       />
     </div>
   )

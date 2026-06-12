@@ -22,7 +22,7 @@ const today = new Date()
 describe('checkAiLimit (shared)', () => {
   it('несуществующий пользователь — запрещено', async () => {
     const prisma = mockPrisma(null)
-    expect(await checkAiLimit(prisma, 'x')).toEqual({ allowed: false, left: 0 })
+    expect(await checkAiLimit(prisma, 'x')).toEqual({ allowed: false, left: 0, limit: 0 })
   })
 
   it('ADMIN — без лимита, счётчик не трогается', async () => {
@@ -35,14 +35,14 @@ describe('checkAiLimit (shared)', () => {
   it('USER: первое сообщение за день — разрешено, осталось limit-1', async () => {
     const prisma = mockPrisma({ role: 'USER', aiMessagesDay: 0, aiMessagesDate: null })
     const r = await checkAiLimit(prisma, 'x')
-    expect(r).toEqual({ allowed: true, left: USER_LIMIT - 1 })
+    expect(r).toEqual({ allowed: true, left: USER_LIMIT - 1, limit: USER_LIMIT })
     expect(prisma.updates).toHaveLength(1) // счётчик увеличен
   })
 
   it('USER: лимит исчерпан — запрещено, счётчик не увеличивается', async () => {
     const prisma = mockPrisma({ role: 'USER', aiMessagesDay: USER_LIMIT, aiMessagesDate: today })
     const r = await checkAiLimit(prisma, 'x')
-    expect(r).toEqual({ allowed: false, left: 0 })
+    expect(r).toEqual({ allowed: false, left: 0, limit: USER_LIMIT })
     expect(prisma.updates).toHaveLength(0)
   })
 
@@ -57,7 +57,7 @@ describe('checkAiLimit (shared)', () => {
   it('PRO: лимит 100, даже если флаг для USER ниже', async () => {
     const prisma = mockPrisma({ role: 'PRO', aiMessagesDay: 50, aiMessagesDate: today })
     const r = await checkAiLimit(prisma, 'x', { 'ai.dailyLimit.user': 10 })
-    expect(r).toEqual({ allowed: true, left: PRO_LIMIT - 50 - 1 })
+    expect(r).toEqual({ allowed: true, left: PRO_LIMIT - 50 - 1, limit: PRO_LIMIT })
   })
 
   it('флаг ai.dailyLimit.user переопределяет лимит USER', async () => {

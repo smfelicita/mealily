@@ -27,7 +27,8 @@
   },
   "limit": {
     "reached": "Daily message limit reached. Come back tomorrow.",
-    "reachedMsg": "⚠️ Daily message limit reached. Come back tomorrow."
+    "reachedMsg": "⚠️ Daily message limit reached. Come back tomorrow.",
+    "counter": "{{left}} of {{limit}} messages left today"
   },
   "error": "⚠️ Error: {{message}}"
 }

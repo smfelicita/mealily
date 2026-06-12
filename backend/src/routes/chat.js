@@ -47,7 +47,7 @@ router.post('/', auth, async (req, res, next) => {
       }
     }
 
-    const { allowed } = await checkAiLimit(req.userId, flags)
+    const { allowed, left, limit } = await checkAiLimit(req.userId, flags)
     if (!allowed) {
       logger.warn({ action: 'ai_limit_exceeded', type: 'user', userId: req.userId, requestId: req.requestId }, 'ai_limit_exceeded')
       return res.status(429).json({ error: 'Дневной лимит ИИ-сообщений исчерпан', limitReached: true, messagesLeft: 0 })
@@ -109,7 +109,7 @@ router.post('/', auth, async (req, res, next) => {
       data: { userId: req.userId, model: aiResponse.model, inputTokens, outputTokens, cost, status: 'success' },
     }).catch(() => {})
 
-    res.json({ message: assistantText, dishes: mentionedDishes })
+    res.json({ message: assistantText, dishes: mentionedDishes, messagesLeft: left, dailyLimit: limit })
   } catch (err) {
     next(err)
   }
