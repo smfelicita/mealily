@@ -1,4 +1,5 @@
-require('dotenv').config()
+// Грузим .env из папки бота независимо от текущей рабочей директории (PM2 стартует из корня)
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') })
 const TelegramBot = require('node-telegram-bot-api')
 const { PrismaClient } = require('@prisma/client')
 const Anthropic = require('@anthropic-ai/sdk')
