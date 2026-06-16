@@ -42,6 +42,12 @@ scripts/          — export-i18n-csv.js, import-i18n-csv.js
 - Логи: `pm2 logs mealily-backend --lines 30`
 - После `git pull`: `npm install && pm2 restart mealily-backend && cd frontend && npm run build`
 
+### Telegram-бот: прокси (обход блокировки)
+- На РФ-хостинге HTTPS к `api.telegram.org` режется DPI. Бот ходит через SOCKS5-прокси.
+- Туннель: `ssh -f -N -D 127.0.0.1:1080 root@<зарубежный-vps>` (держится через systemd-сервис `tg-tunnel`).
+- В `telegram-bot/.env`: `TELEGRAM_PROXY="socks5://127.0.0.1:1080"`. Без переменной — прямое подключение.
+- Код: `telegram-bot/src/index.js` подключает `socks-proxy-agent` при наличии `TELEGRAM_PROXY`.
+
 ## Важные правила
 
 ### БД (Supabase)

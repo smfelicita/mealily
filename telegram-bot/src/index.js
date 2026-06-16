@@ -4,7 +4,17 @@ const { PrismaClient } = require('@prisma/client')
 const Anthropic = require('@anthropic-ai/sdk')
 const { distance } = require('fastest-levenshtein')
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true })
+// SOCKS5/HTTPS-прокси для обхода блокировки Telegram (опционально, через .env).
+// Без TELEGRAM_PROXY поведение прежнее — прямое подключение.
+const TELEGRAM_PROXY = process.env.TELEGRAM_PROXY
+let botOptions = { polling: true }
+if (TELEGRAM_PROXY) {
+  const { SocksProxyAgent } = require('socks-proxy-agent')
+  const agent = new SocksProxyAgent(TELEGRAM_PROXY)
+  botOptions = { polling: true, request: { agent } }
+  console.log(`🔌 Telegram через прокси: ${TELEGRAM_PROXY.replace(/\/\/[^@]*@/, '//***@')}`)
+}
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, botOptions)
 const prisma = new PrismaClient()
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
