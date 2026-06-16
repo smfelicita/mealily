@@ -35,7 +35,7 @@ export default function TelegramAuthPage() {
 
   return (
     <div className="min-h-screen bg-bg flex flex-col items-center justify-center px-6 fade-in">
-      <p className="text-2xl font-bold text-text mb-6">🍽️ MealBot</p>
+      <p className="text-2xl font-bold text-text mb-6">🍽️ Meality</p>
 
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-card px-6 py-8 text-center fade-up">
         {error ? (
@@ -44,7 +44,7 @@ export default function TelegramAuthPage() {
             <h2 className="font-bold text-lg text-text mb-2">{t('telegram.errorTitle')}</h2>
             <p className="text-sm text-text-2 mb-5">{error}</p>
             <a
-              href={`https://t.me/${import.meta.env.VITE_TELEGRAM_BOT_USERNAME || 'MealBotRu'}`}
+              href={`https://t.me/${import.meta.env.VITE_TELEGRAM_BOT_USERNAME || 'mealily_bot'}`}
               className="inline-flex items-center justify-center w-full py-3 rounded-xl bg-accent text-white font-semibold text-sm"
             >
               {t('telegram.openBot')}

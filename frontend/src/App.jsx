@@ -67,7 +67,7 @@ export default function App() {
   const setFlags       = useStore(s => s.setFlags)
 
   const [showOnboarding, setShowOnboarding] = useState(
-    () => localStorage.getItem('mealbot_show_onboarding') === '1'
+    () => localStorage.getItem('meality_show_onboarding') === '1'
   )
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function App() {
   useEffect(() => {
     if (!token) {
       setShowOnboarding(false)
-    } else if (localStorage.getItem('mealbot_show_onboarding') === '1') {
+    } else if (localStorage.getItem('meality_show_onboarding') === '1') {
       setShowOnboarding(true)
     }
   }, [token])

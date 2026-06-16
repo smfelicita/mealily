@@ -1,4 +1,4 @@
-// LayoutShell.jsx — MealBot, общий Layout мобильного PWA
+// LayoutShell.jsx — Meality, общий Layout мобильного PWA
 // Header (52px) + Tab bar (64px + safe-area). Семь состояний друг под другом.
 // Одиночный .jsx, мок внутри, только core Tailwind + lucide-react, useState.
 
@@ -168,7 +168,7 @@ function Header({
             </div>
             <div className="flex flex-col leading-tight">
               <span className="text-[16px] font-extrabold tracking-tight" style={{ color: C.text }}>
-                MealBot
+                Meality
               </span>
               <span className="text-[10.5px]" style={{ color: C.text3 }}>
                 Моя кухня

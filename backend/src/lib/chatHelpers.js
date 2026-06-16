@@ -38,7 +38,7 @@ function buildSystemPrompt(dishSummary, fridgeList, isPro) {
     ? `В холодильнике пользователя: ${fridgeList}`
     : 'Холодильник пустой или не заполнен.'
 
-  return `Ты — дружелюбный кулинарный ассистент MealBot${isPro ? ' PRO' : ''}. Помогаешь выбирать блюда.
+  return `Ты — дружелюбный кулинарный ассистент Meality${isPro ? ' PRO' : ''}. Помогаешь выбирать блюда.
 
 ${fridgePart}
 

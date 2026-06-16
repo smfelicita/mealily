@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════
-# MealBot/mealily.ru — Этап 2: приложение, данные, nginx, SSL, бэкапы
+# Meality/mealily.ru — Этап 2: приложение, данные, nginx, SSL, бэкапы
 #
 # Запуск с локальной машины (секреты передаются через окружение):
 #   ssh root@5.42.112.233 "OLD_PASS='пароль_старого_сервера' TG_TOKEN='токен_бота' bash -s" < deploy/mealily-02-app.sh
@@ -43,9 +43,9 @@ cd $APP && git log --oneline -1
 step "3/10 Секреты со старого сервера"
 mkdir -p /root/.mealily
 sshpass -p "$OLD_PASS" scp -o StrictHostKeyChecking=accept-new \
-  root@$OLD_HOST:/var/www/mealbot/backend/.env /root/.mealily/old-backend.env
+  root@$OLD_HOST:/var/www/mealily/backend/.env /root/.mealily/old-backend.env
 sshpass -p "$OLD_PASS" scp -o StrictHostKeyChecking=accept-new \
-  root@$OLD_HOST:/var/www/mealbot/frontend/.env /root/.mealily/old-frontend.env || touch /root/.mealily/old-frontend.env
+  root@$OLD_HOST:/var/www/mealily/frontend/.env /root/.mealily/old-frontend.env || touch /root/.mealily/old-frontend.env
 chmod 600 /root/.mealily/old-*.env
 getv() { grep -E "^$1=" "$2" | head -1 | cut -d= -f2- | tr -d '"' ; }
 ANTHROPIC_API_KEY="$(getv ANTHROPIC_API_KEY /root/.mealily/old-backend.env)"
@@ -72,7 +72,7 @@ ADMIN_JWT_SECRET="${ADMIN_JWT_SECRET}"
 FRONTEND_URL="https://${DOMAIN}"
 ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY}"
 RESEND_API_KEY="${RESEND_API_KEY}"
-RESEND_FROM="${RESEND_FROM:-MealBot <noreply@smarussya.ru>}"
+RESEND_FROM="${RESEND_FROM:-Meality <noreply@smarussya.ru>}"
 GOOGLE_CLIENT_ID="${GOOGLE_CLIENT_ID}"
 TELEGRAM_BOT_TOKEN="${TG_TOKEN}"
 TELEGRAM_BOT_USERNAME="mealily_bot"

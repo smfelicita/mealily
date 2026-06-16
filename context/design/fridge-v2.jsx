@@ -1,4 +1,4 @@
-// FridgePage.jsx — MealBot, страница холодильника (редизайн)
+// FridgePage.jsx — Meality, страница холодильника (редизайн)
 // Три состояния друг под другом: пустой / рабочий вид / picker (grouped + search).
 // Одиночный .jsx, мок внутри, только core Tailwind + lucide-react, useState.
 
@@ -102,7 +102,7 @@ function FridgeEmpty() {
         </div>
         <h2 className="mt-4 text-[17px] font-bold" style={{ color: C.text }}>Холодильник пустой</h2>
         <p className="mt-2 text-[13px] max-w-[280px] leading-relaxed" style={{ color: C.text2 }}>
-          Добавь продукты — MealBot подберёт что приготовить из того, что есть
+          Добавь продукты — Meality подберёт что приготовить из того, что есть
         </p>
         <button
           onClick={() => console.log('add')}

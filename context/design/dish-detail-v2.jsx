@@ -1,4 +1,4 @@
-// DishDetailPage.jsx — MealBot, вариант Б (чек-боксы в 2 колонки)
+// DishDetailPage.jsx — Meality, вариант Б (чек-боксы в 2 колонки)
 // Одиночный файл для claude.ai/design — мок внутри, только core Tailwind,
 // без localStorage, иконки lucide-react.
 

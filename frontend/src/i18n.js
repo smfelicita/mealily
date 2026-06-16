@@ -1,4 +1,4 @@
-// i18n — мультиязычность MealBot
+// i18n — мультиязычность Meality
 // Namespaces: common (общие кнопки), errors, dish, fridge, chat, auth, profile, groups, plan, home
 // По мере портирования страниц добавляем ключи в соответствующий namespace.
 
@@ -73,7 +73,7 @@ i18n
 
     detection: {
       order: ['localStorage', 'navigator'],
-      lookupLocalStorage: 'mealbot_lang',
+      lookupLocalStorage: 'meality_lang',
       caches: ['localStorage'],
     },
 

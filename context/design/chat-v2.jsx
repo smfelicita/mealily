@@ -1,4 +1,4 @@
-// AIChatPage.jsx — MealBot, страница ИИ-чата (4 состояния).
+// AIChatPage.jsx — Meality, страница ИИ-чата (4 состояния).
 // Без app-header (52px) и tab bar (64px) — они в Layout.
 // Mini top-bar 44px внутри страницы оставлен.
 // Одиночный .jsx, моки инлайном, Tailwind core + lucide-react, useState.

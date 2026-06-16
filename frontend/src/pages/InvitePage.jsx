@@ -43,7 +43,7 @@ export default function InvitePage() {
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-4 py-10 bg-bg fade-in">
       <div className="text-[40px] mb-1">🍽️</div>
-      <h1 className="font-serif text-3xl2 font-extrabold mb-8">MealBot</h1>
+      <h1 className="font-serif text-3xl2 font-extrabold mb-8">Meality</h1>
 
       <div className="w-full max-w-[360px] bg-bg-2 border border-border rounded-DEFAULT p-6 fade-up">
         {error ? (

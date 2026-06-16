@@ -1,4 +1,4 @@
-// DishFormPage.jsx — MealBot, страница создания/редактирования блюда.
+// DishFormPage.jsx — Meality, страница создания/редактирования блюда.
 // Без tab bar (он в Layout). Свой sticky header 52px (back + Сохранить).
 // Одиночный .jsx, моки инлайном, Tailwind core + lucide-react, useState.
 

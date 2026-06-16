@@ -155,7 +155,7 @@ export default function AdminDishesPage() {
                       <p className="text-border">{d.author.email}</p>
                     </>
                   ) : (
-                    <span className="text-accent font-medium">MealBot</span>
+                    <span className="text-accent font-medium">Meality</span>
                   )}
                 </td>
                 <td className="px-4 py-2.5">

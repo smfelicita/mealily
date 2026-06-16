@@ -23,15 +23,15 @@ registerRoute(
 self.addEventListener('push', (event) => {
   if (!event.data) return
   let data
-  try { data = event.data.json() } catch { data = { title: 'MealBot', body: event.data.text() } }
+  try { data = event.data.json() } catch { data = { title: 'Meality', body: event.data.text() } }
 
   event.waitUntil(
-    self.registration.showNotification(data.title || 'MealBot', {
+    self.registration.showNotification(data.title || 'Meality', {
       body: data.body || '',
       icon: '/icon-192.png',
       badge: '/icon-192.png',
       data: { url: data.url || '/' },
-      tag: 'mealbot-push',
+      tag: 'meality-push',
     }),
   )
 })

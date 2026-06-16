@@ -38,7 +38,7 @@ export default function AdminLayout() {
     <div className="flex min-h-screen bg-bg text-text">
       <aside className="w-52 shrink-0 flex flex-col border-r border-border bg-bg-2">
         <div className="px-4 py-5 border-b border-border">
-          <p className="font-semibold text-accent text-sm">MealBot Admin</p>
+          <p className="font-semibold text-accent text-sm">Meality Admin</p>
           {name && <p className="text-xs text-text-2 mt-0.5">{name}</p>}
         </div>
         <nav className="flex-1 py-3 flex flex-col gap-0.5 px-2">

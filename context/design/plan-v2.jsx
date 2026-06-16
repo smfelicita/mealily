@@ -1,4 +1,4 @@
-// PlanPage.jsx — MealBot, страница плана питания (3 состояния).
+// PlanPage.jsx — Meality, страница плана питания (3 состояния).
 // Без header/tab bar, только контент. pb-24 под tab bar.
 // Одиночный .jsx, моки инлайном, Tailwind core + lucide-react, useState.
 

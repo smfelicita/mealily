@@ -6,7 +6,7 @@
 
 ## Промпт для claude.ai/design
 
-Создай React-артефакт (`.jsx`) — страница профиля мобильного PWA MealBot.
+Создай React-артефакт (`.jsx`) — страница профиля мобильного PWA Meality.
 
 ### Общие правила артефакта (важно!)
 
@@ -25,7 +25,7 @@
 
 Ключевое:
 - Hero с аватаром + имя/email + badge Pro/Free
-- Раздел статистики (Мои блюда, В избранном, Дней с MealBot, Серия готовки)
+- Раздел статистики (Мои блюда, В избранном, Дней с Meality, Серия готовки)
 - Pro-upgrade плашка (если Free) ИЛИ блок «Моя подписка» (если Pro)
 - Раздел «Подключения» — Telegram (подключён/не подключён)
 - Раздел «Настройки» — Язык, Уведомления (свитчер), О приложении
@@ -119,7 +119,7 @@ const LANGUAGES = [
    - Последняя с акцентом sage (если streak > 0)
 
 3. **Pro-upgrade плашка:** `bg-pro-muted border border-pro/35 rounded-2xl p-5` — золотая:
-   - Верх: Crown icon 24px text-pro + H3 «MealBot Pro» 17px bold
+   - Верх: Crown icon 24px text-pro + H3 «Meality Pro» 17px bold
    - text-13 text-2 leading-relaxed «Безлимитный ИИ-чат, расширенные рекомендации, приоритетная поддержка»
    - Список плюшек (3 строки с Check-иконкой 14px text-pro): «Безлимитный ИИ-помощник», «Расширенный анализ холодильника», «Приоритетная поддержка»
    - Primary-кнопка `bg-pro text-white` pill «Попробовать Pro — 499 ₽/мес»
@@ -143,7 +143,7 @@ const LANGUAGES = [
    - SectionHeader label uppercase «АККАУНТ»
    - Ряд выхода: `bg-white rounded-xl p-4 flex items-center gap-3 border border-border` с LogOut icon 18px text-text-2, «Выйти» 14px text-text
    - Ряд удаления: то же но с Trash2 icon text-red-600, «Удалить аккаунт» text-red-600 font-semibold
-   - Ниже мелкий text-11 text-3 по центру «MealBot v2.4.0 · [условия] · [приватность]»
+   - Ниже мелкий text-11 text-3 по центру «Meality v2.4.0 · [условия] · [приватность]»
 
 #### Состояние 3 — Pro-юзер
 
@@ -152,7 +152,7 @@ const LANGUAGES = [
 1. **Hero** — вокруг аватара тонкая golden-рамка `border-2 border-pro`. Status chip меняется на `bg-pro-muted border border-pro/35 text-pro font-extrabold uppercase tracking-wide` с Crown icon — «PRO».
 
 2. **Вместо Pro-upgrade — блок "Моя подписка"** `bg-white rounded-2xl p-5 border border-pro/25`:
-   - Crown icon text-pro 20px + H3 «MealBot Pro» 17px bold + мелкий chip pro-muted «активна»
+   - Crown icon text-pro 20px + H3 «Meality Pro» 17px bold + мелкий chip pro-muted «активна»
    - 2 строки мета-инфо: «Ежемесячная · 499 ₽» | «Следующее списание: 10 мая 2026»
    - Две ghost-кнопки в ряд: «Управлять» accent + «Отменить» text-red-600
 

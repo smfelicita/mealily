@@ -6,7 +6,7 @@
 
 ## Промпт для claude.ai/design
 
-Создай React-артефакт (`.jsx`) — общий Layout мобильного PWA MealBot. Два компонента: верхний header (52px) и нижний tab bar (64px).
+Создай React-артефакт (`.jsx`) — общий Layout мобильного PWA Meality. Два компонента: верхний header (52px) и нижний tab bar (64px).
 
 ### Общие правила артефакта (важно!)
 
@@ -25,7 +25,7 @@
 Между header и tab bar — контент страницы (скроллится). Header и tab bar **не скроллятся**, залипают.
 
 Ключевое:
-- **Header:** логотип MealBot (эмодзи или мини-SVG) + название «Моя кухня» слева, колокольчик + аватар справа
+- **Header:** логотип Meality (эмодзи или мини-SVG) + название «Моя кухня» слева, колокольчик + аватар справа
 - **Tab bar:** 5 иконок-табов с подписью. Активный — accent. Бейджики для уведомлений.
 - Табы: **Главная** (Home), **Блюда** (ChefHat), **План** (Calendar), **Чат** (Sparkles), **Профиль** (User)
 - Safe-area iOS — нижний отступ 8px внутри tab bar, чтобы не упираться в home-indicator
@@ -90,7 +90,7 @@ const USER = {
 - Контейнер `flex items-center gap-2`
 - Лого-круг 32px `rounded-full bg-accent-muted flex items-center justify-center`:
   - Внутри эмодзи 🍳 или ChefHat icon 16px text-accent (выбери что лучше)
-- Название «MealBot» 16px font-extrabold text-text. Ниже мелким text-11 text-3 «Моя кухня» (опционально — только если есть место).
+- Название «Meality» 16px font-extrabold text-text. Ниже мелким text-11 text-3 «Моя кухня» (опционально — только если есть место).
 
 **Правая часть:**
 - Контейнер `flex items-center gap-2`
@@ -133,7 +133,7 @@ const USER = {
 
 #### Состояние 1 — Header гость
 
-Слева: лого MealBot + «Моя кухня»
+Слева: лого Meality + «Моя кухня»
 Справа: колокольчик (disabled / без бейджа) + pill «Войти» accent
 
 #### Состояние 2 — Header залогинен, free, 0 notifications

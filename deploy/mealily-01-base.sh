@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════
-# MealBot/mealily.ru — Этап 1: фундамент чистого сервера
+# Meality/mealily.ru — Этап 1: фундамент чистого сервера
 # Запуск с локальной машины:
 #   ssh root@5.42.112.233 'bash -s' < deploy/mealily-01-base.sh
 # Скрипт идемпотентный — можно запускать повторно.
@@ -74,7 +74,7 @@ echo "PM2:      $(pm2 -v)"
 echo
 echo "╔════════════════════════════════════════════════════════════╗"
 echo "║ ДОБАВЬ ЭТОТ DEPLOY-КЛЮЧ В GITHUB:                          ║"
-echo "║ repo mealbot → Settings → Deploy keys → Add deploy key     ║"
+echo "║ repo mealily → Settings → Deploy keys → Add deploy key     ║"
 echo "║ (галочку 'Allow write access' НЕ ставить)                  ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 cat /root/.ssh/mealbot_deploy.pub

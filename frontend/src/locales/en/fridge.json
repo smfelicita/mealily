@@ -2,7 +2,7 @@
   "title": "Fridge",
   "guest": {
     "title": "Cook from what you have at home",
-    "description": "Add ingredients from your fridge — MealBot will suggest dishes you can make right now.",
+    "description": "Add ingredients from your fridge — Meality will suggest dishes you can make right now.",
     "register": "Create your kitchen",
     "login": "Already have an account? Sign in"
   },
@@ -38,7 +38,7 @@
   },
   "empty": {
     "title": "Fridge is empty",
-    "description": "Add ingredients — MealBot will suggest what to cook from what you have",
+    "description": "Add ingredients — Meality will suggest what to cook from what you have",
     "addButton": "Add ingredients"
   },
   "picker": {

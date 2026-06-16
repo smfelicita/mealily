@@ -1,4 +1,4 @@
-// Ингредиенты для базы MealBot
+// Ингредиенты для базы Meality
 // protein/fat/carbs — на 100г; avgWeightG — средний вес 1 шт в граммах
 // isBasic: true — "всегда есть в доме" (соль, масло и т.д.)
 // defaultQuantity/defaultUnit — дефолт для холодильника (специи/соль — null)

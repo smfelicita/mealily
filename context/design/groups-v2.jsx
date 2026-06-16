@@ -1,4 +1,4 @@
-// GroupsPage.jsx — MealBot, страницы семейных групп.
+// GroupsPage.jsx — Meality, страницы семейных групп.
 // Без app-header (52px) и tab bar (64px) — те в Layout.
 // На GroupDetailPage оставляем top-bar 52px (ChevronLeft + title + MoreVertical).
 // Одиночный .jsx, моки инлайном, Tailwind core + lucide-react, useState.
@@ -553,7 +553,7 @@ function PendingRow({ email }) {
 // ═══ Invite block ═════════════════════════════════════════════
 function InviteBlock({ code, emphasized = false }) {
   const [copied, setCopied] = useState(false);
-  const link = `mealbot.app/g/${code}`;
+  const link = `meality.app/g/${code}`;
   const onCopy = () => { setCopied(true); setTimeout(() => setCopied(false), 1500); };
   return (
     <div

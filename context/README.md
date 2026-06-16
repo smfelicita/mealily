@@ -1,4 +1,4 @@
-# MealBot — Контекст проекта
+# Meality — Контекст проекта
 
 ## Что это за проект
 Кроссплатформенный сервис для выбора блюд с ИИ-помощником.
@@ -16,7 +16,7 @@
 
 ## Структура проекта
 ```
-mealbot/
+meality/
 ├── backend/
 │   ├── prisma/
 │   │   └── schema.prisma
@@ -85,12 +85,12 @@ mealbot/
 ## Деплой (команды на сервере)
 ```bash
 # После git pull:
-cd /var/www/mealbot/backend && npm install
-pm2 restart mealbot-backend
+cd /var/www/mealily/backend && npm install
+pm2 restart mealily-backend
 
 # Если изменился фронтенд:
-cd /var/www/mealbot/frontend && npm run build
+cd /var/www/mealily/frontend && npm run build
 
 # Если изменилась схема БД:
-cd /var/www/mealbot/backend && npx prisma db push
+cd /var/www/mealily/backend && npx prisma db push
 ```

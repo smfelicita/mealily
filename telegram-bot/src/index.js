@@ -218,11 +218,11 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
     const token = await generateWebLoginToken(user.id)
     const url = `${FRONTEND_URL}/auth/tg?token=${token}`
     await bot.sendMessage(chatId,
-      '🌐 Нажми кнопку ниже чтобы войти в веб-приложение MealBot.\n\n_Ссылка действует 10 минут._',
+      '🌐 Нажми кнопку ниже чтобы войти в веб-приложение Meality.\n\n_Ссылка действует 10 минут._',
       {
         parse_mode: 'Markdown',
         reply_markup: {
-          inline_keyboard: [[{ text: '🌐 Открыть MealBot', url }]],
+          inline_keyboard: [[{ text: '🌐 Открыть Meality', url }]],
         },
       }
     )
@@ -254,7 +254,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   const name = user.name || 'друг'
 
   await bot.sendMessage(chatId,
-    `👋 Привет, *${name}*\\! Я MealBot — помогу выбрать что приготовить\\.\n\n` +
+    `👋 Привет, *${name}*\\! Я Meality — помогу выбрать что приготовить\\.\n\n` +
     `🔐 Твой аккаунт уже создан через Telegram — холодильник и список блюд сохраняются автоматически\\.\n\n` +
     `Что умею:\n` +
     `🧊 Вести твой холодильник \\(\\+ молоко, \\- яйца\\)\n` +
@@ -701,7 +701,7 @@ bot.on('message', async (msg) => {
   if (text === '🤖 ИИ-помощник') {
     const aiEnabled = await getFlag('telegram.commands.aiEnabled', false)
     if (!aiEnabled) {
-      return bot.sendMessage(chatId, '🤖 ИИ-помощник временно недоступен в боте.\n\nВоспользуйся им в веб-приложении MealBot.', MAIN_MENU)
+      return bot.sendMessage(chatId, '🤖 ИИ-помощник временно недоступен в боте.\n\nВоспользуйся им в веб-приложении Meality.', MAIN_MENU)
     }
     session.state = 'ai_chat'
     session.data.aiHistory = []
@@ -759,9 +759,9 @@ bot.on('message', async (msg) => {
       const relevant = getRelevantDishes(visibleDishes, text)
       const dishSummary = relevant.map(d => `• ${d.name} (${d.mealTime.join('/')})`).join('\n')
 
-      const systemPrompt = `Ты — дружелюбный кулинарный ассистент MealBot в Telegram. Помогаешь выбрать, что приготовить. Отвечай коротко (до 150 слов), по-русски, можно эмодзи.
+      const systemPrompt = `Ты — дружелюбный кулинарный ассистент Meality в Telegram. Помогаешь выбрать, что приготовить. Отвечай коротко (до 150 слов), по-русски, можно эмодзи.
 ${fridgeList ? `В холодильнике пользователя: ${fridgeList}` : 'Холодильник пользователя пуст или не заполнен.'}
-${dishSummary ? `Подходящие блюда из базы MealBot:\n${dishSummary}\nПредпочитай блюда из этого списка — особенно те, что готовятся из продуктов холодильника.` : ''}`
+${dishSummary ? `Подходящие блюда из базы Meality:\n${dishSummary}\nПредпочитай блюда из этого списка — особенно те, что готовятся из продуктов холодильника.` : ''}`
 
       const resp = await anthropic.messages.create({
         model: aiModel,
@@ -793,11 +793,11 @@ ${dishSummary ? `Подходящие блюда из базы MealBot:\n${dishS
     const token = await generateWebLoginToken(user.id)
     const url = `${FRONTEND_URL}/auth/tg?token=${token}`
     return bot.sendMessage(chatId,
-      '🌐 Нажми кнопку ниже чтобы войти в веб-приложение MealBot.\n\n_Ссылка действует 10 минут._',
+      '🌐 Нажми кнопку ниже чтобы войти в веб-приложение Meality.\n\n_Ссылка действует 10 минут._',
       {
         parse_mode: 'Markdown',
         reply_markup: {
-          inline_keyboard: [[{ text: '🌐 Открыть MealBot', url }]],
+          inline_keyboard: [[{ text: '🌐 Открыть Meality', url }]],
         },
       }
     )
@@ -1167,4 +1167,4 @@ function buildIngredientKeyboard(session) {
   return { inline_keyboard: keyboard }
 }
 
-console.log('🤖 MealBot Telegram запущен...')
+console.log('🤖 Meality Telegram запущен...')

@@ -3,7 +3,7 @@
 // Если storageKey не передан — баннер нельзя закрыть (постоянный).
 //
 // Props:
-//   - storageKey: string (ключ в localStorage, напр. 'mealbot_hint_fridge_seen')
+//   - storageKey: string (ключ в localStorage, напр. 'meality_hint_fridge_seen')
 //   - icon?: ReactNode (lucide-иконка 16-18px)
 //   - title?: string
 //   - children: основной текст

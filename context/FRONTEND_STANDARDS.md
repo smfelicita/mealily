@@ -1,4 +1,4 @@
-# MealBot — Frontend Standards
+# Meality — Frontend Standards
 
 _Актуально на апрель 2026_
 

@@ -3,7 +3,7 @@ import { forceLogout } from '../store'
 const BASE = '/api'
 
 function getToken() {
-  return localStorage.getItem('mealbot_token')
+  return localStorage.getItem('meality_token')
 }
 
 async function request(path, options = {}) {

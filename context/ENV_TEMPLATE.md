@@ -32,7 +32,7 @@ GOOGLE_CLIENT_ID="xxxxxxxxx.apps.googleusercontent.com"
 
 # 9. Resend (отправка email)
 RESEND_API_KEY="re_..."
-RESEND_FROM="MealBot <noreply@smarussya.ru>"
+RESEND_FROM="Meality <noreply@smarussya.ru>"
 ```
 
 ## frontend/.env

@@ -72,7 +72,7 @@ modified:   frontend/src/pages/FridgePage.jsx
 ## Команды
 
 ```bash
-cd <путь-к-mealbot>
+cd <путь-к-meality>
 git status
 git branch --show-current      # main
 
@@ -108,7 +108,7 @@ git push origin main
 ## На сервере
 
 ```bash
-ssh root@194.87.130.215 "cd /var/www/mealbot && git pull && cd frontend && npm run build 2>&1 | tail -10"
+ssh root@194.87.130.215 "cd /var/www/mealily && git pull && cd frontend && npm run build 2>&1 | tail -10"
 ```
 
 ## Что проверить после деплоя

@@ -1,6 +1,6 @@
 {
-  "name": "MealBot",
-  "short_name": "MealBot",
+  "name": "Meality",
+  "short_name": "Meality",
   "description": "Умный помощник для выбора блюд",
   "start_url": "/",
   "display": "standalone",

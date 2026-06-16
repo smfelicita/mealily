@@ -1,4 +1,4 @@
-# MealBot — инструкции для Claude Code
+# Meality — инструкции для Claude Code
 
 ## Проект
 Коммерческий сервис выбора блюд с ИИ-помощником (веб PWA + Telegram-бот).
@@ -37,10 +37,10 @@ scripts/          — export-i18n-csv.js, import-i18n-csv.js
 ```
 
 ## Деплой (VPS 194.87.130.215, домен smarussya.ru)
-- Backend: PM2, `pm2 restart mealbot-backend`
+- Backend: PM2, `pm2 restart mealily-backend`
 - Frontend: `cd frontend && npm run build` (статика через nginx)
-- Логи: `pm2 logs mealbot-backend --lines 30`
-- После `git pull`: `npm install && pm2 restart mealbot-backend && cd frontend && npm run build`
+- Логи: `pm2 logs mealily-backend --lines 30`
+- После `git pull`: `npm install && pm2 restart mealily-backend && cd frontend && npm run build`
 
 ## Важные правила
 

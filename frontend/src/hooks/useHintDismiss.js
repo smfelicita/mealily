@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 /**
  * Однократный hint — показывается пока не закрыт, состояние хранится в localStorage.
- * @param {string} key  ключ в localStorage, напр. 'mealbot_hint_fridgeMode_seen'
+ * @param {string} key  ключ в localStorage, напр. 'meality_hint_fridgeMode_seen'
  * @returns {[boolean, () => void]}  [dismissed, dismiss]
  */
 export function useHintDismiss(key) {

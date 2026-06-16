@@ -103,7 +103,7 @@ logger.info({
 Затем агрегировать из PM2 логов:
 ```bash
 # Сколько токенов за сегодня
-pm2 logs mealbot-backend --lines 5000 | grep '"action":"ai_request"' | \
+pm2 logs mealily-backend --lines 5000 | grep '"action":"ai_request"' | \
   node -e "
     const lines = require('fs').readFileSync('/dev/stdin','utf8').split('\n').filter(Boolean)
     let inp=0, out=0
@@ -134,21 +134,21 @@ pm2 logs mealbot-backend --lines 5000 | grep '"action":"ai_request"' | \
 **Что собирать:**
 ```bash
 # Последние ошибки 5xx
-pm2 logs mealbot-backend --lines 2000 | grep '"level":50'
+pm2 logs mealily-backend --lines 2000 | grep '"level":50'
 
 # Топ эндпоинтов по количеству запросов
-pm2 logs mealbot-backend --lines 5000 | grep '"method"' | \
+pm2 logs mealily-backend --lines 5000 | grep '"method"' | \
   grep -oP '"path":"[^"]*"' | sort | uniq -c | sort -rn | head -20
 
 # Медленные запросы (если логируем duration)
-pm2 logs mealbot-backend --lines 5000 | grep '"duration"' | \
+pm2 logs mealily-backend --lines 5000 | grep '"duration"' | \
   node -e "
     const lines = require('fs').readFileSync('/dev/stdin','utf8').split('\n')
     lines.forEach(l => { try { const d=JSON.parse(l.match(/\{.*\}/)[0]); if(d.duration>500) console.log(d.duration+'ms', d.method, d.path) } catch{} })
   " | sort -rn | head -20
 
 # Rate limit срабатывания
-pm2 logs mealbot-backend --lines 5000 | grep '429'
+pm2 logs mealily-backend --lines 5000 | grep '429'
 ```
 
 **На что смотреть:**

@@ -595,7 +595,7 @@ export default function DishesPage() {
 
   const [favIds, setFavIds]             = useState(new Set())
   const [showBulkAdd, setShowBulkAdd]   = useState(false)
-  const [bulkHintHidden, dismissBulkHint] = useHintDismiss('mealbot_hint_bulkAdd_seen')
+  const [bulkHintHidden, dismissBulkHint] = useHintDismiss('meality_hint_bulkAdd_seen')
 
   const offsetRef     = useRef(0)
   const sentinelRef   = useRef(null)

@@ -1,4 +1,4 @@
-// ProfilePage.jsx — MealBot, страница профиля (3 состояния).
+// ProfilePage.jsx — Meality, страница профиля (3 состояния).
 // Без header/tab bar — только контент. pb-24 под tab bar.
 // Одиночный .jsx, моки внутри, Tailwind core + lucide-react, useState.
 
@@ -174,7 +174,7 @@ function ProUpgradeCard() {
           <Crown size={18} strokeWidth={2.2} color={C.pro} />
         </div>
         <h3 className="text-[17px] font-bold" style={{ color: C.text }}>
-          MealBot Pro
+          Meality Pro
         </h3>
       </div>
       <div
@@ -224,7 +224,7 @@ function MySubscriptionCard({ user }) {
       <div className="flex items-center gap-2.5 flex-wrap">
         <Crown size={20} strokeWidth={2.2} color={C.pro} />
         <h3 className="text-[17px] font-bold" style={{ color: C.text }}>
-          MealBot Pro
+          Meality Pro
         </h3>
         <span
           className="text-[10.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full"
@@ -538,7 +538,7 @@ function Screen({ variant }) {
         className="mt-7 text-center text-[10.5px]"
         style={{ color: C.text3 }}
       >
-        MealBot v2.4.0 · условия · приватность
+        Meality v2.4.0 · условия · приватность
       </div>
     </div>
   );

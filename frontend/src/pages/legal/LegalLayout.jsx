@@ -20,7 +20,7 @@ export function LegalLayout({ title, updated, children }) {
           </button>
           <Link to="/" className="inline-flex items-center gap-1.5 text-accent font-extrabold">
             <ChefHat size={18} strokeWidth={2.2} />
-            MealBot
+            Meality
           </Link>
         </div>
 

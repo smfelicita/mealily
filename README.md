@@ -1,8 +1,8 @@
-# 🍽️ MealBot — умный помощник для выбора блюд
+# 🍽️ Meality — умный помощник для выбора блюд
 
 ## Структура проекта
 ```
-mealbot/
+meality/
 ├── backend/          — Node.js + Express + Prisma API
 ├── frontend/         — React + Vite (PWA)
 └── telegram-bot/     — Telegram-бот

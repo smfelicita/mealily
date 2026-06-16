@@ -42,7 +42,7 @@ const loginLimiter = rateLimit({
 })
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
-const FROM = process.env.RESEND_FROM || 'MealBot <noreply@smarussya.ru>'
+const FROM = process.env.RESEND_FROM || 'Meality <noreply@smarussya.ru>'
 
 async function sendEmailCode(email, code, requestId) {
   if (!resend) {
@@ -52,10 +52,10 @@ async function sendEmailCode(email, code, requestId) {
   const result = await resend.emails.send({
     from: FROM,
     to: email,
-    subject: 'Ваш код подтверждения — MealBot',
+    subject: 'Ваш код подтверждения — Meality',
     html: `
       <div style="font-family:sans-serif;max-width:420px;margin:0 auto">
-        <h2 style="color:#e85d04">🍽️ MealBot</h2>
+        <h2 style="color:#e85d04">🍽️ Meality</h2>
         <p>Ваш код подтверждения:</p>
         <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#e85d04;margin:16px 0">${code}</div>
         <p style="color:#888;font-size:13px">Код действителен 15 минут. Если вы не регистрировались — просто проигнорируйте это письмо.</p>
@@ -325,7 +325,7 @@ router.post('/generate-telegram-link', authMiddleware, async (req, res, next) =>
         pendingTelegramLinkExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 часа
       },
     })
-    const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'MealBotRu'
+    const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'mealily_bot'
     res.json({ url: `https://t.me/${botUsername}?start=link_${token}` })
   } catch (err) { next(err) }
 })

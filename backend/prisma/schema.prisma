@@ -191,7 +191,7 @@ model Dish {
   videoUrl    String?
   recipe      String?
 
-  // Владение: null = системное блюдо от MealBot
+  // Владение: null = системное блюдо от Meality
   authorId String?
   author   User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
 

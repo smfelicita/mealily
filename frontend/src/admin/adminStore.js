@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-const STORAGE_KEY = 'mealbot_admin_token'
+const STORAGE_KEY = 'meality_admin_token'
 const INACTIVITY_LIMIT_MS = 30 * 60 * 1000 // 30 минут
 
 export const useAdminStore = create((set, get) => ({

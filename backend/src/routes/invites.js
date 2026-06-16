@@ -9,7 +9,7 @@ const { logger, maskEmail } = require('../lib/logger')
 const { migratePersonalFridgeToFamily } = require('../lib/fridgeMigration')
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
-const FROM = process.env.RESEND_FROM || 'MealBot <noreply@smarussya.ru>'
+const FROM = process.env.RESEND_FROM || 'Meality <noreply@smarussya.ru>'
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 const TTL_DAYS = 7
 
@@ -97,10 +97,10 @@ router.post('/groups/:id/invite', authMiddleware, validate(inviteCreate), async 
       const result = await resend.emails.send({
         from: FROM,
         to: normalEmail,
-        subject: `${inviterName} приглашает вас в группу «${group.name}» — MealBot`,
+        subject: `${inviterName} приглашает вас в группу «${group.name}» — Meality`,
         html: `
           <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-            <h2 style="color:#e85d04">🍽️ MealBot</h2>
+            <h2 style="color:#e85d04">🍽️ Meality</h2>
             <p><strong>${inviterName}</strong> приглашает вас вступить в группу <strong>«${group.name}»</strong>${group.type === 'FAMILY' ? ' (семейная группа с общим холодильником)' : ''}.</p>
             <p style="margin:24px 0">
               <a href="${inviteUrl}"

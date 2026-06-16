@@ -39,7 +39,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-bg">
       <div className="w-full max-w-sm bg-bg-2 rounded-2xl p-8 border border-border">
         <h1 className="text-xl font-semibold text-text mb-1">Панель администратора</h1>
-        <p className="text-sm text-text-2 mb-6">MealBot Admin</p>
+        <p className="text-sm text-text-2 mb-6">Meality Admin</p>
 
         {params.get('reason') === 'inactivity' && (
           <p className="text-sm text-amber-500 mb-4">Сессия завершена из-за неактивности</p>

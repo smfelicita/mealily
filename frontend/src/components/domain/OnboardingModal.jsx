@@ -10,8 +10,8 @@ export default function OnboardingModal({ onClose }) {
   const [saving, setSaving] = useState(false)
 
   function finish() {
-    localStorage.removeItem('mealbot_show_onboarding')
-    localStorage.setItem('mealbot_onboarding_done', '1')
+    localStorage.removeItem('meality_show_onboarding')
+    localStorage.setItem('meality_onboarding_done', '1')
     onClose()
     navigate('/', { replace: true })
   }
@@ -22,7 +22,7 @@ export default function OnboardingModal({ onClose }) {
     setSaving(true)
     try {
       await api.bulkCreateDishes(names)
-      localStorage.setItem('mealbot_hint_firstDish_seen', '1')
+      localStorage.setItem('meality_hint_firstDish_seen', '1')
     } catch {}
     setSaving(false)
     finish()

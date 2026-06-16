@@ -33,7 +33,7 @@
 - **HTTPS:** Let's Encrypt через certbot ✅
 - **Backend:** PM2, порт 3001, nginx reverse proxy ✅
 - **Frontend:** собранные статические файлы через nginx ✅
-- **GitHub:** git@github.com:smfelicita/mealbot.git
+- **GitHub:** git@github.com:smfelicita/mealily.git
 
 ### Реализованные функции
 Смотри TASKS.md — там актуальный список
@@ -74,10 +74,10 @@
 
 ### На сервере нужно (если не сделано)
 ```bash
-cd /var/www/mealbot/backend
+cd /var/www/mealily/backend
 # Добавить в .env: ADMIN_JWT_SECRET=<openssl rand -hex 32>
 npx prisma db push --accept-data-loss  # AuditLog + isActive + AiUsageLog
-pm2 restart mealbot-backend
+pm2 restart mealily-backend
 cd ../frontend && npm run build
 ```
 
@@ -179,7 +179,7 @@ cd ../frontend && npm run build
 
 ### GitHub
 - Username: smfelicita
-- Repo: `git@github.com:smfelicita/mealbot.git`
+- Repo: `git@github.com:smfelicita/mealily.git`
 - Настроен SSH
 
 ### Деплой после изменений
@@ -188,9 +188,9 @@ cd ../frontend && npm run build
 git add -A && git commit -m "..." && git push
 
 # На сервере:
-cd /var/www/mealbot && git pull
+cd /var/www/mealily && git pull
 cd backend && npm install
-pm2 restart mealbot-backend
+pm2 restart mealily-backend
 # Если изменился фронтенд:
 cd ../frontend && npm run build
 ```

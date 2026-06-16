@@ -336,7 +336,7 @@ export default function ProfilePage() {
   function changeLang(code) {
     setLang(code)
     i18n.changeLanguage(code)
-    // i18n.changeLanguage сам пишет в localStorage.mealbot_lang (через LanguageDetector cache)
+    // i18n.changeLanguage сам пишет в localStorage.meality_lang (через LanguageDetector cache)
   }
 
   if (loading) return <Loader fullPage />

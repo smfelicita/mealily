@@ -340,7 +340,7 @@ export default function HomePage() {
             description={t('guestBanner.description')}
             registerText={t('guestBanner.registerText')}
             loginText={t('guestBanner.loginText')}
-            storageKey="mealbot_guest_banner_dismissed"
+            storageKey="meality_guest_banner_dismissed"
             dismissible
           />
         </div>

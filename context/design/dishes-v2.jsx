@@ -1,4 +1,4 @@
-// CatalogPage.jsx — MealBot, страница каталога блюд (4 состояния).
+// CatalogPage.jsx — Meality, страница каталога блюд (4 состояния).
 // Без header/tab bar — только контент. pb-24 под tab bar.
 // Одиночный .jsx, моки внутри, Tailwind core + lucide-react, useState.
 

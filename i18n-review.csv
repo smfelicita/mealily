@@ -96,7 +96,7 @@ common,nav.fridge,Холодильник,Fridge
 common,nav.plan,План,Plan
 common,nav.chat,Чат,Chat
 common,nav.profile,Профиль,Profile
-common,brand.name,MealBot,MealBot
+common,brand.name,Meality,Meality
 common,brand.subtitle,Моя кухня,My Kitchen
 common,header.loginButton,Войти,Sign in
 common,header.notifications,Уведомления,Notifications
@@ -209,7 +209,7 @@ dish,empty.ownTitle,Ваша кухня пока пуста,Your kitchen is empt
 dish,empty.ownBody,Добавьте первое блюдо — личное или для всей семьи,Add your first dish — personal or for the whole family
 dish,empty.ownButton,Добавить блюдо,Add dish
 dish,empty.guestTitle,Добавь свои блюда,Add your dishes
-dish,empty.guestBody,Зарегистрируйся — и MealBot каждый день будет подсказывать что приготовить,Register — and MealBot will suggest what to cook every day
+dish,empty.guestBody,Зарегистрируйся — и Meality каждый день будет подсказывать что приготовить,Register — and Meality will suggest what to cook every day
 dish,empty.guestRegister,Создать свою кухню,Create your kitchen
 dish,empty.guestLogin,Уже есть аккаунт? Войти,Already have an account? Sign in
 dish,empty.filteredTitle,Ничего не найдено,Nothing found
@@ -336,7 +336,7 @@ errors,validation.minLength,Минимум {{count}} символов,Minimum {{
 errors,validation.maxLength,Максимум {{count}} символов,Maximum {{count}} characters
 fridge,title,Холодильник,Fridge
 fridge,guest.title,"Готовь из того, что есть дома",Cook from what you have at home
-fridge,guest.description,"Добавь продукты из холодильника — MealBot подберёт блюда, которые можно приготовить прямо сейчас.",Add ingredients from your fridge — MealBot will suggest dishes you can make right now.
+fridge,guest.description,"Добавь продукты из холодильника — Meality подберёт блюда, которые можно приготовить прямо сейчас.",Add ingredients from your fridge — Meality will suggest dishes you can make right now.
 fridge,guest.register,Создать свою кухню,Create your kitchen
 fridge,guest.login,Уже есть аккаунт? Войти,Already have an account? Sign in
 fridge,telegram.title,Управляй холодильником в Telegram,Manage your fridge in Telegram
@@ -361,7 +361,7 @@ fridge,card.cancelAria,Отмена,Cancel
 fridge,card.qtyPlaceholder,Кол-во,Qty
 fridge,card.basicBadge,базовый,staple
 fridge,empty.title,Холодильник пустой,Fridge is empty
-fridge,empty.description,"Добавь продукты — MealBot подберёт что приготовить из того, что есть",Add ingredients — MealBot will suggest what to cook from what you have
+fridge,empty.description,"Добавь продукты — Meality подберёт что приготовить из того, что есть",Add ingredients — Meality will suggest what to cook from what you have
 fridge,empty.addButton,Добавить продукты,Add ingredients
 fridge,picker.title,Что у вас есть?,What do you have?
 fridge,picker.closeAria,Закрыть,Close

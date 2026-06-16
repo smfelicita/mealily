@@ -108,7 +108,7 @@ Error: Not allowed by CORS
 ```
 FRONTEND_URL=https://smarussya.ru
 ```
-Затем: `pm2 restart mealbot-backend`
+Затем: `pm2 restart mealily-backend`
 
 **Статус:** ✅ Исправлено
 
@@ -125,7 +125,7 @@ Error: Cannot find module 'pino'
 
 **Решение:**
 ```bash
-cd /var/www/mealbot/backend && npm install && pm2 restart mealbot-backend
+cd /var/www/mealily/backend && npm install && pm2 restart mealily-backend
 ```
 
 **Статус:** ✅ Исправлено — после каждого `git pull` нужно запускать `npm install`
