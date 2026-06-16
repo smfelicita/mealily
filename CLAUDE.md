@@ -36,17 +36,25 @@ context/          — документация проекта
 scripts/          — export-i18n-csv.js, import-i18n-csv.js
 ```
 
-## Деплой (VPS 194.87.130.215, домен smarussya.ru)
+## Деплой
+- **Прод-сервер (Москва):** `5.42.112.233` (хост `msk-1-vm-7usl`), путь `/var/www/mealily`.
+  Бэкенд, фронт, бот, PostgreSQL.
+- **Зарубежный VPS:** `194.87.130.215` — только выход для Telegram-трафика бота (см. ниже).
 - Backend: PM2, `pm2 restart mealily-backend`
 - Frontend: `cd frontend && npm run build` (статика через nginx)
 - Логи: `pm2 logs mealily-backend --lines 30`
 - После `git pull`: `npm install && pm2 restart mealily-backend && cd frontend && npm run build`
 
 ### Telegram-бот: прокси (обход блокировки)
-- На РФ-хостинге HTTPS к `api.telegram.org` режется DPI. Бот ходит через SOCKS5-прокси.
-- Туннель: `ssh -f -N -D 127.0.0.1:1080 root@<зарубежный-vps>` (держится через systemd-сервис `tg-tunnel`).
+- На РФ-хостинге HTTPS к `api.telegram.org` режется DPI (и IPv4, и IPv6) → бот падает с `EFATAL`.
+  Бот ходит через SOCKS5-туннель на зарубежный VPS.
+- Туннель: systemd-сервис `tg-tunnel.service` (`ssh -NT -D 127.0.0.1:1080 root@194.87.130.215`,
+  `Restart=always`, enabled). Ключ `/root/.ssh/tg_tunnel` (беспарольный, установлен на зарубежный VPS).
 - В `telegram-bot/.env`: `TELEGRAM_PROXY="socks5://127.0.0.1:1080"`. Без переменной — прямое подключение.
-- Код: `telegram-bot/src/index.js` подключает `socks-proxy-agent` при наличии `TELEGRAM_PROXY`.
+- Код: `telegram-bot/src/index.js` подключает `socks-proxy-agent` при наличии `TELEGRAM_PROXY`;
+  грузит `.env` по абсолютному пути (`__dirname/../.env`), т.к. PM2 стартует из cwd `/var/www/mealily`.
+- После правок `.env`/кода бота: `pm2 delete mealily-bot && pm2 start telegram-bot/src/index.js --name mealily-bot --time && pm2 save`
+  (надёжнее, чем `pm2 restart --update-env`).
 
 ## Важные правила
 
