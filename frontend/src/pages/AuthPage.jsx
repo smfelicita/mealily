@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
-import { ChefHat, Mail, Phone, AlertCircle } from 'lucide-react'
+import { ChefHat, Mail, Phone, Send, AlertCircle } from 'lucide-react'
 import { useTranslation, Trans } from 'react-i18next'
 
 import { api } from '../api'
@@ -115,8 +115,9 @@ function ConsentNote() {
 function TabSwitcher({ tab, onChange }) {
   const { t } = useTranslation('auth')
   const items = [
-    { id: 'email', label: 'Email',          Icon: Mail  },
-    { id: 'phone', label: t('tab.phone'),   Icon: Phone },
+    { id: 'email',    label: 'Email',           Icon: Mail  },
+    { id: 'phone',    label: t('tab.phone'),    Icon: Phone },
+    { id: 'telegram', label: 'Telegram',        Icon: Send  },
   ]
   return (
     <div className="flex rounded-full p-1 bg-bg-3 border border-border">
@@ -265,9 +266,13 @@ export default function AuthPage() {
 
   function switchTab(t) {
     setTab(t); setError('')
-    setStep(t === 'phone' ? 'phone-enter' : 'login')
+    const stepByTab = { phone: 'phone-enter', telegram: 'telegram', email: 'login' }
+    setStep(stepByTab[t] || 'login')
     setForm({ email: '', password: '', name: '', phone: '', code: '' })
   }
+
+  const tgBotUsername = import.meta.env.VITE_TELEGRAM_BOT_USERNAME || 'mealily_bot'
+  const tgLoginUrl = `https://t.me/${tgBotUsername}?start=getlink`
 
   // ── Render ────────────────────────────────────────────────────
   return (
@@ -424,6 +429,32 @@ export default function AuthPage() {
                 {!loading && t('phoneEnter.sendCode')}
               </Button>
             </form>
+            <ConsentNote />
+          </>
+        )}
+
+        {/* ── Telegram вход ── */}
+        {step === 'telegram' && (
+          <>
+            <TabSwitcher tab={tab} onChange={switchTab} />
+            <h2 className="text-xl font-extrabold tracking-tight text-text mt-5 mb-2">
+              {t('telegramLogin.title')}
+            </h2>
+            <p className="text-sm2 text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
+              {t('telegramLogin.desc')}
+            </p>
+            <a
+              href={tgLoginUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full h-11 rounded-full inline-flex items-center justify-center gap-2 bg-accent text-white font-bold text-[14.5px]"
+            >
+              <Send size={16} strokeWidth={2.2} />
+              {t('telegramLogin.openBot')}
+            </a>
+            <p className="text-center text-xs text-text-3 leading-snug mt-3" style={{ textWrap: 'pretty' }}>
+              {t('telegramLogin.hint')}
+            </p>
             <ConsentNote />
           </>
         )}
