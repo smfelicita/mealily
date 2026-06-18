@@ -49,6 +49,11 @@ prisma.user.updateMany({
 const app = express()
 const PORT = process.env.PORT || 3001
 
+// За одним обратным прокси (nginx на этом же хосте): доверяем одному хопу,
+// чтобы express-rate-limit корректно читал реальный IP из X-Forwarded-For.
+// НЕ ставим true (это доверяло бы любому отправителю заголовка и позволяло бы подделку IP).
+app.set('trust proxy', 1)
+
 // Startup checks
 if (process.env.NODE_ENV === 'production' && !process.env.FRONTEND_URL) {
   logger.warn({ action: 'startup_missing_env', var: 'FRONTEND_URL' }, 'FRONTEND_URL not set in production — CORS will use localhost fallback')
