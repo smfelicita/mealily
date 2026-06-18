@@ -10,8 +10,8 @@ JWT-авторизация. Три метода входа: email/пароль, 
 - `optionalAuth` — не блокирует, пишет userId если токен есть (для гостей)
 - `requireRole('ADMIN')` — после authMiddleware
 - Google OAuth: auto-link к существующему email-аккаунту
-- SMS: код подтверждения через Resend
-- Email: код подтверждения через Resend
+- SMS: код подтверждения через Unisender Go
+- Email: код подтверждения через Unisender Go
 - Telegram-авторизация: one-time token (10 мин) через бот → JWT
 
 ## 2. Найденные проблемы

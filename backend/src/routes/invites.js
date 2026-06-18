@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { randomBytes } = require('crypto')
-const { Resend } = require('resend')
+const { sendEmail, isConfigured } = require('../lib/email')
 const prisma = require('../lib/prisma')
 const { authMiddleware } = require('../middleware/auth')
 const validate = require('../middleware/validate')
@@ -8,8 +8,6 @@ const { inviteCreate } = require('../lib/schemas')
 const { logger, maskEmail } = require('../lib/logger')
 const { migratePersonalFridgeToFamily } = require('../lib/fridgeMigration')
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
-const FROM = process.env.RESEND_FROM || 'Meality <noreply@smarussya.ru>'
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 const TTL_DAYS = 7
 
@@ -93,12 +91,12 @@ router.post('/groups/:id/invite', authMiddleware, validate(inviteCreate), async 
 
     // Отправляем письмо
     const inviteUrl = `${FRONTEND_URL}/invite/${token}`
-    if (resend) {
-      const result = await resend.emails.send({
-        from: FROM,
-        to: normalEmail,
-        subject: `${inviterName} приглашает вас в группу «${group.name}» — Meality`,
-        html: `
+    if (isConfigured()) {
+      try {
+        await sendEmail({
+          to: normalEmail,
+          subject: `${inviterName} приглашает вас в группу «${group.name}» — Meality`,
+          html: `
           <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
             <h2 style="color:#e85d04">🍽️ Meality</h2>
             <p><strong>${inviterName}</strong> приглашает вас вступить в группу <strong>«${group.name}»</strong>${group.type === 'FAMILY' ? ' (семейная группа с общим холодильником)' : ''}.</p>
@@ -111,9 +109,10 @@ router.post('/groups/:id/invite', authMiddleware, validate(inviteCreate), async 
             <p style="color:#888;font-size:13px">Ссылка действительна ${TTL_DAYS} дней. Если вы не ожидали этого приглашения — просто проигнорируйте письмо.</p>
           </div>
         `,
-      })
-      if (result?.error) {
-        console.error('[Resend] invite error:', result.error)
+          requestId: req.requestId,
+        })
+      } catch (err) {
+        logger.error({ action: 'invite_email_failed', email: maskEmail(normalEmail), error: String(err), requestId: req.requestId }, 'invite_email_failed')
         return res.status(500).json({ error: 'Не удалось отправить письмо' })
       }
     } else {

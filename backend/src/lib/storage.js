@@ -1,5 +1,5 @@
 // Хранилище медиафайлов с переключаемым драйвером (STORAGE_DRIVER в .env):
-//   'supabase' (по умолчанию) — Supabase Storage, как было всегда (smarussya.ru)
+//   'supabase' (по умолчанию) — Supabase Storage, как было всегда (mealily.ru)
 //   'local'                   — локальный диск + раздача через nginx (mealily.ru)
 //
 // Для local обязательны:

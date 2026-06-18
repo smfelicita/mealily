@@ -14,7 +14,7 @@ JWT_SECRET="любой_длинный_случайный_текст"
 ANTHROPIC_API_KEY="sk-ant-..."
 
 # 4. URL фронтенда (для CORS)
-FRONTEND_URL="https://smarussya.ru"
+FRONTEND_URL="https://mealily.ru"
 
 # 5. Порт
 PORT=3001
@@ -25,20 +25,20 @@ SUPABASE_SERVICE_KEY="eyJ..."   # service_role key (не anon!)
 
 # 7. Telegram Bot
 TELEGRAM_BOT_TOKEN="7123456789:AAH..."
-TELEGRAM_WEBHOOK_URL="https://smarussya.ru/telegram/webhook"
+TELEGRAM_WEBHOOK_URL="https://mealily.ru/telegram/webhook"
 
 # 8. Google OAuth
 GOOGLE_CLIENT_ID="xxxxxxxxx.apps.googleusercontent.com"
 
-# 9. Resend (отправка email)
-RESEND_API_KEY="re_..."
-RESEND_FROM="Meality <noreply@smarussya.ru>"
+# 9. Unisender Go (отправка email)
+UNISENDER_GO_API_KEY="your-unisender-go-api-key"
+MAIL_FROM="Meality <noreply@mealily.ru>"
 ```
 
 ## frontend/.env
 
 ```env
-VITE_API_URL="https://smarussya.ru/api"
+VITE_API_URL="https://mealily.ru/api"
 VITE_GOOGLE_CLIENT_ID="xxxxxxxxx.apps.googleusercontent.com"
 ```
 
@@ -60,13 +60,16 @@ API_URL="http://localhost:3001"
 3. Application type: Web application
 4. Authorized JavaScript origins:
    - `http://localhost:5173`
-   - `https://smarussya.ru`
+   - `https://mealily.ru`
 5. Скопировать Client ID → в backend/.env (GOOGLE_CLIENT_ID) и frontend/.env (VITE_GOOGLE_CLIENT_ID)
 6. Пересобрать frontend после добавления VITE_GOOGLE_CLIENT_ID
 
-## Настройка Resend (отправка email)
+## Настройка Unisender Go (отправка email)
 
-1. resend.com → зарегистрироваться
-2. API Keys → Create API Key → скопировать в RESEND_API_KEY
-3. Domains → Add Domain → `smarussya.ru` → добавить DNS-записи в Timeweb
-4. После верификации домена письма будут отправляться с noreply@smarussya.ru
+1. go.unisender.ru → зарегистрироваться (российский сервис, серверы в РФ — под 152-ФЗ)
+2. Настройки → API → создать ключ → скопировать в UNISENDER_GO_API_KEY
+3. Домены → Добавить домен → `mealily.ru` + домен ссылок `email.mealily.ru`
+4. Прописать DNS в Timeweb: SPF (объединить с timeweb: `v=spf1 include:_spf.timeweb.ru include:spf.unisender.ru ~all`),
+   DKIM (`us._domainkey` TXT), validate-hash (TXT), DMARC (CNAME `_dmarc`), трекинг-домен (`email` CNAME → uns1.unisender.com)
+5. Подтвердить домен и трекинг-домен в панели → письма уходят с noreply@mealily.ru
+6. Код: `backend/src/lib/email.js` (track_links/track_read = 0, служебные письма)

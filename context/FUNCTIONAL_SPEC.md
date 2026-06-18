@@ -26,7 +26,7 @@ _Актуально на май 2026_
 ## Авторизация
 
 ### Способы входа
-- **Email + пароль** — с подтверждением кода (Resend)
+- **Email + пароль** — с подтверждением кода (Unisender Go)
 - **Google OAuth** — через @react-oauth/google; auto-link к существующему email-аккаунту
 - **SMS** — номер телефона + одноразовый код
 
@@ -230,7 +230,7 @@ _Актуально на май 2026_
 - **Приглашение по email**: one-time token, TTL 7 дней, one-use
   - FAMILY: только owner может приглашать; при accept проверяется email получателя
   - Rate limit: 3 инвайта / день / email-получатель, 10 / день / отправитель
-  - Отправка через Resend; заглушка (console.log) если RESEND_API_KEY не задан
+  - Отправка через Unisender Go; заглушка (console.log) если UNISENDER_GO_API_KEY не задан
 - При выходе/исключении из FAMILY: продукты возвращаются в личный холодильник
 - При удалении FAMILY: все участники получают продукты обратно
 
@@ -316,7 +316,7 @@ _Актуально на май 2026_
 
 ## Деплой
 
-- VPS Timeweb, IP 194.87.130.215, домен smarussya.ru
+- VPS Timeweb, IP 194.87.130.215, домен mealily.ru
 - Backend: Node.js + Express + Prisma, PM2, порт 3001
 - Frontend: React + Vite, статика через nginx
 - БД: Supabase PostgreSQL (Session Pooler, порт 5432)

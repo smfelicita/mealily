@@ -98,15 +98,15 @@ git checkout package-lock.json && git pull
 
 **Ошибка в pm2 logs:**
 ```
-cors_rejected origin: https://smarussya.ru
+cors_rejected origin: https://mealily.ru
 Error: Not allowed by CORS
 ```
 
-**Причина:** `FRONTEND_URL` в backend/.env был задан как IP-адрес `http://194.87.130.215`, но браузер делает запросы с домена `https://smarussya.ru`. CORS-функция делает строгое `===` сравнение.
+**Причина:** `FRONTEND_URL` в backend/.env был задан как IP-адрес `http://194.87.130.215`, но браузер делает запросы с домена `https://mealily.ru`. CORS-функция делает строгое `===` сравнение.
 
 **Решение:** Обновить `.env` на сервере:
 ```
-FRONTEND_URL=https://smarussya.ru
+FRONTEND_URL=https://mealily.ru
 ```
 Затем: `pm2 restart mealily-backend`
 
@@ -138,6 +138,6 @@ cd /var/www/mealily/backend && npm install && pm2 restart mealily-backend
 
 **Причина:** Google OAuth не принимает IP-адреса в Authorized JavaScript origins.
 
-**Решение:** Нужен домен. Марина купила `smarussya.ru`, настроила A-запись → 194.87.130.215.
+**Решение:** Нужен домен. Марина купила `mealily.ru`, настроила A-запись → 194.87.130.215.
 
-**Статус:** ✅ Исправлено — используем https://smarussya.ru
+**Статус:** ✅ Исправлено — используем https://mealily.ru

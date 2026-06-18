@@ -29,7 +29,7 @@
 ## Текущий статус (актуально)
 
 ### Деплой
-- **Домен:** https://smarussya.ru (A-запись → 194.87.130.215)
+- **Домен:** https://mealily.ru (A-запись → 194.87.130.215)
 - **HTTPS:** Let's Encrypt через certbot ✅
 - **Backend:** PM2, порт 3001, nginx reverse proxy ✅
 - **Frontend:** собранные статические файлы через nginx ✅
@@ -39,12 +39,12 @@
 Смотри TASKS.md — там актуальный список
 
 ### Авторизация (реализовано)
-- Email + пароль + подтверждение кода (отправка через Resend)
+- Email + пароль + подтверждение кода (отправка через Unisender Go)
 - Телефон + SMS-код (заглушка — код в логи PM2)
 - Google OAuth (@react-oauth/google фронт + google-auth-library бэк)
 
 ### Что настроено на сервере
-- `RESEND_API_KEY` — реальная отправка email через Resend
+- `UNISENDER_GO_API_KEY` — реальная отправка email через Unisender Go
 - `GOOGLE_CLIENT_ID` — Google OAuth
 - `VITE_GOOGLE_CLIENT_ID` — в frontend/.env для сборки
 
@@ -157,7 +157,7 @@ cd ../frontend && npm run build
 - **Аудит безопасности (29 задач)**: token versioning, CORS-функция с логированием, Zod-валидация, единый errorHandler, индексы БД, пагинация /api/dishes, N+1 fix в buildVisibilityFilter, rate limit на comments, in-memory кэш блюд для ИИ, ErrorBoundary на фронте, XSS-защита в чате, фикс optionalAuth (async + tokenVersion)
 - **Infinite scroll**: DishesPage — 20 блюд за запрос, IntersectionObserver
 - **Zod-валидация**: добавлена на fridge (POST, PATCH, bulk) и meal-plans (POST)
-- **CORS фикс**: FRONTEND_URL на сервере должен быть `https://smarussya.ru` (домен), не IP — иначе Google OAuth и другие запросы с домена блокируются
+- **CORS фикс**: FRONTEND_URL на сервере должен быть `https://mealily.ru` (домен), не IP — иначе Google OAuth и другие запросы с домена блокируются
 - **Фронтенд-аудит (10 задач)**: MealTypeChips bg-sage, useToast на всех страницах, DishesPage Tailwind-only, SVG currentColor, TelegramAuthPage переписан без легаси CSS, GroupHeader извлечён в domain-компонент, email-валидация приглашений, DishCard getDishMeta + variant=inline, PlanItem/GroupCard извлечены, text-[11px]→text-2xs
 - **Аудит-система**: context/audits/ (7 файлов), context/frontend-rules.md — документация стандартов
 - **Баг видимости блюд в группах**: ALL_GROUPS и FAMILY блюда теперь корректно возвращаются (явный prisma.dish.findMany с OR-условиями вместо include через relation)

@@ -11,7 +11,7 @@
 - **Telegram-бот:** node-telegram-bot-api
 - **ИИ:** Claude API (Anthropic)
 - **Хостинг:** VPS Timeweb (IP 194.87.130.215), nginx + PM2
-- **Домен:** https://smarussya.ru
+- **Домен:** https://mealily.ru
 - **Медиафайлы:** Supabase Storage
 
 ## Структура проекта

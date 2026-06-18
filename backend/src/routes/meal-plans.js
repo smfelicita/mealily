@@ -10,7 +10,7 @@ const { logger } = require('../lib/logger')
 
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(
-    process.env.VAPID_EMAIL || 'mailto:admin@smarussya.ru',
+    process.env.VAPID_EMAIL || 'mailto:admin@mealily.ru',
     process.env.VAPID_PUBLIC_KEY,
     process.env.VAPID_PRIVATE_KEY,
   )

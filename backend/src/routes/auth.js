@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const rateLimit = require('express-rate-limit')
 const prisma = require('../lib/prisma')
-const { Resend } = require('resend')
+const { sendEmail } = require('../lib/email')
 const { authMiddleware } = require('../middleware/auth')
 const { addDefaultFridgeItems } = require('../lib/fridge')
 const { logger, maskEmail } = require('../lib/logger')
@@ -41,16 +41,8 @@ const loginLimiter = rateLimit({
   legacyHeaders: false,
 })
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
-const FROM = process.env.RESEND_FROM || 'Meality <noreply@smarussya.ru>'
-
 async function sendEmailCode(email, code, requestId) {
-  if (!resend) {
-    logger.debug({ action: 'email_send_stub', email: maskEmail(email), requestId }, 'email_send_stub')
-    return
-  }
-  const result = await resend.emails.send({
-    from: FROM,
+  await sendEmail({
     to: email,
     subject: 'Ваш код подтверждения — Meality',
     html: `
@@ -61,12 +53,8 @@ async function sendEmailCode(email, code, requestId) {
         <p style="color:#888;font-size:13px">Код действителен 15 минут. Если вы не регистрировались — просто проигнорируйте это письмо.</p>
       </div>
     `,
+    requestId,
   })
-  if (result?.error) {
-    logger.error({ action: 'email_send_failed', email: maskEmail(email), error: result.error, requestId }, 'email_send_failed')
-    throw new Error('Не удалось отправить письмо. Попробуйте позже.')
-  }
-  logger.info({ action: 'email_sent', email: maskEmail(email), messageId: result?.data?.id, requestId }, 'email_sent')
 }
 
 const signToken = (userId, role, tokenVersion) =>
