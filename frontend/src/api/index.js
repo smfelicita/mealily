@@ -42,6 +42,10 @@ export const api = {
     request('/auth/verify-email', { method: 'POST', body: { email, code } }),
   resendEmailCode: (email) =>
     request('/auth/resend-email-code', { method: 'POST', body: { email } }),
+  forgotPassword: (email) =>
+    request('/auth/forgot-password', { method: 'POST', body: { email } }),
+  resetPassword: (email, code, password) =>
+    request('/auth/reset-password', { method: 'POST', body: { email, code, password } }),
   sendPhoneCode: (phone) =>
     request('/auth/send-phone-code', { method: 'POST', body: { phone } }),
   verifyPhone: (phone, code, name) =>

@@ -209,6 +209,32 @@ export default function AuthPage() {
     finally { setLoading(false) }
   }
 
+  async function submitForgotPassword(e) {
+    e.preventDefault(); setError(''); setLoading(true)
+    try {
+      const res = await api.forgotPassword(form.email)
+      setPendingEmail(res.email || form.email)
+      setStep('reset'); setResendCountdown(60)
+    } catch (err) { setError(err.message) }
+    finally { setLoading(false) }
+  }
+
+  async function submitResetPassword(e) {
+    e.preventDefault(); setError(''); setLoading(true)
+    try {
+      const res = await api.resetPassword(pendingEmail, form.code, form.password)
+      setAuth(res.user, res.token); navigate(redirectTo, { replace: true })
+    } catch (err) { setError(err.message) }
+    finally { setLoading(false) }
+  }
+
+  async function resendResetCode() {
+    setError(''); setLoading(true)
+    try { await api.forgotPassword(pendingEmail); setResendCountdown(60) }
+    catch (err) { setError(err.message) }
+    finally { setLoading(false) }
+  }
+
   async function submitSendPhone(e) {
     e.preventDefault(); setError(''); setLoading(true)
     try {
@@ -260,6 +286,87 @@ export default function AuthPage() {
 
       {/* Card */}
       <div className="w-full max-w-[380px] bg-bg-2 border border-border rounded-2xl p-6 fade-up">
+
+        {/* ── Forgot password: ввод email ── */}
+        {step === 'forgot' && (
+          <>
+            <h2 className="text-xl font-extrabold tracking-tight text-text mb-1">
+              {t('forgot.title')}
+            </h2>
+            <p className="text-sm2 text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
+              {t('forgot.desc')}
+            </p>
+            <form onSubmit={submitForgotPassword} className="flex flex-col gap-4">
+              <div>
+                <FieldLabel>{t('fields.email')}</FieldLabel>
+                <PillInput
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={upd('email')}
+                  autoFocus
+                />
+              </div>
+              <ErrorMsg msg={error} />
+              <Button type="submit" className="w-full" loading={loading}>
+                {!loading && t('forgot.sendCode')}
+              </Button>
+            </form>
+            <p className="text-center mt-4 text-sm2 text-text-2">
+              <button
+                type="button"
+                className="text-accent font-bold"
+                onClick={() => { setStep('login'); setError('') }}
+              >
+                {t('forgot.backToLogin')}
+              </button>
+            </p>
+          </>
+        )}
+
+        {/* ── Reset password: код + новый пароль ── */}
+        {step === 'reset' && (
+          <>
+            <h2 className="text-xl font-extrabold tracking-tight text-text mb-1">
+              {t('reset.title')}
+            </h2>
+            <p className="text-sm2 text-text-2 leading-relaxed mb-5" style={{ textWrap: 'pretty' }}>
+              {t('reset.descPart1')} <strong className="text-text">{pendingEmail}</strong>.{' '}
+              {t('reset.descPart2')}
+            </p>
+            <form onSubmit={submitResetPassword} className="flex flex-col gap-4">
+              <div>
+                <FieldLabel>{t('reset.codeLabel')}</FieldLabel>
+                <PillInput
+                  placeholder="123456"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={form.code}
+                  onChange={upd('code')}
+                  required
+                  autoFocus
+                />
+              </div>
+              <div>
+                <FieldLabel>{t('reset.newPasswordLabel')}</FieldLabel>
+                <PillInput
+                  type="password"
+                  required
+                  minLength={6}
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={upd('password')}
+                />
+              </div>
+              <ErrorMsg msg={error} />
+              <Button type="submit" className="w-full" loading={loading}>
+                {!loading && t('reset.submit')}
+              </Button>
+            </form>
+            <ResendLine countdown={resendCountdown} onResend={resendResetCode} loading={loading} />
+          </>
+        )}
 
         {/* ── Verify email ── */}
         {step === 'verify-email' && (
@@ -414,6 +521,15 @@ export default function AuthPage() {
                   onChange={upd('password')}
                 />
               </div>
+              {step === 'login' && (
+                <button
+                  type="button"
+                  className="self-end -mt-2 text-sm2 text-accent font-semibold"
+                  onClick={() => { setStep('forgot'); setError(''); setForm(f => ({ ...f, code: '', password: '' })) }}
+                >
+                  {t('forgot.link')}
+                </button>
+              )}
               {step === 'register' && (
                 <ConsentCheckbox checked={agree} onChange={setAgree} />
               )}

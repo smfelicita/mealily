@@ -84,6 +84,16 @@ const authLogin = z.object({
   password: z.string({ required_error: 'Укажите пароль' }).min(1, 'Укажите пароль').max(100),
 })
 
+const authForgotPassword = z.object({
+  email: z.string({ required_error: 'Укажите email' }).trim().email('Некорректный email').max(255),
+})
+
+const authResetPassword = z.object({
+  email:    z.string({ required_error: 'Укажите email' }).trim().email('Некорректный email').max(255),
+  code:     z.string({ required_error: 'Укажите код' }).trim().length(6, 'Код состоит из 6 цифр'),
+  password: z.string({ required_error: 'Укажите пароль' }).min(6, 'Пароль не менее 6 символов').max(100),
+})
+
 // ─── Comments ─────────────────────────────────────────────────────────────────
 
 const commentCreate = z.object({
@@ -129,6 +139,8 @@ module.exports = {
   commentCreate,
   authRegister,
   authLogin,
+  authForgotPassword,
+  authResetPassword,
   fridgeItemAdd,
   fridgeBulk,
   fridgePatch,

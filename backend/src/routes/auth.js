@@ -8,7 +8,7 @@ const { authMiddleware } = require('../middleware/auth')
 const { addDefaultFridgeItems } = require('../lib/fridge')
 const { logger, maskEmail } = require('../lib/logger')
 const validate = require('../middleware/validate')
-const { authRegister, authLogin } = require('../lib/schemas')
+const { authRegister, authLogin, authForgotPassword, authResetPassword } = require('../lib/schemas')
 const { normalizePhone } = require('../utils/phone')
 
 // Строгий rate limit для verify-эндпоинтов: 5 попыток за 15 минут по target (email/phone)
@@ -51,6 +51,22 @@ async function sendEmailCode(email, code, requestId) {
         <p>Ваш код подтверждения:</p>
         <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#e85d04;margin:16px 0">${code}</div>
         <p style="color:#888;font-size:13px">Код действителен 15 минут. Если вы не регистрировались — просто проигнорируйте это письмо.</p>
+      </div>
+    `,
+    requestId,
+  })
+}
+
+async function sendPasswordResetCode(email, code, requestId) {
+  await sendEmail({
+    to: email,
+    subject: 'Сброс пароля — Meality',
+    html: `
+      <div style="font-family:sans-serif;max-width:420px;margin:0 auto">
+        <h2 style="color:#e85d04">🍽️ Meality</h2>
+        <p>Код для сброса пароля:</p>
+        <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#e85d04;margin:16px 0">${code}</div>
+        <p style="color:#888;font-size:13px">Код действителен 15 минут. Если вы не запрашивали сброс пароля — просто проигнорируйте это письмо, ваш пароль останется прежним.</p>
       </div>
     `,
     requestId,
@@ -184,6 +200,70 @@ router.post('/login', loginLimiter, validate(authLogin), async (req, res, next) 
     res.json({
       token: signToken(user.id, user.role, user.tokenVersion),
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
+    })
+  } catch (err) { next(err) }
+})
+
+// POST /api/auth/forgot-password — отправляет код сброса на email.
+// Не раскрываем, существует ли аккаунт: всегда отвечаем { sent: true }.
+router.post('/forgot-password', sendCodeLimiter, validate(authForgotPassword), async (req, res, next) => {
+  try {
+    const { email } = req.body
+    const user = await prisma.user.findUnique({ where: { email } })
+
+    // Шлём код только если аккаунт реально существует и у него есть пароль
+    // (Google-аккаунты без пароля не сбрасываем — им вход через Google).
+    if (user && user.passwordHash) {
+      await prisma.verificationCode.deleteMany({ where: { type: 'reset', target: email, usedAt: null } })
+      const code = genCode()
+      await saveCode('reset', email, code)
+      await sendPasswordResetCode(email, code, req.requestId)
+      logger.info({ action: 'password_reset_requested', userId: user.id, requestId: req.requestId }, 'password_reset_requested')
+    } else {
+      logger.info({ action: 'password_reset_noop', email: maskEmail(email), requestId: req.requestId }, 'password_reset_noop')
+    }
+
+    // Единый ответ независимо от того, есть ли аккаунт
+    res.json({ sent: true, email })
+  } catch (err) { next(err) }
+})
+
+// POST /api/auth/reset-password — проверяет код и ставит новый пароль.
+router.post('/reset-password', verifyLimiter, validate(authResetPassword), async (req, res, next) => {
+  try {
+    const { email, code, password } = req.body
+
+    const vc = await findValidCode('reset', email, code)
+    if (!vc) {
+      logger.warn({ action: 'password_reset_failed', email: maskEmail(email), requestId: req.requestId }, 'password_reset_failed')
+      return res.status(400).json({ error: 'Неверный или истёкший код' })
+    }
+
+    const user = await prisma.user.findUnique({ where: { email } })
+    if (!user || !user.passwordHash) {
+      return res.status(400).json({ error: 'Неверный или истёкший код' })
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12)
+    await prisma.$transaction([
+      prisma.verificationCode.update({ where: { id: vc.id }, data: { usedAt: new Date() } }),
+      // Меняем пароль, подтверждаем email (раз получил код на почту) и инвалидируем старые сессии
+      prisma.user.update({
+        where: { email },
+        data: { passwordHash, emailVerified: true, tokenVersion: { increment: 1 } },
+      }),
+    ])
+
+    const updated = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true, email: true, name: true, role: true, tokenVersion: true },
+    })
+    logger.info({ action: 'password_reset_completed', userId: updated.id, requestId: req.requestId }, 'password_reset_completed')
+
+    // Сразу логиним с новым токеном
+    res.json({
+      token: signToken(updated.id, updated.role, updated.tokenVersion),
+      user: { id: updated.id, email: updated.email, name: updated.name, role: updated.role },
     })
   } catch (err) { next(err) }
 })
