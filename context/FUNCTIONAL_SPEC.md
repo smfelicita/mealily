@@ -27,13 +27,22 @@ _Актуально на май 2026_
 
 ### Способы входа
 - **Email + пароль** — с подтверждением кода (Unisender Go)
+- **Сброс пароля** — код на email (`/auth/forgot-password` → `/auth/reset-password`)
 - **Google OAuth** — через @react-oauth/google; auto-link к существующему email-аккаунту
-- **SMS** — номер телефона + одноразовый код
+- **SMS** — номер телефона + одноразовый код (отправка SMS — заглушка, провайдер не подключён)
+- **Telegram** — таб «Telegram» на AuthPage → бот `getlink` (см. ниже)
+
+### Сброс пароля
+- `POST /auth/forgot-password` — шлёт 6-значный код на email (тип `reset`).
+  Не раскрывает, существует ли аккаунт (всегда `{sent:true}`); Google-аккаунтам без пароля не шлёт.
+- `POST /auth/reset-password` — проверяет код, ставит новый пароль (bcrypt),
+  `emailVerified=true`, `tokenVersion++` (старые сессии слетают), сразу логинит.
 
 ### Безопасность
 - JWT с `tokenVersion` — server-side invalidation при смене пароля/выходе
 - loginLimiter: 10 попыток / 15 мин / email
 - Коды верификации: crypto.randomInt, TTL, one-use
+- `app.set('trust proxy', 1)` — за nginx, чтобы rate-limit читал реальный IP
 - Единый error middleware: Prisma-ошибки не утекают в продакшне
 
 ### Привязка Telegram
@@ -43,13 +52,13 @@ _Актуально на май 2026_
 - Бот привязывает `telegramId` к веб-аккаунту
 - При наличии отдельного бот-аккаунта: мигрируются FridgeItems и MealPlan
 
-### "Открыть приложение" из бота
-- Пользователь нажимает 🌐 в боте
-- Бот генерирует `webLoginToken` (одноразовый, 10 мин)
-- Открывается `/auth/tg?token=` → выдаётся JWT → редирект на главную
-
-### Бэклог
-- "Войти через Telegram" на AuthPage — требует дополнительной проработки flow
+### "Открыть приложение" из бота / Вход через Telegram
+- Пользователь нажимает 🌐 в боте ИЛИ таб «Telegram» на AuthPage → кнопка ведёт на
+  `t.me/mealily_bot?start=getlink`
+- Бот по payload `getlink` находит/создаёт пользователя по `telegramId`,
+  генерирует `webLoginToken` (одноразовый, 10 мин), шлёт кнопку «Открыть Meality»
+- Открывается `/auth/tg?token=` → `POST /auth/tg` выдаёт JWT → редирект на главную
+- Бесплатная альтернатива SMS-регистрации (без alpha-name и платы за SMS)
 
 ---
 

@@ -29,10 +29,13 @@
 ## Текущий статус (актуально)
 
 ### Деплой
-- **Домен:** https://mealily.ru (A-запись → 194.87.130.215)
+- **Домен:** https://mealily.ru (A-запись → 5.42.112.233)
+- **Прод-сервер:** 5.42.112.233 (Москва, хост msk-1-vm-7usl), путь /var/www/mealily
+- **Зарубежный VPS:** 194.87.130.215 — только выход для Telegram-трафика бота (SOCKS5-туннель)
 - **HTTPS:** Let's Encrypt через certbot ✅
-- **Backend:** PM2, порт 3001, nginx reverse proxy ✅
+- **Backend:** PM2 `mealily-backend`, порт 3001, nginx reverse proxy, `trust proxy = 1` ✅
 - **Frontend:** собранные статические файлы через nginx ✅
+- **Telegram-бот:** PM2 `mealily-bot` (`@mealily_bot`), через SOCKS5-туннель (systemd `tg-tunnel`)
 - **GitHub:** git@github.com:smfelicita/mealily.git
 
 ### Реализованные функции
@@ -40,13 +43,16 @@
 
 ### Авторизация (реализовано)
 - Email + пароль + подтверждение кода (отправка через Unisender Go)
-- Телефон + SMS-код (заглушка — код в логи PM2)
+- Сброс пароля по коду (`/auth/forgot-password`, `/auth/reset-password`)
+- Телефон + SMS-код (заглушка — код в логи PM2; реальный провайдер не подключён)
+- Вход через Telegram (таб «Telegram» на AuthPage → бот `getlink`)
 - Google OAuth (@react-oauth/google фронт + google-auth-library бэк)
 
 ### Что настроено на сервере
-- `UNISENDER_GO_API_KEY` — реальная отправка email через Unisender Go
+- `UNISENDER_GO_API_KEY` + `MAIL_FROM` — отправка email через Unisender Go (домен mealily.ru)
+- `TELEGRAM_PROXY=socks5://127.0.0.1:1080` — бот через туннель
 - `GOOGLE_CLIENT_ID` — Google OAuth
-- `VITE_GOOGLE_CLIENT_ID` — в frontend/.env для сборки
+- `VITE_GOOGLE_CLIENT_ID`, `VITE_TELEGRAM_BOT_USERNAME` — в frontend/.env для сборки
 
 ---
 

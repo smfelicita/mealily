@@ -108,6 +108,13 @@ scripts/          — export-i18n-csv.js, import-i18n-csv.js
 - Админка: этапы A, C, D, E, F, G, H реализованы. Этап B заморожен.
   Файлы: `frontend/src/admin/`, `backend/src/routes/admin/`, `backend/src/middleware/adminAuth.js`.
   На сервере нужен `prisma db push` (AiUsageLog + AuditLog + isActive) и `ADMIN_JWT_SECRET` в `.env`.
+- Ребрендинг MealBot → Meality (июнь 2026). Прод переехал на 5.42.112.233 (Москва);
+  194.87.130.215 — только туннель для бота.
+- Email: Unisender Go (РФ) вместо Resend, единый модуль `backend/src/lib/email.js`
+  (track выключен), отправитель `noreply@mealily.ru`. Env: `UNISENDER_GO_API_KEY`, `MAIL_FROM`.
+- Сброс пароля по коду: `/auth/forgot-password` + `/auth/reset-password` (tokenVersion++).
+- Вход через Telegram: таб «Telegram» на AuthPage → `t.me/mealily_bot?start=getlink`.
+- `app.set('trust proxy', 1)` в `backend/src/index.js` — обязательно за nginx (rate-limit).
 
 ## Правило обновления документации
 После ЛЮБЫХ изменений обновить: `context/TASKS.md`, `context/CHAT_SUMMARY.md`,

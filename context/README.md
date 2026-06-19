@@ -10,7 +10,8 @@
 - **Фронтенд:** React + Vite + Tailwind CSS (PWA)
 - **Telegram-бот:** node-telegram-bot-api
 - **ИИ:** Claude API (Anthropic)
-- **Хостинг:** VPS Timeweb (IP 194.87.130.215), nginx + PM2
+- **Хостинг:** прод-сервер 5.42.112.233 (Москва), nginx + PM2.
+  Зарубежный VPS 194.87.130.215 — только туннель для Telegram-бота.
 - **Домен:** https://mealily.ru
 - **Медиафайлы:** Supabase Storage
 
