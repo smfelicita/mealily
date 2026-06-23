@@ -590,6 +590,8 @@ export default function FridgePage() {
 
   const { t } = useTranslation('fridge')
   const { fridge, setFridge, addToFridge, removeFromFridge, updateFridgeItem } = useStore()
+  const flags = useStore(s => s.flags)
+  const aiEnabled = flags['ai.enabled'] !== false
   const { show, Toast } = useToast()
   const navigate = useNavigate()
 
@@ -699,7 +701,7 @@ export default function FridgePage() {
       ) : (
         <>
           <FridgeMetaStrip total={total} basic={basic} />
-          <AICookCTA onClick={goAICook} />
+          {aiEnabled && <AICookCTA onClick={goAICook} />}
 
           {orderedCats.map(cat => (
             <CategoryBlock
