@@ -203,12 +203,12 @@ Meality — сервис для планирования питания с ИИ-
 ## 7. Технический стек
 
 - **Бэкенд:** Node.js + Express + Prisma ORM
-- **База данных:** PostgreSQL (Supabase)
+- **База данных:** локальная PostgreSQL на прод-сервере (Москва)
 - **Фронтенд:** React + Vite (PWA)
 - **Telegram:** node-telegram-bot-api
 - **ИИ:** Claude API (Anthropic)
-- **Медиафайлы:** Supabase Storage (или Cloudflare R2)
-- **Хостинг:** VPS Timeweb (бэкенд + фронтенд + бот)
+- **Медиафайлы:** локальный диск + nginx (`STORAGE_DRIVER=local`)
+- **Хостинг:** прод-сервер 5.42.112.233 (Москва) — бэкенд + фронтенд + бот + БД
 
 ---
 

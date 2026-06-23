@@ -3,9 +3,9 @@
 ## backend/.env
 
 ```env
-# 1. БД Supabase — Session Pooler, порт 5432 (НЕ 6543!)
-DATABASE_URL="postgresql://postgres.PROJECT_ID:ПАРОЛЬ@aws-1-eu-west-2.pooler.supabase.com:5432/postgres"
-DIRECT_URL="postgresql://postgres.PROJECT_ID:ПАРОЛЬ@aws-1-eu-west-2.pooler.supabase.com:5432/postgres"
+# 1. БД — локальная PostgreSQL на прод-сервере (Москва). Supabase больше не используется.
+DATABASE_URL="postgresql://mealbot:ПАРОЛЬ@localhost:5432/mealbot"
+DIRECT_URL="postgresql://mealbot:ПАРОЛЬ@localhost:5432/mealbot"
 
 # 2. JWT секрет (минимум 32 символа)
 JWT_SECRET="любой_длинный_случайный_текст"
@@ -19,9 +19,10 @@ FRONTEND_URL="https://mealily.ru"
 # 5. Порт
 PORT=3001
 
-# 6. Supabase Storage (загрузка фото/видео)
-SUPABASE_URL="https://PROJECT_ID.supabase.co"
-SUPABASE_SERVICE_KEY="eyJ..."   # service_role key (не anon!)
+# 6. Хранилище медиа — local (диск + nginx) в проде. Supabase legacy.
+STORAGE_DRIVER="local"
+MEDIA_DIR="/var/www/mealily-media"
+MEDIA_PUBLIC_URL="https://mealily.ru/media"
 
 # 7. Telegram Bot
 TELEGRAM_BOT_TOKEN="7123456789:AAH..."

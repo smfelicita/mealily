@@ -6,14 +6,14 @@
 
 ## Стек технологий
 - **Бэкенд:** Node.js + Express + Prisma ORM + Zod (валидация)
-- **База данных:** PostgreSQL (Supabase, Session Pooler порт 5432)
+- **База данных:** локальная PostgreSQL на прод-сервере (`localhost:5432/mealbot`)
 - **Фронтенд:** React + Vite + Tailwind CSS (PWA)
 - **Telegram-бот:** node-telegram-bot-api
 - **ИИ:** Claude API (Anthropic)
 - **Хостинг:** прод-сервер 5.42.112.233 (Москва), nginx + PM2.
   Зарубежный VPS 194.87.130.215 — только туннель для Telegram-бота.
 - **Домен:** https://mealily.ru
-- **Медиафайлы:** Supabase Storage
+- **Медиафайлы:** локальный диск сервера + раздача через nginx (`STORAGE_DRIVER=local`)
 
 ## Структура проекта
 ```

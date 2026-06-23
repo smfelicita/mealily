@@ -2,7 +2,7 @@
 
 ## Проект
 Коммерческий сервис выбора блюд с ИИ-помощником (веб PWA + Telegram-бот).
-Стек: Node.js + Express + Prisma + PostgreSQL (Supabase) + React + Vite + Tailwind v4.
+Стек: Node.js + Express + Prisma + PostgreSQL (локальная на прод-сервере) + React + Vite + Tailwind v4.
 
 ## Структура
 ```
@@ -58,10 +58,13 @@ scripts/          — export-i18n-csv.js, import-i18n-csv.js
 
 ## Важные правила
 
-### БД (Supabase)
-- DATABASE_URL: Session Pooler, порт **5432** (НЕ 6543 — Transaction Pooler вызывает ошибку 42P05)
+### БД (локальная PostgreSQL на прод-сервере, Москва)
+- **Перенесена с Supabase (Лондon) на локальную PostgreSQL** на прод-сервере 5.42.112.233.
+  `DATABASE_URL="postgresql://mealbot:***@localhost:5432/mealbot"`. Supabase больше НЕ используется для БД.
+- (Историческое: на Supabase был Session Pooler, порт 5432, НЕ 6543 — Transaction Pooler давал 42P05.)
 - `prisma db push --accept-data-loss` (не `migrate dev` — non-interactive среда)
-- Seed: `DATABASE_URL="...5432..." npm run db:seed`
+- Seed: `DATABASE_URL="...localhost:5432..." npm run db:seed`
+- Имя БД/юзера `mealbot` оставлено как есть (не переименовано при ребрендинге).
 
 ### PrismaClient
 - Всегда из `../lib/prisma`, никогда `new PrismaClient()` в роутах

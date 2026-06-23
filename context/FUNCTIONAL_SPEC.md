@@ -108,8 +108,8 @@ _Актуально на май 2026_
 - **КБЖУ** — рассчитывается автоматически из ингредиентов (nutrition.js)
 - **Ингредиенты с количеством** (amountValue + unit + toTaste + optional)
 - **Пошаговый рецепт** (markdown текст)
-- **Фото** — до 10 штук, Supabase Storage
-- **Видео** — загрузка, Supabase Storage
+- **Фото** — до 10 штук, локальный диск + nginx
+- **Видео** — загрузка, локальный диск + nginx
 - Автор (null = системное блюдо, видимость PUBLIC)
 - Видимость: PRIVATE / PUBLIC / FAMILY / ALL_GROUPS
 
@@ -262,7 +262,7 @@ _Актуально на май 2026_
 ## Медиафайлы
 
 - Загрузка фото и видео через форму рецепта
-- Хранение: Supabase Storage
+- Хранение: локальный диск сервера + раздача через nginx (STORAGE_DRIVER=local)
 - Форматы: JPEG, PNG, WebP (до 5MB); MP4 (до 100MB)
 - Фото: до 10 штук на рецепт, выбор главного
 
@@ -325,9 +325,9 @@ _Актуально на май 2026_
 
 ## Деплой
 
-- VPS Timeweb, IP 194.87.130.215, домен mealily.ru
+- Прод-сервер 5.42.112.233 (Москва), домен mealily.ru; 194.87.130.215 — туннель бота
 - Backend: Node.js + Express + Prisma, PM2, порт 3001
 - Frontend: React + Vite, статика через nginx
-- БД: Supabase PostgreSQL (Session Pooler, порт 5432)
+- БД: локальная PostgreSQL на прод-сервере (localhost:5432/mealbot)
 - Telegram-бот: PM2
 - HTTPS: Let's Encrypt
