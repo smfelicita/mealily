@@ -19,6 +19,28 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, botOptions)
 const prisma = new PrismaClient()
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
+// ─── Watchdog: защита от «тихого зависания» polling ──────────────────────────
+// node-telegram-bot-api при серии сетевых ошибок может перестать поллить и не
+// возобновить сам (процесс при этом остаётся «online»). Если ошибки идут
+// непрерывно дольше POLL_FAIL_LIMIT_MS — выходим с кодом 1, PM2 поднимает заново.
+const POLL_FAIL_LIMIT_MS = 2 * 60 * 1000 // 2 минуты
+let firstPollErrorAt = null
+
+bot.on('polling_error', (err) => {
+  const now = Date.now()
+  if (firstPollErrorAt === null) firstPollErrorAt = now
+  const downForMs = now - firstPollErrorAt
+  console.error(`[polling_error] ${err.code || ''} ${err.message || err} (без восстановления ${Math.round(downForMs / 1000)}с)`)
+  if (downForMs >= POLL_FAIL_LIMIT_MS) {
+    console.error(`[watchdog] polling не восстановился за ${POLL_FAIL_LIMIT_MS / 1000}с — перезапуск процесса (PM2 поднимет заново)`)
+    process.exit(1)
+  }
+})
+
+// Любой успешно полученный апдейт = polling жив → сбрасываем счётчик ошибок.
+bot.on('message', () => { firstPollErrorAt = null })
+bot.on('callback_query', () => { firstPollErrorAt = null })
+
 // Очистка просроченных токенов при старте (старше 24 часов)
 async function cleanupExpiredTokens() {
   const { count } = await prisma.user.updateMany({
@@ -92,7 +114,6 @@ const MAIN_MENU = {
       [{ text: '📅 Буду готовить' },   { text: '🎲 Случайное блюдо' }],
       [{ text: '🌅 Завтрак' }, { text: '☀️ Обед' }],
       [{ text: '🌙 Ужин' },    { text: '🍎 Перекус' }],
-      [{ text: '🤖 ИИ-помощник' }],
       [{ text: '🌐 Открыть приложение' }],
     ],
     resize_keyboard: true,
