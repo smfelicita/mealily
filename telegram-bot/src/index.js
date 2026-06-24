@@ -300,10 +300,10 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
 
 // ─── Meal time buttons ────────────────────────────────────────────────────
 const MEAL_MAP = {
-  '🌅 Завтрак': 'breakfast',
-  '☀️ Обед':   'lunch',
-  '🌙 Ужин':   'dinner',
-  '🍎 Перекус': 'snack',
+  '🌅 Завтрак': 'BREAKFAST',
+  '☀️ Обед':   'LUNCH',
+  '🌙 Ужин':   'DINNER',
+  '🍎 Перекус': 'SNACK',
 }
 
 async function sendDishSuggestions(chatId, userId, mealTime, fridgeMode = false) {
@@ -960,7 +960,7 @@ bot.on('callback_query', async (query) => {
   }
 
   // Fridge meal suggestions
-  const fridgeMeals = { fridge_breakfast:'breakfast', fridge_lunch:'lunch', fridge_dinner:'dinner' }
+  const fridgeMeals = { fridge_breakfast:'BREAKFAST', fridge_lunch:'LUNCH', fridge_dinner:'DINNER' }
   if (fridgeMeals[data]) {
     return sendDishSuggestions(chatId, user.id, fridgeMeals[data], true)
   }
