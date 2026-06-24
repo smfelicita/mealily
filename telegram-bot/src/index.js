@@ -58,6 +58,7 @@ const { addDefaultFridgeItems } = require('../../shared/fridge')
 const { buildVisibilityFilter, checkDishAccess } = require('../../shared/dishVisibility')
 const { getRelevantDishes } = require('../../shared/dishRelevance')
 const { costFor } = require('../../shared/aiPricing')
+const { MEAL_MAP, FRIDGE_MEAL_MAP } = require('../../shared/mealTypes')
 
 const { getFlags, getFlag } = createFlagsCache(prisma)
 
@@ -298,14 +299,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   )
 })
 
-// ─── Meal time buttons ────────────────────────────────────────────────────
-const MEAL_MAP = {
-  '🌅 Завтрак': 'BREAKFAST',
-  '☀️ Обед':   'LUNCH',
-  '🌙 Ужин':   'DINNER',
-  '🍎 Перекус': 'SNACK',
-}
-
+// ─── Meal time buttons (MEAL_MAP / FRIDGE_MEAL_MAP — из shared/mealTypes) ──────
 async function sendDishSuggestions(chatId, userId, mealTime, fridgeMode = false) {
   await bot.sendMessage(chatId, '🔍 Ищу...')
 
@@ -960,9 +954,8 @@ bot.on('callback_query', async (query) => {
   }
 
   // Fridge meal suggestions
-  const fridgeMeals = { fridge_breakfast:'BREAKFAST', fridge_lunch:'LUNCH', fridge_dinner:'DINNER' }
-  if (fridgeMeals[data]) {
-    return sendDishSuggestions(chatId, user.id, fridgeMeals[data], true)
+  if (FRIDGE_MEAL_MAP[data]) {
+    return sendDishSuggestions(chatId, user.id, FRIDGE_MEAL_MAP[data], true)
   }
 
   // Fridge clear
