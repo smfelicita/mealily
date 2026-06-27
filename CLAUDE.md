@@ -30,8 +30,8 @@ frontend/         — React + Vite + PWA
 telegram-bot/     — Telegram-бот
 shared/           — ЕДИНАЯ логика backend+бот: aiLimit, flags (кэш), fridge (базовые
                     продукты), dishVisibility (видимость блюд!), dishRelevance (подбор
-                    для ИИ), aiPricing (цены моделей). Prisma передаётся аргументом.
-                    Править здесь, не в копиях!
+                    для ИИ), aiPricing (цены моделей), mealTypes (enum MealType + маппинги
+                    кнопок бота). Prisma передаётся аргументом. Править здесь, не в копиях!
 context/          — документация проекта
 scripts/          — export-i18n-csv.js, import-i18n-csv.js
 ```
@@ -118,6 +118,9 @@ scripts/          — export-i18n-csv.js, import-i18n-csv.js
 - Сброс пароля по коду: `/auth/forgot-password` + `/auth/reset-password` (tokenVersion++).
 - Вход через Telegram: таб «Telegram» на AuthPage → `t.me/mealily_bot?start=getlink`.
 - `app.set('trust proxy', 1)` в `backend/src/index.js` — обязательно за nginx (rate-limit).
+- Бот: watchdog от «тихого зависания» polling (`polling_error` → `process.exit(1)` через 2 мин,
+  PM2 рестарт) + cron `deploy/bot-healthcheck.sh` (каждые 5 мин). Кнопка «🤖 ИИ-помощник»
+  убрана из меню. MealType-маппинги — в `shared/mealTypes.js` (верхний регистр!), с тестами.
 
 ## Правило обновления документации
 После ЛЮБЫХ изменений обновить: `context/TASKS.md`, `context/CHAT_SUMMARY.md`,

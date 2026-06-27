@@ -17,6 +17,14 @@
 - **Сброс пароля по коду**: `POST /auth/forgot-password` + `/auth/reset-password`.
 - **Вход через Telegram** на AuthPage (таб «Telegram» → бот getlink). SMS-логика сохранена.
 - Фикс `app.set('trust proxy', 1)` — корректный rate-limit за nginx.
+- **Управление ИИ-чатом флагами админки**: `ai.enabled` (веб) и `telegram.commands.aiEnabled`
+  (Telegram) уже работают. На FridgePage CTA «что приготовить» скрывается при `ai.enabled=false`.
+- **Бот: надёжность polling** — watchdog в коде (обработчик `polling_error` → `process.exit(1)`
+  через 2 мин без восстановления, PM2 поднимает заново) + внешний cron `deploy/bot-healthcheck.sh`
+  (каждые 5 мин: getMe через прокси + pending_update_count; рестарт при зависании).
+- **Бот: кнопка «🤖 ИИ-помощник» убрана** из меню (обработчик оставлен для закэшированных кнопок).
+- **Фикс бота: MealType в верхнем регистре** (BREAKFAST/LUNCH/...) — кнопки подбора по времени
+  падали с Prisma-ошибкой. Маппинги вынесены в `shared/mealTypes.js`, покрыты unit-тестами.
 
 ---
 
@@ -50,9 +58,9 @@
 
 ### Качество
 - [ ] Integration-тесты: auth flow, invite flow, fridge migration, access control
-- [x] Unit-тесты чистой логики: phone, messageFilter, nutrition, chatHelpers —
-      `backend/tests/`, запуск `cd backend && npm test` (Vitest, 37 тестов)
-- [x] Дублирование логики бот/бэкенд — вынесено в `shared/` (aiLimit, flags, fridge);
+- [x] Unit-тесты чистой логики: phone, messageFilter, nutrition, chatHelpers, mealTypes —
+      `backend/tests/`, запуск `cd backend && npm test` (Vitest, 42 теста)
+- [x] Дублирование логики бот/бэкенд — вынесено в `shared/` (aiLimit, flags, fridge, mealTypes);
       backend/src/lib/* — тонкие обёртки, бот подключает shared напрямую
 - [ ] In-memory кэши (dishCache в chat.js, флаги) — рассинхрон при нескольких PM2-инстансах
 - [ ] SMS: подключить реального провайдера, убрать код из логов (сейчас заглушка console.log).
