@@ -52,6 +52,8 @@ export const api = {
     request('/auth/verify-phone', { method: 'POST', body: { phone, code, name } }),
   googleAuth: (token) =>
     request('/auth/google', { method: 'POST', body: { token } }),
+  yandexAuth: (code) =>
+    request('/auth/yandex', { method: 'POST', body: { code } }),
   telegramAuth: (token) =>
     request('/auth/tg', { method: 'POST', body: { token } }),
   generateTelegramLink: () =>

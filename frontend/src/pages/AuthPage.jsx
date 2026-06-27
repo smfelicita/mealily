@@ -264,6 +264,22 @@ export default function AuthPage() {
     finally { setLoading(false) }
   }
 
+  // Редирект на Яндекс OAuth. state — защита от CSRF (проверяется в callback).
+  function handleYandex() {
+    const clientId = import.meta.env.VITE_YANDEX_CLIENT_ID
+    if (!clientId) return
+    const state = Math.random().toString(36).slice(2) + Date.now().toString(36)
+    sessionStorage.setItem('yandex_oauth_state', state)
+    sessionStorage.setItem('yandex_oauth_redirect', redirectTo)
+    const redirectUri = `${window.location.origin}/auth/yandex/callback`
+    const url = `https://oauth.yandex.ru/authorize?response_type=code`
+      + `&client_id=${encodeURIComponent(clientId)}`
+      + `&redirect_uri=${encodeURIComponent(redirectUri)}`
+      + `&scope=${encodeURIComponent('login:email login:info')}`
+      + `&state=${encodeURIComponent(state)}`
+    window.location.href = url
+  }
+
   function switchTab(t) {
     setTab(t); setError('')
     const stepByTab = { phone: 'phone-enter', telegram: 'telegram', email: 'login' }
@@ -605,6 +621,29 @@ export default function AuthPage() {
                   />
                 </div>
                 <ConsentNote />
+              </>
+            )}
+
+            {/* Яндекс */}
+            {import.meta.env.VITE_YANDEX_CLIENT_ID && (
+              <>
+                {!import.meta.env.VITE_GOOGLE_CLIENT_ID && (
+                  <div className="flex items-center gap-3 my-5">
+                    <div className="flex-1 h-px bg-border" />
+                    <span className="text-[12px] text-text-3 font-semibold uppercase tracking-wide" style={{ letterSpacing: 0.6 }}>{t('divider')}</span>
+                    <div className="flex-1 h-px bg-border" />
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={handleYandex}
+                  className="mt-3 w-full h-11 rounded-full inline-flex items-center justify-center gap-2 font-bold text-[14.5px] text-white"
+                  style={{ background: '#FC3F1D' }}
+                >
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white" style={{ color: '#FC3F1D', fontWeight: 900 }}>Я</span>
+                  {t('yandexLogin')}
+                </button>
+                {!import.meta.env.VITE_GOOGLE_CLIENT_ID && <ConsentNote />}
               </>
             )}
           </>

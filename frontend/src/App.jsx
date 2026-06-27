@@ -16,6 +16,7 @@ import GroupDetailPage from './pages/GroupDetailPage'
 import GroupFormPage from './pages/GroupFormPage'
 import MealPlanPage from './pages/MealPlanPage'
 import TelegramAuthPage from './pages/TelegramAuthPage'
+import YandexCallbackPage from './pages/YandexCallbackPage'
 import ProfilePage from './pages/ProfilePage'
 import InvitePage from './pages/InvitePage'
 import PrivacyPage from './pages/legal/PrivacyPage'
@@ -112,6 +113,7 @@ export default function App() {
 
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/auth/tg" element={<TelegramAuthPage />} />
+        <Route path="/auth/yandex/callback" element={<YandexCallbackPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/invite/:token" element={<InvitePage />} />

@@ -369,6 +369,76 @@ router.post('/google', async (req, res, next) => {
   }
 })
 
+// POST /api/auth/yandex — обмен кода авторизации Яндекса на аккаунт.
+// Фронт присылает { code } (получен после редиректа с oauth.yandex.ru).
+router.post('/yandex', async (req, res, next) => {
+  try {
+    const { code } = req.body
+    if (!code) return res.status(400).json({ error: 'Код не передан' })
+    if (!process.env.YANDEX_CLIENT_ID || !process.env.YANDEX_CLIENT_SECRET) {
+      return res.status(500).json({ error: 'Яндекс OAuth не настроен' })
+    }
+
+    // 1. Меняем code на access_token
+    const tokenResp = await fetch('https://oauth.yandex.ru/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        code,
+        client_id: process.env.YANDEX_CLIENT_ID,
+        client_secret: process.env.YANDEX_CLIENT_SECRET,
+      }),
+    })
+    const tokenData = await tokenResp.json().catch(() => ({}))
+    if (!tokenResp.ok || !tokenData.access_token) {
+      logger.warn({ action: 'yandex_token_failed', code: tokenData.error, requestId: req.requestId }, 'yandex_token_failed')
+      return res.status(401).json({ error: 'Не удалось авторизоваться через Яндекс' })
+    }
+
+    // 2. Получаем профиль пользователя
+    const infoResp = await fetch('https://login.yandex.ru/info?format=json', {
+      headers: { Authorization: `OAuth ${tokenData.access_token}` },
+    })
+    const info = await infoResp.json().catch(() => ({}))
+    if (!infoResp.ok || !info.id) {
+      logger.warn({ action: 'yandex_info_failed', requestId: req.requestId }, 'yandex_info_failed')
+      return res.status(401).json({ error: 'Не удалось получить данные из Яндекса' })
+    }
+
+    const yandexId = String(info.id)
+    const email = (info.default_email || (Array.isArray(info.emails) ? info.emails[0] : null) || '').toLowerCase() || null
+    const name = info.display_name || info.real_name || info.first_name || null
+
+    // 3. Находим/создаём пользователя
+    let user = await prisma.user.findUnique({ where: { yandexId } })
+    let isNew = !user
+    if (!user) {
+      // Яндекс верифицирует email — безопасно связать с существующим аккаунтом
+      const existing = email ? await prisma.user.findUnique({ where: { email } }) : null
+      if (existing) {
+        user = await prisma.user.update({
+          where: { id: existing.id },
+          data: { yandexId, emailVerified: true },
+        })
+        isNew = false
+      } else {
+        user = await prisma.user.create({
+          data: { yandexId, email, name, emailVerified: !!email },
+        })
+        isNew = true
+      }
+    }
+
+    if (isNew) await addDefaultFridgeItems(user.id)
+    logger.info({ action: 'yandex_login', userId: user.id, isNew, requestId: req.requestId }, 'yandex_login')
+    res.json({
+      token: signToken(user.id, user.role, user.tokenVersion),
+      user: { id: user.id, email: user.email, name: user.name, role: user.role },
+    })
+  } catch (err) { next(err) }
+})
+
 // POST /api/auth/generate-telegram-link — генерирует ссылку для привязки Telegram к аккаунту
 router.post('/generate-telegram-link', authMiddleware, async (req, res, next) => {
   try {

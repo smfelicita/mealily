@@ -29,6 +29,8 @@ _Актуально на май 2026_
 - **Email + пароль** — с подтверждением кода (Unisender Go)
 - **Сброс пароля** — код на email (`/auth/forgot-password` → `/auth/reset-password`)
 - **Google OAuth** — через @react-oauth/google; auto-link к существующему email-аккаунту
+- **Яндекс OAuth** — Authorization Code Flow; кнопка → oauth.yandex.ru → callback `/auth/yandex/callback`
+  → `POST /auth/yandex` (code→token→login.yandex.ru/info). Auto-link по email. yandexId @unique.
 - **SMS** — номер телефона + одноразовый код (отправка SMS — заглушка, провайдер не подключён)
 - **Telegram** — таб «Telegram» на AuthPage → бот `getlink` (см. ниже)
 
