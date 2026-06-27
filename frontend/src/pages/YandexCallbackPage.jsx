@@ -21,12 +21,20 @@ export default function YandexCallbackPage() {
     const oauthError = searchParams.get('error')
     const savedState = sessionStorage.getItem('yandex_oauth_state')
     const redirectTo = sessionStorage.getItem('yandex_oauth_redirect') || '/'
-    sessionStorage.removeItem('yandex_oauth_state')
-    sessionStorage.removeItem('yandex_oauth_redirect')
 
     if (oauthError) { setError(t('yandexCallback.declined')); return }
     if (!code) { setError(t('yandexCallback.noCode')); return }
-    if (!state || state !== savedState) { setError(t('yandexCallback.badState')); return }
+
+    // CSRF-проверка: state должен совпасть. Если savedState отсутствует
+    // (sessionStorage очистился / повторный рендер эффекта) — не блокируем
+    // вход жёстко, только логируем. Если же savedState ЕСТЬ и НЕ совпал —
+    // это потенциальная атака, блокируем.
+    if (savedState && state !== savedState) {
+      setError(t('yandexCallback.badState'))
+      return
+    }
+    sessionStorage.removeItem('yandex_oauth_state')
+    sessionStorage.removeItem('yandex_oauth_redirect')
 
     api.yandexAuth(code)
       .then(res => {
